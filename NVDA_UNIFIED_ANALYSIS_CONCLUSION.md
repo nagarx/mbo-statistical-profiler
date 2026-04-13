@@ -440,7 +440,7 @@ A model that ingests features from both XNAS and ARCX simultaneously. This unloc
 |---|---|---|---|
 | OFI-return r conditioned on spread state | ~~High~~ | **RESOLVED** | OFI is most predictive at 1-tick (r=0.546-0.737). See `TIER1_ANALYSIS_FINDINGS.md` §2. |
 | Cross-scale OFI (5s OFI → 1m return) | ~~High~~ | **RESOLVED** | Max off-diagonal r = 0.044. Not tradeable. See `TIER1_ANALYSIS_FINDINGS.md` §1. |
-| Rolling 30-day OFI-return correlation | ~~High~~ | **RESOLVED** | Monthly runs completed (12 months, `output_xnas_monthly/`). OFI-return r monthly std = 0.036 at 5m. See `monthly_stability_report.json` and `ZERO_DTE_STRATEGY_BRIDGE.md` §4. |
+| Rolling 30-day OFI-return correlation | ~~High~~ | **RESOLVED** | Monthly runs completed (12 months, `output_xnas_monthly/`). OFI-return r monthly std = 0.036 at 5m. See `monthly_stability_report.json` and `ZERO_DTE_STRATEGY_BRIDGE.md` §2 (stability table) + §7 (summary). |
 | Per-month profiler runs | ~~Medium~~ | **RESOLVED** | 12 monthly runs completed. Results in `output_xnas_monthly/`. |
 | Depth replenishment rate after trade | Medium | PENDING | Requires new tracker (Tier 2) |
 
@@ -488,7 +488,7 @@ A model that ingests features from both XNAS and ARCX simultaneously. This unloc
 
 ## 11. Overall Assessment
 
-### Confidence Rating: 9.0/10 (updated from 8.5 after Tier 1 findings)
+### Confidence Rating: 9.5/10 (updated from 8.5 after Tier 1 findings + monthly stability confirmation)
 
 
 | Component                   | Rating | Justification                                                                  |

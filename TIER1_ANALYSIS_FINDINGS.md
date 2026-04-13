@@ -144,7 +144,7 @@ Incorporating these findings into the signal hierarchy from the unified conclusi
 
 ### 3.1 Revised Confidence Rating
 
-Prior rating: 8.5/10. The Tier 1 analyses answered two of the three blocking questions:
+Prior rating: 8.5/10. Tier 1 analyses + monthly stability analysis have now answered all three blocking questions:
 
 | Question | Answer | Confidence Impact |
 |---|---|---|
@@ -181,7 +181,7 @@ Prior rating: 8.5/10. The Tier 1 analyses answered two of the three blocking que
 
 ### 5.1 Monthly Rolling Stability — COMPLETED
 
-Twelve monthly runs completed (`output_xnas_monthly/`). OFI-return correlation is stable month-to-month (std = 0.036 at 5m). The comparison script `scripts/compare_monthly.py` produced `output_xnas_monthly/monthly_stability_report.json`. See `ZERO_DTE_STRATEGY_BRIDGE.md` §4 for the stability results used in strategy parameterization.
+Twelve monthly runs completed (`output_xnas_monthly/`). OFI-return correlation is stable month-to-month (std = 0.036 at 5m). The comparison script `scripts/compare_monthly.py` produced `output_xnas_monthly/monthly_stability_report.json`. See `ZERO_DTE_STRATEGY_BRIDGE.md` §2 (stability table) and §7 (key metrics summary) for the results used in strategy parameterization.
 
 ### 5.2 What Has Been Resolved
 

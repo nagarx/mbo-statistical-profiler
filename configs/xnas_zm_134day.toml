@@ -1,6 +1,11 @@
 # ZM 134-day XNAS ITCH profiling (multi-stock universality study)
 # Control group: median volume (3.5M/day), beta=1.02, spread 2-3 bps
 
+timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
+reservoir_capacity = 10000
+vpin_volume_bar_size = 1000
+vpin_window_bars = 50
+
 [input]
 data_dir = "../data/XNAS_ITCH/ZM/mbo_2025-07-01_to_2026-01-09"
 filename_pattern = "xnas-itch-{date}.mbo.ZM.dbn.zst"
@@ -21,11 +26,6 @@ jumps = true
 noise = true
 vpin = true
 cross_scale_ofi = true
-
-timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
-reservoir_capacity = 10000
-vpin_volume_bar_size = 1000
-vpin_window_bars = 50
 
 [output]
 output_dir = "output_ZM_134day"

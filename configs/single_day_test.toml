@@ -1,5 +1,8 @@
 # Single-day test configuration
 
+timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
+reservoir_capacity = 10000
+
 [input]
 hot_store_dir = "../data/hot_store"
 filename_pattern = "xnas-itch-{date}.mbo.dbn"
@@ -20,9 +23,6 @@ depth = false
 liquidity = false
 jumps = false
 noise = false
-
-timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
-reservoir_capacity = 10000
 
 [output]
 output_dir = "test_output"

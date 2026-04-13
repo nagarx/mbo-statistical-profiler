@@ -10,7 +10,7 @@ High-performance Rust crate for MBO (Market-by-Order) / LOB (Limit Order Book) m
 - **Single-pass processing** — all trackers receive every event simultaneously
 - **Bounded memory** — streaming accumulators (Welford, reservoir sampling), no full-dataset storage
 - **TOML-driven configuration** — enable/disable trackers, set timescales, tune parameters
-- **118 tests** — 98 self-contained unit tests + 20 golden-value integration tests
+- **120 tests** — 100 self-contained unit tests (including 2 config schema regression guards) + 20 golden-value integration tests
 
 ## Architecture
 

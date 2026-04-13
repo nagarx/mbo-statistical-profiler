@@ -1,5 +1,8 @@
 # Default profiler configuration
 
+timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
+reservoir_capacity = 10000
+
 [input]
 hot_store_dir = "../data/hot_store"
 filename_pattern = "xnas-itch-{date}.mbo.dbn"
@@ -18,9 +21,6 @@ depth = true
 liquidity = true
 jumps = true
 noise = true
-
-timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
-reservoir_capacity = 10000
 
 [output]
 output_dir = "profiler_output"

@@ -17,3 +17,8 @@
 
 # Log files (reproducible profiler output)
 *.log
+
+# Default output directories (not the committed output_*_full/ artifacts)
+/profiler_output/
+/test_output/
+/test_output_full/

@@ -2,6 +2,11 @@
 # Expected runtime: ~30 minutes (ARCX has lower volume than XNAS)
 # Expected output: 12 JSON files in output_arcx_full/
 
+timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
+reservoir_capacity = 10000
+vpin_volume_bar_size = 5000
+vpin_window_bars = 50
+
 [input]
 hot_store_dir = "../data/hot_store"
 filename_pattern = "arcx-pillar-{date}.mbo.dbn"
@@ -23,11 +28,6 @@ jumps = true
 noise = true
 vpin = true
 cross_scale_ofi = true
-
-timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
-reservoir_capacity = 10000
-vpin_volume_bar_size = 5000
-vpin_window_bars = 50
 
 [output]
 output_dir = "output_arcx_full"

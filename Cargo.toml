@@ -31,9 +31,6 @@ env_logger = "0.10"
 rand = "0.8"
 chrono = { version = "0.4", default-features = false, features = ["std"] }
 
-[dev-dependencies]
-criterion = "0.5"
-
 [[bin]]
 name = "profile_mbo"
 path = "src/bin/profile_mbo.rs"

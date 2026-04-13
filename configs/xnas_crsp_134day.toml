@@ -1,6 +1,11 @@
 # CRSP 134-day XNAS ITCH profiling (multi-stock universality study)
 # Most different from NVDA: widest spreads (6-10 bps), thinnest book, lowest volume (1.6M/day)
 
+timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
+reservoir_capacity = 10000
+vpin_volume_bar_size = 500
+vpin_window_bars = 50
+
 [input]
 data_dir = "../data/XNAS_ITCH/CRSP/mbo_2025-07-01_to_2026-01-09"
 filename_pattern = "xnas-itch-{date}.mbo.CRSP.dbn.zst"
@@ -21,11 +26,6 @@ jumps = true
 noise = true
 vpin = true
 cross_scale_ofi = true
-
-timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
-reservoir_capacity = 10000
-vpin_volume_bar_size = 500
-vpin_window_bars = 50
 
 [output]
 output_dir = "output_CRSP_134day"

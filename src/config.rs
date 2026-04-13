@@ -4,7 +4,13 @@ use serde::{Deserialize, Serialize};
 use std::path::PathBuf;
 
 /// Top-level profiler configuration.
+///
+/// `deny_unknown_fields` ensures that misplaced keys (e.g., a top-level key
+/// accidentally placed under `[trackers]` in TOML) fail at parse time rather
+/// than being silently dropped. This prevents config-schema drift from
+/// silently overriding intended values with defaults.
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct ProfilerConfig {
     /// Input data configuration.
     pub input: InputConfig,
@@ -36,6 +42,7 @@ pub struct ProfilerConfig {
 
 /// Input data source configuration.
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct InputConfig {
     /// Path to hot store directory (decompressed .dbn files).
     pub hot_store_dir: Option<PathBuf>,
@@ -61,6 +68,7 @@ pub struct InputConfig {
 
 /// Which analysis trackers to enable.
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct TrackerConfig {
     #[serde(default = "default_true")]
     pub quality: bool,
@@ -112,6 +120,7 @@ impl Default for TrackerConfig {
 
 /// Output configuration.
 #[derive(Debug, Clone, Serialize, Deserialize)]
+#[serde(deny_unknown_fields)]
 pub struct OutputConfig {
     /// Directory for JSON output files.
     #[serde(default = "default_output_dir")]
@@ -169,5 +178,68 @@ impl ProfilerConfig {
         let contents = std::fs::read_to_string(path)?;
         let config: Self = toml::from_str(&contents)?;
         Ok(config)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    /// Parse every committed config file to verify contract integrity.
+    ///
+    /// Regression guard: on 2026-04-14 we discovered that all 27 committed
+    /// configs had runtime keys (`timescales`, `reservoir_capacity`,
+    /// `vpin_volume_bar_size`, `vpin_window_bars`) placed AFTER the
+    /// `[trackers]` section header. Because these keys don't exist in
+    /// `TrackerConfig`, they were silently dropped by serde's default
+    /// behavior. `deny_unknown_fields` now makes this fail loudly, but a
+    /// direct parse test ensures no future config file regresses.
+    #[test]
+    fn all_committed_configs_parse() {
+        let configs_dir = std::path::Path::new(env!("CARGO_MANIFEST_DIR")).join("configs");
+        let mut count = 0;
+        let mut failures: Vec<String> = Vec::new();
+
+        for entry in std::fs::read_dir(&configs_dir).expect("configs/ directory exists") {
+            let entry = entry.unwrap();
+            let path = entry.path();
+            if path.extension().and_then(|e| e.to_str()) != Some("toml") {
+                continue;
+            }
+            match ProfilerConfig::from_file(&path) {
+                Ok(_) => count += 1,
+                Err(e) => failures.push(format!("{}: {}", path.display(), e)),
+            }
+        }
+
+        assert!(
+            failures.is_empty(),
+            "Config parse failures (deny_unknown_fields catches misplaced keys):\n{}",
+            failures.join("\n")
+        );
+        assert!(
+            count >= 27,
+            "Expected at least 27 configs, found {}",
+            count
+        );
+    }
+
+    #[test]
+    fn deny_unknown_fields_catches_misplaced_key() {
+        // Regression: a `timescales` key placed inside `[trackers]` should fail,
+        // not silently drop to the default.
+        let bad_toml = r#"
+[input]
+filename_pattern = "test.dbn"
+
+[trackers]
+quality = true
+timescales = [1.0, 5.0]
+"#;
+        let result: Result<ProfilerConfig, _> = toml::from_str(bad_toml);
+        assert!(
+            result.is_err(),
+            "Expected parse error for misplaced key, but parse succeeded"
+        );
     }
 }

@@ -2,7 +2,7 @@
 
 > **Version**: 0.1.0 (Phase B Complete — All 13 Trackers Implemented)
 > **Last Updated**: 2026-04-14
-> **Tests**: 118 passing (98 unit + 20 integration)
+> **Tests**: 120 passing (100 unit + 20 integration)
 > **Performance**: 854K–2.9M events/sec (13 trackers → 1 tracker)
 
 ---
@@ -38,7 +38,7 @@ src/
 tests/
 └── integration_real_data.rs   # 20 golden-value regression tests (require real data)
 
-configs/                       # 28 TOML configs (default, full runs, monthly, multi-stock)
+configs/                       # 27 TOML configs (default, full runs, monthly, multi-stock)
 scripts/
 ├── compare_monthly.py         # Monthly signal stability comparison
 └── cross_validate.py          # Cross-validation against Python analyzer
@@ -100,8 +100,8 @@ After all days:
 DbnLoader (from mbo-lob-reconstructor)
     │ iterates MboMessage records
     ▼
-LobReconstructor::process_message(msg)
-    │ returns &LobState (560B stack-allocated book snapshot)
+LobReconstructor::process_message_into(msg, &mut state_buf)
+    │ fills LobState into caller-provided buffer (560B stack-allocated, zero-alloc)
     ▼
 ┌─────────────────────────────────────────────────┐
 │ For each (MboMessage, LobState) pair:           │
@@ -221,7 +221,7 @@ OFI_t = (bid_size_t * I(bid_price_t >= bid_price_{t-1})
 
 **Formulas:**
 - Log return: `r_t = ln(mid_t / mid_{t-1})` at N timescales
-- Hill tail index: `H = (1/k) * sum_{i=1}^{k} ln(X_{(i)} / X_{(k+1)})` — estimated separately for left and right tails
+- Hill (1975) estimator: `H = (1/k) * sum_{i=1}^{k} ln(X_{(i)} / X_{(k+1)})` where X is sorted descending by absolute value; reported output is the **tail exponent** `α = 1/H` (separate estimates for left and right tails). Higher α = lighter tails.
 - Value at Risk: `VaR_α = quantile(returns, α)` for α = 1%, 5%
 - CVaR (Expected Shortfall): `CVaR_α = E[r | r <= VaR_α]` for α = 1%, 5%
 - Zero-return fraction: `count(r = 0) / count(r)` — indicates market inactivity
@@ -234,7 +234,7 @@ OFI_t = (bid_size_t * I(bid_price_t >= bid_price_{t-1})
 | Return distribution (mean, std, skew, kurtosis, percentiles) | dimensionless | Yes |
 | ACF (lags 1–20) | dimensionless | Yes |
 | Absolute return ACF (volatility clustering) | dimensionless | Yes |
-| Hill tail index (left, right) | dimensionless | Yes |
+| Hill tail exponent α = 1/H (left, right) | dimensionless | Yes |
 | VaR (1%, 5%) | dimensionless | Yes |
 | CVaR (1%, 5%) | dimensionless | Yes |
 | Zero-return fraction | ratio | Yes |
@@ -398,7 +398,8 @@ OFI_t = (bid_size_t * I(bid_price_t >= bid_price_{t-1})
 - Jump fraction: `J / RV` — ratio of variance attributable to jumps
 - BNS z-statistic: `z = (RV - BV) / sqrt(var_est)` where:
   - `var_est = (π²/4 + π - 5) * max(TP, 0) / n`
-  - Tripower quarticity: `TP = n * (π/4)² * sum_{i=3}^{n} |r_i|^{2/3} * |r_{i-1}|^{2/3} * |r_{i-2}|^{2/3}`
+  - Tripower quarticity (BNS 2006): `TP = (n / (n-2)) * μ_{4/3}^{-3} * sum_{i=3}^{n} |r_i|^{4/3} * |r_{i-1}|^{4/3} * |r_{i-2}|^{4/3}`
+  - Scaling constant: `μ_{4/3} = 2^{2/3} * Γ(7/6) / Γ(1/2)`
 - Significant jump: `z > z_threshold` (configurable, default from normal quantile)
 
 **Statistics:**
@@ -510,7 +511,10 @@ The profiler re-exports statistical primitives from the [`hft-statistics`](https
 **Time utilities** (also from hft-statistics):
 - `time_regime(timestamp_ns, utc_offset) → u8` — 7-regime intraday classification
 - `utc_offset_for_date(year, month, day) → i32` — DST-aware UTC offset (2nd Sunday March, 1st Sunday November)
-- `resample_to_grid(timestamps, values, timescale, AggMode) → Vec<f64>` — canonical-grid resampling
+- `infer_utc_offset(timestamps) → i32` — infer UTC offset from first timestamp
+- `infer_day_params(timestamps) → (utc_offset: i32, day_epoch_ns: i64)` — infer both from timestamps
+- `day_epoch_ns(year, month, day, utc_offset) → i64` — midnight UTC in nanoseconds for a trading day
+- `resample_to_grid(timestamps_ns, values, bin_width_ns, day_epoch_ns, utc_offset_hours, mode) → ResampledBins` — canonical-grid resampling with 390-bin intraday support
 - `N_REGIMES = 7` — number of time regimes
 
 ---
@@ -566,7 +570,7 @@ Configuration is TOML-driven via `ProfilerConfig` (defined in `src/config.rs`).
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `output_dir` | `PathBuf` | `"profiler_output"` | Output directory for JSON files |
-| `write_summaries` | `bool` | `true` | Write human-readable markdown summary |
+| `write_summaries` | `bool` | `true` | **Currently unused** (reserved for future markdown summary generation — Phase C) |
 
 ---
 
@@ -574,21 +578,22 @@ Configuration is TOML-driven via `ProfilerConfig` (defined in `src/config.rs`).
 
 Each tracker produces a numbered JSON file: `{NN}_{TrackerName}.json`.
 
-**Provenance metadata** (appended to output):
+**Provenance metadata** (emitted by `profiler.rs::write_output()`, appended as `_provenance` key to each tracker's JSON):
 ```json
 {
   "profiler_version": "0.1.0",
-  "config_path": "configs/xnas_full_234day.toml",
   "symbol": "NVDA",
   "exchange": "XNAS",
-  "total_events": 2873641234,
   "n_days": 233,
-  "elapsed_secs": 3367.2,
-  "timestamp": "2026-03-12T01:17:39Z"
+  "total_events": 2873641234,
+  "runtime_secs": 3367.2,
+  "throughput_events_per_sec": 853487.5,
+  "timescales": [1.0, 5.0, 10.0, 30.0, 60.0, 300.0],
+  "reservoir_capacity": 10000
 }
 ```
 
-If `write_summaries = true`, a markdown statistical profile is also generated (e.g., `XNAS_NVDA_STATISTICAL_PROFILE.md`).
+Note: the `write_summaries` config field exists in `OutputConfig` but is currently **unused by profiler code** — markdown summary files in committed `output_*/` directories were generated by external tools. Adding markdown summary generation is part of Phase C.
 
 ---
 
@@ -605,8 +610,6 @@ If `write_summaries = true`, a markdown statistical profile is also generated (e
 | `log` 0.4 + `env_logger` 0.10 | crates.io | Logging |
 | `rand` 0.8 | crates.io | Reservoir sampling RNG |
 | `chrono` 0.4 | crates.io | Date arithmetic for DST computation |
-
-**Dev dependency:** `criterion` 0.5 (benchmarking).
 
 **Local development:** `.cargo/config.toml` (gitignored) patches both git dependencies to sibling directories for fast iteration. See README.md for monorepo setup.
 
@@ -635,7 +638,7 @@ If `write_summaries = true`, a markdown statistical profile is also generated (e
 
 ## Test Inventory
 
-**Total: 118 tests** (98 unit + 20 integration)
+**Total: 120 tests** (100 unit + 20 integration)
 
 ### Unit Tests (98, self-contained)
 
@@ -677,13 +680,30 @@ The `output_*/` directories contain profiler output from production runs:
 
 See `NVDA_UNIFIED_ANALYSIS_CONCLUSION.md` for the definitive cross-exchange analysis.
 
+### Historical Note: Multi-Stock VPIN Bar Sizes
+
+On 2026-04-14, a TOML schema misplacement was discovered: all committed configs had runtime keys (`timescales`, `reservoir_capacity`, `vpin_volume_bar_size`, `vpin_window_bars`) placed after the `[trackers]` section header. Because these keys don't exist in `TrackerConfig`, serde silently dropped them and used defaults.
+
+**Affected runs**: The NVDA XNAS + ARCX full runs used defaults (`vpin_volume_bar_size = 5000`, matching the intended values), so their results are correct. However, the multi-stock universality configs intended stock-calibrated VPIN bar sizes that were not applied:
+
+| Stock | Intended | Actually Ran With |
+|-------|----------|-------------------|
+| CRSP, ISRG | 500 | 5000 (10× larger) |
+| ZM, FANG | 1000 | 5000 (5× larger) |
+| PEP, IBKR | 1500 | 5000 (3.3× larger) |
+| MRNA, DKNG | 2000 | 5000 (2.5× larger) |
+| SNAP | 4000 | 5000 (1.25× larger) |
+| HOOD | 5000 | 5000 (correct) |
+
+The VPIN values in these multi-stock JSON outputs therefore reflect larger-volume bars than intended. To re-run with correct bar sizes, execute: `cargo run --release --bin profile_mbo -- --config configs/xnas_{stock}_134day.toml` after pulling the updated configs. The config files have been corrected and `#[serde(deny_unknown_fields)]` now prevents this class of silent drop at parse time.
+
 ---
 
 ## Roadmap
 
 ### Complete
 - Phase A: Foundation (AnalysisTracker trait, QualityTracker, CLI, statistical primitives)
-- Phase B: All 13 trackers implemented (118 tests)
+- Phase B: All 13 trackers implemented (120 tests)
 - Golden-value regression tests (20 integration tests vs Python analyzer)
 - Full 233-day XNAS + ARCX runs
 - Monthly signal stability analysis (12 months)
