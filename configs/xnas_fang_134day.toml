@@ -1,0 +1,32 @@
+# FANG 134-day XNAS ITCH profiling (multi-stock universality study)
+# Energy, institutional, low beta (0.52), spread 3-5 bps, 3M vol/day
+
+[input]
+data_dir = "../data/XNAS_ITCH/FANG/mbo_2025-07-01_to_2026-01-09"
+filename_pattern = "xnas-itch-{date}.mbo.FANG.dbn.zst"
+symbol = "FANG"
+exchange = "XNAS"
+
+[trackers]
+quality = true
+ofi = true
+spread = true
+returns = true
+volatility = true
+lifecycle = true
+trades = true
+depth = true
+liquidity = true
+jumps = true
+noise = true
+vpin = true
+cross_scale_ofi = true
+
+timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
+reservoir_capacity = 10000
+vpin_volume_bar_size = 1000
+vpin_window_bars = 50
+
+[output]
+output_dir = "output_FANG_134day"
+write_summaries = true

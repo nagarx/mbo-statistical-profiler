@@ -1,0 +1,2163 @@
+{
+  "_provenance": {
+    "exchange": "XNAS",
+    "n_days": 19,
+    "profiler_version": "0.1.0",
+    "reservoir_capacity": 10000,
+    "runtime_secs": 427.310052125,
+    "symbol": "NVDA",
+    "throughput_events_per_sec": 1106799.0529313597,
+    "timescales": [
+      1.0,
+      5.0,
+      10.0,
+      30.0,
+      60.0,
+      300.0
+    ],
+    "total_events": 472946361
+  },
+  "buyer_initiated_size": {
+    "count": 12826569,
+    "kurtosis": 2094.0717348419917,
+    "max": 194100.0,
+    "mean": 49.768952944459656,
+    "min": 1.0,
+    "percentiles": {
+      "p1": 1.0,
+      "p10": 2.0,
+      "p25": 10.0,
+      "p5": 1.0,
+      "p50": 25.0,
+      "p75": 50.0,
+      "p90": 100.0,
+      "p95": 100.0,
+      "p99": 420.08000000000175
+    },
+    "skewness": 38.70998065591735,
+    "std": 256.1009634605851
+  },
+  "clustering": {
+    "cluster_fraction": 0.2619540657806021,
+    "cluster_gap_seconds": 1.0,
+    "max_cluster_size": 186701,
+    "mean_cluster_size": 77.58083515663141,
+    "total_clustered_trades": 7481663,
+    "total_clusters": 96437
+  },
+  "inter_trade_time": {
+    "count": 7527301,
+    "kurtosis": 886.7930265527247,
+    "max": 161.203408855,
+    "mean": 0.13532766593069903,
+    "min": 1.62e-7,
+    "percentiles": {
+      "p1": 8.948200000000001e-7,
+      "p10": 0.0000184543,
+      "p25": 0.00004178625,
+      "p5": 4.923900000000002e-6,
+      "p50": 0.0014820735,
+      "p75": 0.04988566625,
+      "p90": 0.22473193940000014,
+      "p95": 0.4168891494999996,
+      "p99": 1.6378587916600136
+    },
+    "skewness": 25.575126213157954,
+    "std": 1.0201918715525213
+  },
+  "intraday_trade_rate_curve": [
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 0.0,
+      "total_trade_count": 309435
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 1.0,
+      "total_trade_count": 238618
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 2.0,
+      "total_trade_count": 218144
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 3.0,
+      "total_trade_count": 209503
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 4.0,
+      "total_trade_count": 171981
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 5.0,
+      "total_trade_count": 260050
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 6.0,
+      "total_trade_count": 229550
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 7.0,
+      "total_trade_count": 207212
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 8.0,
+      "total_trade_count": 187827
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 9.0,
+      "total_trade_count": 183486
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 10.0,
+      "total_trade_count": 192145
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 11.0,
+      "total_trade_count": 170489
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 12.0,
+      "total_trade_count": 188110
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 13.0,
+      "total_trade_count": 162825
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 14.0,
+      "total_trade_count": 168155
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 15.0,
+      "total_trade_count": 171375
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 16.0,
+      "total_trade_count": 175566
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 17.0,
+      "total_trade_count": 162099
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 18.0,
+      "total_trade_count": 148834
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 19.0,
+      "total_trade_count": 149781
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 20.0,
+      "total_trade_count": 160954
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 21.0,
+      "total_trade_count": 148052
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 22.0,
+      "total_trade_count": 147919
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 23.0,
+      "total_trade_count": 139601
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 24.0,
+      "total_trade_count": 131952
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 25.0,
+      "total_trade_count": 131082
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 26.0,
+      "total_trade_count": 113341
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 27.0,
+      "total_trade_count": 102698
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 28.0,
+      "total_trade_count": 102277
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 29.0,
+      "total_trade_count": 111750
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 30.0,
+      "total_trade_count": 136270
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 31.0,
+      "total_trade_count": 118117
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 32.0,
+      "total_trade_count": 158002
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 33.0,
+      "total_trade_count": 117982
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 34.0,
+      "total_trade_count": 169077
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 35.0,
+      "total_trade_count": 121766
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 36.0,
+      "total_trade_count": 119823
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 37.0,
+      "total_trade_count": 102178
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 38.0,
+      "total_trade_count": 103483
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 39.0,
+      "total_trade_count": 92540
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 40.0,
+      "total_trade_count": 108880
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 41.0,
+      "total_trade_count": 108460
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 42.0,
+      "total_trade_count": 106460
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 43.0,
+      "total_trade_count": 93391
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 44.0,
+      "total_trade_count": 87096
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 45.0,
+      "total_trade_count": 94079
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 46.0,
+      "total_trade_count": 96483
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 47.0,
+      "total_trade_count": 109212
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 48.0,
+      "total_trade_count": 91805
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 49.0,
+      "total_trade_count": 90743
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 50.0,
+      "total_trade_count": 100155
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 51.0,
+      "total_trade_count": 91259
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 52.0,
+      "total_trade_count": 88218
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 53.0,
+      "total_trade_count": 93313
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 54.0,
+      "total_trade_count": 88431
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 55.0,
+      "total_trade_count": 93299
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 56.0,
+      "total_trade_count": 104780
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 57.0,
+      "total_trade_count": 87012
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 58.0,
+      "total_trade_count": 107642
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 59.0,
+      "total_trade_count": 96419
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 60.0,
+      "total_trade_count": 92886
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 61.0,
+      "total_trade_count": 86684
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 62.0,
+      "total_trade_count": 80635
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 63.0,
+      "total_trade_count": 103935
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 64.0,
+      "total_trade_count": 136058
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 65.0,
+      "total_trade_count": 103522
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 66.0,
+      "total_trade_count": 102856
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 67.0,
+      "total_trade_count": 113686
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 68.0,
+      "total_trade_count": 93883
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 69.0,
+      "total_trade_count": 104478
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 70.0,
+      "total_trade_count": 88258
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 71.0,
+      "total_trade_count": 83402
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 72.0,
+      "total_trade_count": 78427
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 73.0,
+      "total_trade_count": 75823
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 74.0,
+      "total_trade_count": 80842
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 75.0,
+      "total_trade_count": 94789
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 76.0,
+      "total_trade_count": 80226
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 77.0,
+      "total_trade_count": 84228
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 78.0,
+      "total_trade_count": 122088
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 79.0,
+      "total_trade_count": 86501
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 80.0,
+      "total_trade_count": 79973
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 81.0,
+      "total_trade_count": 79827
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 82.0,
+      "total_trade_count": 79657
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 83.0,
+      "total_trade_count": 77084
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 84.0,
+      "total_trade_count": 70181
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 85.0,
+      "total_trade_count": 78217
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 86.0,
+      "total_trade_count": 69767
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 87.0,
+      "total_trade_count": 66663
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 88.0,
+      "total_trade_count": 72115
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 89.0,
+      "total_trade_count": 67988
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 90.0,
+      "total_trade_count": 78512
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 91.0,
+      "total_trade_count": 75764
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 92.0,
+      "total_trade_count": 74515
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 93.0,
+      "total_trade_count": 67305
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 94.0,
+      "total_trade_count": 110990
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 95.0,
+      "total_trade_count": 79086
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 96.0,
+      "total_trade_count": 78149
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 97.0,
+      "total_trade_count": 78362
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 98.0,
+      "total_trade_count": 72305
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 99.0,
+      "total_trade_count": 74417
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 100.0,
+      "total_trade_count": 88160
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 101.0,
+      "total_trade_count": 83442
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 102.0,
+      "total_trade_count": 91257
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 103.0,
+      "total_trade_count": 70307
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 104.0,
+      "total_trade_count": 70390
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 105.0,
+      "total_trade_count": 77058
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 106.0,
+      "total_trade_count": 68621
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 107.0,
+      "total_trade_count": 71062
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 108.0,
+      "total_trade_count": 70216
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 109.0,
+      "total_trade_count": 67044
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 110.0,
+      "total_trade_count": 85590
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 111.0,
+      "total_trade_count": 69527
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 112.0,
+      "total_trade_count": 71105
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 113.0,
+      "total_trade_count": 68270
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 114.0,
+      "total_trade_count": 74079
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 115.0,
+      "total_trade_count": 81092
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 116.0,
+      "total_trade_count": 70018
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 117.0,
+      "total_trade_count": 68791
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 118.0,
+      "total_trade_count": 66365
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 119.0,
+      "total_trade_count": 74938
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 120.0,
+      "total_trade_count": 72645
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 121.0,
+      "total_trade_count": 69769
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 122.0,
+      "total_trade_count": 66581
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 123.0,
+      "total_trade_count": 71841
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 124.0,
+      "total_trade_count": 64751
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 125.0,
+      "total_trade_count": 85082
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 126.0,
+      "total_trade_count": 75922
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 127.0,
+      "total_trade_count": 57354
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 128.0,
+      "total_trade_count": 62050
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 129.0,
+      "total_trade_count": 67077
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 130.0,
+      "total_trade_count": 63956
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 131.0,
+      "total_trade_count": 67353
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 132.0,
+      "total_trade_count": 64393
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 133.0,
+      "total_trade_count": 68214
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 134.0,
+      "total_trade_count": 58444
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 135.0,
+      "total_trade_count": 67376
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 136.0,
+      "total_trade_count": 58107
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 137.0,
+      "total_trade_count": 57597
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 138.0,
+      "total_trade_count": 63733
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 139.0,
+      "total_trade_count": 53286
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 140.0,
+      "total_trade_count": 60125
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 141.0,
+      "total_trade_count": 55500
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 142.0,
+      "total_trade_count": 61766
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 143.0,
+      "total_trade_count": 62067
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 144.0,
+      "total_trade_count": 68149
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 145.0,
+      "total_trade_count": 62591
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 146.0,
+      "total_trade_count": 63230
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 147.0,
+      "total_trade_count": 66383
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 148.0,
+      "total_trade_count": 73273
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 149.0,
+      "total_trade_count": 56214
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 150.0,
+      "total_trade_count": 70377
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 151.0,
+      "total_trade_count": 59686
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 152.0,
+      "total_trade_count": 54034
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 153.0,
+      "total_trade_count": 50031
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 154.0,
+      "total_trade_count": 55493
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 155.0,
+      "total_trade_count": 51953
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 156.0,
+      "total_trade_count": 60610
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 157.0,
+      "total_trade_count": 58168
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 158.0,
+      "total_trade_count": 53055
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 159.0,
+      "total_trade_count": 47326
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 160.0,
+      "total_trade_count": 51835
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 161.0,
+      "total_trade_count": 52362
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 162.0,
+      "total_trade_count": 60603
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 163.0,
+      "total_trade_count": 53792
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 164.0,
+      "total_trade_count": 52938
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 165.0,
+      "total_trade_count": 54552
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 166.0,
+      "total_trade_count": 52836
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 167.0,
+      "total_trade_count": 53889
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 168.0,
+      "total_trade_count": 50506
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 169.0,
+      "total_trade_count": 70476
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 170.0,
+      "total_trade_count": 65365
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 171.0,
+      "total_trade_count": 61554
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 172.0,
+      "total_trade_count": 54376
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 173.0,
+      "total_trade_count": 58124
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 174.0,
+      "total_trade_count": 54714
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 175.0,
+      "total_trade_count": 51760
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 176.0,
+      "total_trade_count": 62406
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 177.0,
+      "total_trade_count": 51583
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 178.0,
+      "total_trade_count": 48939
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 179.0,
+      "total_trade_count": 41411
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 180.0,
+      "total_trade_count": 48443
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 181.0,
+      "total_trade_count": 47680
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 182.0,
+      "total_trade_count": 46483
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 183.0,
+      "total_trade_count": 59709
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 184.0,
+      "total_trade_count": 47218
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 185.0,
+      "total_trade_count": 48885
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 186.0,
+      "total_trade_count": 55843
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 187.0,
+      "total_trade_count": 52665
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 188.0,
+      "total_trade_count": 48885
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 189.0,
+      "total_trade_count": 45882
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 190.0,
+      "total_trade_count": 50891
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 191.0,
+      "total_trade_count": 50062
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 192.0,
+      "total_trade_count": 43667
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 193.0,
+      "total_trade_count": 45524
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 194.0,
+      "total_trade_count": 43745
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 195.0,
+      "total_trade_count": 47130
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 196.0,
+      "total_trade_count": 48660
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 197.0,
+      "total_trade_count": 37765
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 198.0,
+      "total_trade_count": 43570
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 199.0,
+      "total_trade_count": 38713
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 200.0,
+      "total_trade_count": 47432
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 201.0,
+      "total_trade_count": 42292
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 202.0,
+      "total_trade_count": 41399
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 203.0,
+      "total_trade_count": 46443
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 204.0,
+      "total_trade_count": 46575
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 205.0,
+      "total_trade_count": 46226
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 206.0,
+      "total_trade_count": 43536
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 207.0,
+      "total_trade_count": 43396
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 208.0,
+      "total_trade_count": 39569
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 209.0,
+      "total_trade_count": 49971
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 210.0,
+      "total_trade_count": 39377
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 211.0,
+      "total_trade_count": 35516
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 212.0,
+      "total_trade_count": 39311
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 213.0,
+      "total_trade_count": 41528
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 214.0,
+      "total_trade_count": 40617
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 215.0,
+      "total_trade_count": 43689
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 216.0,
+      "total_trade_count": 42306
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 217.0,
+      "total_trade_count": 38362
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 218.0,
+      "total_trade_count": 41677
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 219.0,
+      "total_trade_count": 45506
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 220.0,
+      "total_trade_count": 38785
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 221.0,
+      "total_trade_count": 36462
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 222.0,
+      "total_trade_count": 38449
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 223.0,
+      "total_trade_count": 36728
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 224.0,
+      "total_trade_count": 32767
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 225.0,
+      "total_trade_count": 41327
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 226.0,
+      "total_trade_count": 38858
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 227.0,
+      "total_trade_count": 38573
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 228.0,
+      "total_trade_count": 40807
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 229.0,
+      "total_trade_count": 40462
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 230.0,
+      "total_trade_count": 41606
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 231.0,
+      "total_trade_count": 58062
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 232.0,
+      "total_trade_count": 35691
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 233.0,
+      "total_trade_count": 35055
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 234.0,
+      "total_trade_count": 36271
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 235.0,
+      "total_trade_count": 41791
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 236.0,
+      "total_trade_count": 36918
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 237.0,
+      "total_trade_count": 37203
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 238.0,
+      "total_trade_count": 40319
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 239.0,
+      "total_trade_count": 39961
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 240.0,
+      "total_trade_count": 46748
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 241.0,
+      "total_trade_count": 37480
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 242.0,
+      "total_trade_count": 43062
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 243.0,
+      "total_trade_count": 43144
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 244.0,
+      "total_trade_count": 37699
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 245.0,
+      "total_trade_count": 40024
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 246.0,
+      "total_trade_count": 42125
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 247.0,
+      "total_trade_count": 43150
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 248.0,
+      "total_trade_count": 50074
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 249.0,
+      "total_trade_count": 37228
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 250.0,
+      "total_trade_count": 52293
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 251.0,
+      "total_trade_count": 43682
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 252.0,
+      "total_trade_count": 40401
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 253.0,
+      "total_trade_count": 38031
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 254.0,
+      "total_trade_count": 38956
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 255.0,
+      "total_trade_count": 42728
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 256.0,
+      "total_trade_count": 42396
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 257.0,
+      "total_trade_count": 42509
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 258.0,
+      "total_trade_count": 82854
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 259.0,
+      "total_trade_count": 56878
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 260.0,
+      "total_trade_count": 58993
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 261.0,
+      "total_trade_count": 48225
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 262.0,
+      "total_trade_count": 42929
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 263.0,
+      "total_trade_count": 38873
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 264.0,
+      "total_trade_count": 39923
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 265.0,
+      "total_trade_count": 51663
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 266.0,
+      "total_trade_count": 43570
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 267.0,
+      "total_trade_count": 43455
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 268.0,
+      "total_trade_count": 45547
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 269.0,
+      "total_trade_count": 38452
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 270.0,
+      "total_trade_count": 52712
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 271.0,
+      "total_trade_count": 50430
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 272.0,
+      "total_trade_count": 52231
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 273.0,
+      "total_trade_count": 45897
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 274.0,
+      "total_trade_count": 61388
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 275.0,
+      "total_trade_count": 50289
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 276.0,
+      "total_trade_count": 43467
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 277.0,
+      "total_trade_count": 38807
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 278.0,
+      "total_trade_count": 46407
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 279.0,
+      "total_trade_count": 38823
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 280.0,
+      "total_trade_count": 40528
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 281.0,
+      "total_trade_count": 43252
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 282.0,
+      "total_trade_count": 41750
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 283.0,
+      "total_trade_count": 37333
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 284.0,
+      "total_trade_count": 36153
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 285.0,
+      "total_trade_count": 39101
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 286.0,
+      "total_trade_count": 33926
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 287.0,
+      "total_trade_count": 37236
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 288.0,
+      "total_trade_count": 38408
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 289.0,
+      "total_trade_count": 44068
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 290.0,
+      "total_trade_count": 39643
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 291.0,
+      "total_trade_count": 37420
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 292.0,
+      "total_trade_count": 43347
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 293.0,
+      "total_trade_count": 33589
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 294.0,
+      "total_trade_count": 30297
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 295.0,
+      "total_trade_count": 42693
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 296.0,
+      "total_trade_count": 43906
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 297.0,
+      "total_trade_count": 46488
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 298.0,
+      "total_trade_count": 38880
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 299.0,
+      "total_trade_count": 37320
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 300.0,
+      "total_trade_count": 48821
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 301.0,
+      "total_trade_count": 45771
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 302.0,
+      "total_trade_count": 41416
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 303.0,
+      "total_trade_count": 39251
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 304.0,
+      "total_trade_count": 40876
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 305.0,
+      "total_trade_count": 42038
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 306.0,
+      "total_trade_count": 37831
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 307.0,
+      "total_trade_count": 40426
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 308.0,
+      "total_trade_count": 44638
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 309.0,
+      "total_trade_count": 37975
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 310.0,
+      "total_trade_count": 52116
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 311.0,
+      "total_trade_count": 41119
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 312.0,
+      "total_trade_count": 42235
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 313.0,
+      "total_trade_count": 44924
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 314.0,
+      "total_trade_count": 43201
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 315.0,
+      "total_trade_count": 40301
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 316.0,
+      "total_trade_count": 40438
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 317.0,
+      "total_trade_count": 41725
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 318.0,
+      "total_trade_count": 37198
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 319.0,
+      "total_trade_count": 33475
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 320.0,
+      "total_trade_count": 39226
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 321.0,
+      "total_trade_count": 38543
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 322.0,
+      "total_trade_count": 38355
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 323.0,
+      "total_trade_count": 38369
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 324.0,
+      "total_trade_count": 41072
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 325.0,
+      "total_trade_count": 45602
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 326.0,
+      "total_trade_count": 40150
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 327.0,
+      "total_trade_count": 38096
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 328.0,
+      "total_trade_count": 38416
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 329.0,
+      "total_trade_count": 38244
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 330.0,
+      "total_trade_count": 45471
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 331.0,
+      "total_trade_count": 49828
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 332.0,
+      "total_trade_count": 46331
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 333.0,
+      "total_trade_count": 42232
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 334.0,
+      "total_trade_count": 38538
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 335.0,
+      "total_trade_count": 41081
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 336.0,
+      "total_trade_count": 40246
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 337.0,
+      "total_trade_count": 41598
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 338.0,
+      "total_trade_count": 41988
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 339.0,
+      "total_trade_count": 33377
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 340.0,
+      "total_trade_count": 40143
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 341.0,
+      "total_trade_count": 34244
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 342.0,
+      "total_trade_count": 41330
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 343.0,
+      "total_trade_count": 35429
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 344.0,
+      "total_trade_count": 33944
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 345.0,
+      "total_trade_count": 41918
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 346.0,
+      "total_trade_count": 39648
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 347.0,
+      "total_trade_count": 39273
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 348.0,
+      "total_trade_count": 44791
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 349.0,
+      "total_trade_count": 39412
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 350.0,
+      "total_trade_count": 42601
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 351.0,
+      "total_trade_count": 41739
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 352.0,
+      "total_trade_count": 38669
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 353.0,
+      "total_trade_count": 45053
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 354.0,
+      "total_trade_count": 47919
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 355.0,
+      "total_trade_count": 42154
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 356.0,
+      "total_trade_count": 41038
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 357.0,
+      "total_trade_count": 39624
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 358.0,
+      "total_trade_count": 40044
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 359.0,
+      "total_trade_count": 39195
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 360.0,
+      "total_trade_count": 54259
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 361.0,
+      "total_trade_count": 53210
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 362.0,
+      "total_trade_count": 48688
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 363.0,
+      "total_trade_count": 43472
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 364.0,
+      "total_trade_count": 42426
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 365.0,
+      "total_trade_count": 49459
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 366.0,
+      "total_trade_count": 48942
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 367.0,
+      "total_trade_count": 51024
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 368.0,
+      "total_trade_count": 49836
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 369.0,
+      "total_trade_count": 47843
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 370.0,
+      "total_trade_count": 54065
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 371.0,
+      "total_trade_count": 49960
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 372.0,
+      "total_trade_count": 50028
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 373.0,
+      "total_trade_count": 46741
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 374.0,
+      "total_trade_count": 48288
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 375.0,
+      "total_trade_count": 58070
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 376.0,
+      "total_trade_count": 67971
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 377.0,
+      "total_trade_count": 52898
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 378.0,
+      "total_trade_count": 55615
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 379.0,
+      "total_trade_count": 88746
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 380.0,
+      "total_trade_count": 149406
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 381.0,
+      "total_trade_count": 86761
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 382.0,
+      "total_trade_count": 86844
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 383.0,
+      "total_trade_count": 92759
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 384.0,
+      "total_trade_count": 175684
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 385.0,
+      "total_trade_count": 241015
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 386.0,
+      "total_trade_count": 136715
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 387.0,
+      "total_trade_count": 154812
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 388.0,
+      "total_trade_count": 168911
+    },
+    {
+      "mean_trade_count": 1.0,
+      "minutes_since_open": 389.0,
+      "total_trade_count": 460209
+    }
+  ],
+  "large_trade_impact": {
+    "buyer_count": 537848,
+    "impact_bps": {
+      "count": 1391357,
+      "kurtosis": 509.3586891805164,
+      "max": 82.65564591387876,
+      "mean": 0.7510485654302574,
+      "min": 0.0,
+      "percentiles": {
+        "p1": 0.0,
+        "p10": 0.0,
+        "p25": 0.4957550990382968,
+        "p5": 0.0,
+        "p50": 0.5375621556237551,
+        "p75": 0.5635549043360425,
+        "p90": 1.1291269603302847,
+        "p95": 2.2354745827602374,
+        "p99": 6.120772355029814
+      },
+      "skewness": 15.892091803158488,
+      "std": 1.5319283726616142
+    },
+    "seller_count": 537788,
+    "threshold_size": 104.04999999999927
+  },
+  "mean_trades_per_day": 1503209.105263158,
+  "mean_volume_per_day": 90952338.0,
+  "n_days": 19,
+  "price_level_classification": {
+    "at_ask_count": 10511306,
+    "at_ask_pct": 36.80334299496543,
+    "at_bid_count": 11958113,
+    "at_bid_pct": 41.86906311276211,
+    "inside_count": 6090844,
+    "inside_pct": 21.32593427123397,
+    "outside_count": 474,
+    "outside_pct": 0.0016596210384907085
+  },
+  "regime_trade_size": {
+    "afternoon": {
+      "count": 2881853,
+      "max": 104800.0,
+      "mean": 55.59916692489226,
+      "min": 1.0,
+      "std": 219.3572935770244
+    },
+    "close-auction": {
+      "count": 1161662,
+      "max": 54001.0,
+      "mean": 79.93191737355637,
+      "min": 1.0,
+      "std": 305.6185501033787
+    },
+    "midday": {
+      "count": 14963971,
+      "max": 10378277.0,
+      "mean": 48.44246296655404,
+      "min": 1.0,
+      "std": 2693.692955976537
+    },
+    "morning": {
+      "count": 7223505,
+      "max": 194100.0,
+      "mean": 42.740525963497916,
+      "min": 1.0,
+      "std": 257.11282754921774
+    },
+    "open-auction": {
+      "count": 1147681,
+      "max": 5584110.0,
+      "mean": 85.59002022338686,
+      "min": 1.0,
+      "std": 9045.96106106545
+    },
+    "post-market": {
+      "count": 367841,
+      "max": 29671775.0,
+      "mean": 792.1541562794876,
+      "min": 1.0,
+      "std": 104228.34380591642
+    },
+    "pre-market": {
+      "count": 814460,
+      "max": 19945.0,
+      "mean": 63.560020136042816,
+      "min": 1.0,
+      "std": 221.56583693226003
+    }
+  },
+  "seller_initiated_size": {
+    "count": 12826334,
+    "kurtosis": 1876.1656946781677,
+    "max": 194100.0,
+    "mean": 49.76631974499438,
+    "min": 1.0,
+    "percentiles": {
+      "p1": 1.0,
+      "p10": 2.0,
+      "p25": 10.0,
+      "p5": 1.0,
+      "p50": 25.0,
+      "p75": 50.0,
+      "p90": 100.0,
+      "p95": 100.0,
+      "p99": 469.0100000000002
+    },
+    "skewness": 36.058001157287016,
+    "std": 256.11860262412654
+  },
+  "total_trades": 28560973,
+  "total_volume": 1728094422,
+  "tracker": "TradeTracker",
+  "trade_size_distribution": {
+    "count": 28560973,
+    "kurtosis": 1130.2711101293114,
+    "max": 29671775.0,
+    "mean": 60.50544643560006,
+    "min": 1.0,
+    "percentiles": {
+      "p1": 1.0,
+      "p10": 2.0,
+      "p25": 10.0,
+      "p5": 1.0,
+      "p50": 25.0,
+      "p75": 50.0,
+      "p90": 100.0,
+      "p95": 100.0,
+      "p99": 400.0500000000011
+    },
+    "skewness": 26.621753094832833,
+    "std": 12125.878650030469
+  },
+  "trade_through": {
+    "pct": 0.0016596073250025479,
+    "total_count": 474
+  },
+  "trade_value": {
+    "count": 28560973,
+    "max": 5416582526.25,
+    "mean": 11326.596945413847,
+    "min": 169.55,
+    "std": 2273020.2907209555
+  }
+}

@@ -1,0 +1,29 @@
+# Single-day test configuration
+
+[input]
+hot_store_dir = "../data/hot_store"
+filename_pattern = "xnas-itch-{date}.mbo.dbn"
+symbol = "NVDA"
+exchange = "XNAS"
+date_start = "2025-02-03"
+date_end = "2025-02-03"
+
+[trackers]
+quality = true
+ofi = false
+spread = false
+returns = false
+volatility = false
+lifecycle = false
+trades = false
+depth = false
+liquidity = false
+jumps = false
+noise = false
+
+timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
+reservoir_capacity = 10000
+
+[output]
+output_dir = "test_output"
+write_summaries = true

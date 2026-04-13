@@ -1,0 +1,2133 @@
+{
+  "_provenance": {
+    "exchange": "XNAS",
+    "n_days": 21,
+    "profiler_version": "0.1.0",
+    "reservoir_capacity": 10000,
+    "runtime_secs": 181.676626833,
+    "symbol": "NVDA",
+    "throughput_events_per_sec": 1179982.189987802,
+    "timescales": [
+      1.0,
+      5.0,
+      10.0,
+      30.0,
+      60.0,
+      300.0
+    ],
+    "total_events": 214375184
+  },
+  "acf": [
+    0.9265720634241636,
+    0.8783132355617428,
+    0.8287259296131019,
+    0.7898153903790586,
+    0.7514438225416684,
+    0.725340270304221,
+    0.6989116242084736,
+    0.6803964470317921,
+    0.6622748045256824,
+    0.6447153613723997,
+    0.6265057305025236,
+    0.6084329812571927,
+    0.5947489990988705,
+    0.5813901107988473,
+    0.5712564957771914,
+    0.5592920890272293,
+    0.5464636170223195,
+    0.5348071939275844,
+    0.5245562448328739,
+    0.5121750754561641
+  ],
+  "distribution_bps": {
+    "count": 214375006,
+    "kurtosis": 991.1217036402343,
+    "max": 7830.7043573325,
+    "mean": 0.8003452773765742,
+    "min": 0.5337745869914279,
+    "percentiles": {
+      "p1": 0.5359774889465002,
+      "p10": 0.5501578954667226,
+      "p25": 0.562888745039031,
+      "p5": 0.544735000118607,
+      "p50": 0.5824620671573466,
+      "p75": 0.6008712633329923,
+      "p90": 1.17454295633595,
+      "p95": 1.6993798301110796,
+      "p99": 3.5851547218727005
+    },
+    "skewness": 21.491001069455514,
+    "std": 2.9660259230419106
+  },
+  "distribution_ticks": {
+    "count": 214375006,
+    "kurtosis": 924.4285584770262,
+    "max": 18864.0,
+    "mean": 1.4000329497364785,
+    "min": 0.9999999999990905,
+    "percentiles": {
+      "p1": 0.9999999999990905,
+      "p10": 0.9999999999990905,
+      "p25": 0.9999999999990905,
+      "p5": 0.9999999999990905,
+      "p50": 0.9999999999990905,
+      "p75": 1.0000000000019327,
+      "p90": 2.000000000001023,
+      "p95": 3.0000000000001137,
+      "p99": 6.000000000000227
+    },
+    "skewness": 20.729508949671995,
+    "std": 4.431850439048585
+  },
+  "distribution_usd": {
+    "count": 214375006,
+    "kurtosis": 924.428558477027,
+    "max": 188.64000000000001,
+    "mean": 0.014000329497367733,
+    "min": 0.009999999999990905,
+    "percentiles": {
+      "p1": 0.009999999999990905,
+      "p10": 0.009999999999990905,
+      "p25": 0.009999999999990905,
+      "p5": 0.009999999999990905,
+      "p50": 0.009999999999990905,
+      "p75": 0.010000000000019327,
+      "p90": 0.020000000000010232,
+      "p95": 0.030000000000001137,
+      "p99": 0.060000000000002274
+    },
+    "skewness": 20.7295089496721,
+    "std": 0.04431850439042331
+  },
+  "intraday_spread_curve": [
+    {
+      "count": 4480670,
+      "mean_spread": 0.0403837394853898,
+      "minutes_since_open": 0.0
+    },
+    {
+      "count": 1374657,
+      "mean_spread": 0.03542004296344493,
+      "minutes_since_open": 1.0
+    },
+    {
+      "count": 1011605,
+      "mean_spread": 0.03153461084118725,
+      "minutes_since_open": 2.0
+    },
+    {
+      "count": 955701,
+      "mean_spread": 0.02736254330590826,
+      "minutes_since_open": 3.0
+    },
+    {
+      "count": 909005,
+      "mean_spread": 0.025641949164195946,
+      "minutes_since_open": 4.0
+    },
+    {
+      "count": 1739700,
+      "mean_spread": 0.015592596424672417,
+      "minutes_since_open": 5.0
+    },
+    {
+      "count": 1763262,
+      "mean_spread": 0.015228139663873683,
+      "minutes_since_open": 6.0
+    },
+    {
+      "count": 1573319,
+      "mean_spread": 0.014623563307886184,
+      "minutes_since_open": 7.0
+    },
+    {
+      "count": 1389526,
+      "mean_spread": 0.014132819393088277,
+      "minutes_since_open": 8.0
+    },
+    {
+      "count": 1380865,
+      "mean_spread": 0.013931195301495485,
+      "minutes_since_open": 9.0
+    },
+    {
+      "count": 1567240,
+      "mean_spread": 0.014073830428013587,
+      "minutes_since_open": 10.0
+    },
+    {
+      "count": 1338797,
+      "mean_spread": 0.013865089330196948,
+      "minutes_since_open": 11.0
+    },
+    {
+      "count": 1232894,
+      "mean_spread": 0.013391532443178766,
+      "minutes_since_open": 12.0
+    },
+    {
+      "count": 1201270,
+      "mean_spread": 0.013557951168347408,
+      "minutes_since_open": 13.0
+    },
+    {
+      "count": 1186165,
+      "mean_spread": 0.013818583417989704,
+      "minutes_since_open": 14.0
+    },
+    {
+      "count": 1486847,
+      "mean_spread": 0.013808226401237429,
+      "minutes_since_open": 15.0
+    },
+    {
+      "count": 1322727,
+      "mean_spread": 0.013257603420811406,
+      "minutes_since_open": 16.0
+    },
+    {
+      "count": 1218998,
+      "mean_spread": 0.013024287160438129,
+      "minutes_since_open": 17.0
+    },
+    {
+      "count": 1327217,
+      "mean_spread": 0.012633420156613317,
+      "minutes_since_open": 18.0
+    },
+    {
+      "count": 1281081,
+      "mean_spread": 0.012389302471896112,
+      "minutes_since_open": 19.0
+    },
+    {
+      "count": 1323233,
+      "mean_spread": 0.012539129541055443,
+      "minutes_since_open": 20.0
+    },
+    {
+      "count": 1253782,
+      "mean_spread": 0.01244004938657614,
+      "minutes_since_open": 21.0
+    },
+    {
+      "count": 1200648,
+      "mean_spread": 0.012300674302543621,
+      "minutes_since_open": 22.0
+    },
+    {
+      "count": 1162119,
+      "mean_spread": 0.011925792453268967,
+      "minutes_since_open": 23.0
+    },
+    {
+      "count": 1108264,
+      "mean_spread": 0.012257467534811013,
+      "minutes_since_open": 24.0
+    },
+    {
+      "count": 1164435,
+      "mean_spread": 0.012063404140204785,
+      "minutes_since_open": 25.0
+    },
+    {
+      "count": 901464,
+      "mean_spread": 0.012462738389996932,
+      "minutes_since_open": 26.0
+    },
+    {
+      "count": 911075,
+      "mean_spread": 0.012979809565623055,
+      "minutes_since_open": 27.0
+    },
+    {
+      "count": 801423,
+      "mean_spread": 0.013427528284064892,
+      "minutes_since_open": 28.0
+    },
+    {
+      "count": 825300,
+      "mean_spread": 0.014953786501877776,
+      "minutes_since_open": 29.0
+    },
+    {
+      "count": 1212666,
+      "mean_spread": 0.015667537475282267,
+      "minutes_since_open": 30.0
+    },
+    {
+      "count": 1142636,
+      "mean_spread": 0.013555918070146483,
+      "minutes_since_open": 31.0
+    },
+    {
+      "count": 1116639,
+      "mean_spread": 0.01366770281174092,
+      "minutes_since_open": 32.0
+    },
+    {
+      "count": 1145876,
+      "mean_spread": 0.012328951823757685,
+      "minutes_since_open": 33.0
+    },
+    {
+      "count": 1066949,
+      "mean_spread": 0.012045627298024221,
+      "minutes_since_open": 34.0
+    },
+    {
+      "count": 1186513,
+      "mean_spread": 0.012010336169936337,
+      "minutes_since_open": 35.0
+    },
+    {
+      "count": 1244139,
+      "mean_spread": 0.012775823280196025,
+      "minutes_since_open": 36.0
+    },
+    {
+      "count": 1062081,
+      "mean_spread": 0.01188351924194109,
+      "minutes_since_open": 37.0
+    },
+    {
+      "count": 976075,
+      "mean_spread": 0.01174612606613215,
+      "minutes_since_open": 38.0
+    },
+    {
+      "count": 987605,
+      "mean_spread": 0.011891545709064111,
+      "minutes_since_open": 39.0
+    },
+    {
+      "count": 1038440,
+      "mean_spread": 0.011763154346904786,
+      "minutes_since_open": 40.0
+    },
+    {
+      "count": 1009295,
+      "mean_spread": 0.01161148128148847,
+      "minutes_since_open": 41.0
+    },
+    {
+      "count": 1005279,
+      "mean_spread": 0.011730007291507522,
+      "minutes_since_open": 42.0
+    },
+    {
+      "count": 952861,
+      "mean_spread": 0.011633165802777078,
+      "minutes_since_open": 43.0
+    },
+    {
+      "count": 891730,
+      "mean_spread": 0.011516030637076598,
+      "minutes_since_open": 44.0
+    },
+    {
+      "count": 974282,
+      "mean_spread": 0.011431741528633329,
+      "minutes_since_open": 45.0
+    },
+    {
+      "count": 894559,
+      "mean_spread": 0.011489326025449916,
+      "minutes_since_open": 46.0
+    },
+    {
+      "count": 855427,
+      "mean_spread": 0.011517756629146003,
+      "minutes_since_open": 47.0
+    },
+    {
+      "count": 863653,
+      "mean_spread": 0.011491918629356954,
+      "minutes_since_open": 48.0
+    },
+    {
+      "count": 858842,
+      "mean_spread": 0.01165979307020346,
+      "minutes_since_open": 49.0
+    },
+    {
+      "count": 864713,
+      "mean_spread": 0.011532635683746982,
+      "minutes_since_open": 50.0
+    },
+    {
+      "count": 836120,
+      "mean_spread": 0.011579653638234187,
+      "minutes_since_open": 51.0
+    },
+    {
+      "count": 807859,
+      "mean_spread": 0.011445475014822858,
+      "minutes_since_open": 52.0
+    },
+    {
+      "count": 962711,
+      "mean_spread": 0.013050541647492668,
+      "minutes_since_open": 53.0
+    },
+    {
+      "count": 810735,
+      "mean_spread": 0.011416134741931106,
+      "minutes_since_open": 54.0
+    },
+    {
+      "count": 897321,
+      "mean_spread": 0.011717200422145874,
+      "minutes_since_open": 55.0
+    },
+    {
+      "count": 891501,
+      "mean_spread": 0.011670317812318544,
+      "minutes_since_open": 56.0
+    },
+    {
+      "count": 864212,
+      "mean_spread": 0.011611502733125511,
+      "minutes_since_open": 57.0
+    },
+    {
+      "count": 884474,
+      "mean_spread": 0.011495679918234197,
+      "minutes_since_open": 58.0
+    },
+    {
+      "count": 792457,
+      "mean_spread": 0.011486011228370039,
+      "minutes_since_open": 59.0
+    },
+    {
+      "count": 966033,
+      "mean_spread": 0.012092547563075503,
+      "minutes_since_open": 60.0
+    },
+    {
+      "count": 866543,
+      "mean_spread": 0.011629532521755302,
+      "minutes_since_open": 61.0
+    },
+    {
+      "count": 794976,
+      "mean_spread": 0.011411715573804033,
+      "minutes_since_open": 62.0
+    },
+    {
+      "count": 782401,
+      "mean_spread": 0.011588188154156106,
+      "minutes_since_open": 63.0
+    },
+    {
+      "count": 727449,
+      "mean_spread": 0.011497781975093735,
+      "minutes_since_open": 64.0
+    },
+    {
+      "count": 906467,
+      "mean_spread": 0.012053036679769232,
+      "minutes_since_open": 65.0
+    },
+    {
+      "count": 785812,
+      "mean_spread": 0.011529513420512382,
+      "minutes_since_open": 66.0
+    },
+    {
+      "count": 731719,
+      "mean_spread": 0.011522237361609514,
+      "minutes_since_open": 67.0
+    },
+    {
+      "count": 740685,
+      "mean_spread": 0.011608659551631635,
+      "minutes_since_open": 68.0
+    },
+    {
+      "count": 640845,
+      "mean_spread": 0.011317354430478651,
+      "minutes_since_open": 69.0
+    },
+    {
+      "count": 740057,
+      "mean_spread": 0.011549610367849225,
+      "minutes_since_open": 70.0
+    },
+    {
+      "count": 684990,
+      "mean_spread": 0.011276018628009152,
+      "minutes_since_open": 71.0
+    },
+    {
+      "count": 642368,
+      "mean_spread": 0.01124282342831487,
+      "minutes_since_open": 72.0
+    },
+    {
+      "count": 669817,
+      "mean_spread": 0.011314657585579249,
+      "minutes_since_open": 73.0
+    },
+    {
+      "count": 671477,
+      "mean_spread": 0.011491622200015851,
+      "minutes_since_open": 74.0
+    },
+    {
+      "count": 730661,
+      "mean_spread": 0.01132006498225613,
+      "minutes_since_open": 75.0
+    },
+    {
+      "count": 737686,
+      "mean_spread": 0.011392367484268664,
+      "minutes_since_open": 76.0
+    },
+    {
+      "count": 678767,
+      "mean_spread": 0.011254922528643763,
+      "minutes_since_open": 77.0
+    },
+    {
+      "count": 622068,
+      "mean_spread": 0.011227952571101813,
+      "minutes_since_open": 78.0
+    },
+    {
+      "count": 601013,
+      "mean_spread": 0.011175981218376128,
+      "minutes_since_open": 79.0
+    },
+    {
+      "count": 702675,
+      "mean_spread": 0.011293172519301044,
+      "minutes_since_open": 80.0
+    },
+    {
+      "count": 649015,
+      "mean_spread": 0.011364837484496342,
+      "minutes_since_open": 81.0
+    },
+    {
+      "count": 668842,
+      "mean_spread": 0.011362160271035713,
+      "minutes_since_open": 82.0
+    },
+    {
+      "count": 600109,
+      "mean_spread": 0.0112364420463618,
+      "minutes_since_open": 83.0
+    },
+    {
+      "count": 557064,
+      "mean_spread": 0.011157910042652831,
+      "minutes_since_open": 84.0
+    },
+    {
+      "count": 596976,
+      "mean_spread": 0.011171554635361763,
+      "minutes_since_open": 85.0
+    },
+    {
+      "count": 621535,
+      "mean_spread": 0.011189908854690319,
+      "minutes_since_open": 86.0
+    },
+    {
+      "count": 551716,
+      "mean_spread": 0.011145698149047784,
+      "minutes_since_open": 87.0
+    },
+    {
+      "count": 552786,
+      "mean_spread": 0.011341405173068945,
+      "minutes_since_open": 88.0
+    },
+    {
+      "count": 549440,
+      "mean_spread": 0.011214654921374132,
+      "minutes_since_open": 89.0
+    },
+    {
+      "count": 681856,
+      "mean_spread": 0.01150490719448115,
+      "minutes_since_open": 90.0
+    },
+    {
+      "count": 576409,
+      "mean_spread": 0.011135998917435424,
+      "minutes_since_open": 91.0
+    },
+    {
+      "count": 565869,
+      "mean_spread": 0.01123237003617455,
+      "minutes_since_open": 92.0
+    },
+    {
+      "count": 534284,
+      "mean_spread": 0.011224142965164684,
+      "minutes_since_open": 93.0
+    },
+    {
+      "count": 509158,
+      "mean_spread": 0.011172504409240334,
+      "minutes_since_open": 94.0
+    },
+    {
+      "count": 530003,
+      "mean_spread": 0.0111463520017809,
+      "minutes_since_open": 95.0
+    },
+    {
+      "count": 576605,
+      "mean_spread": 0.01140362986793409,
+      "minutes_since_open": 96.0
+    },
+    {
+      "count": 492908,
+      "mean_spread": 0.011202313616334206,
+      "minutes_since_open": 97.0
+    },
+    {
+      "count": 489285,
+      "mean_spread": 0.011128871720980522,
+      "minutes_since_open": 98.0
+    },
+    {
+      "count": 451861,
+      "mean_spread": 0.011175560625944618,
+      "minutes_since_open": 99.0
+    },
+    {
+      "count": 540389,
+      "mean_spread": 0.011193880704455372,
+      "minutes_since_open": 100.0
+    },
+    {
+      "count": 548168,
+      "mean_spread": 0.011316494213452311,
+      "minutes_since_open": 101.0
+    },
+    {
+      "count": 521049,
+      "mean_spread": 0.011392594554446661,
+      "minutes_since_open": 102.0
+    },
+    {
+      "count": 476149,
+      "mean_spread": 0.011196474212903982,
+      "minutes_since_open": 103.0
+    },
+    {
+      "count": 441187,
+      "mean_spread": 0.011087452712795527,
+      "minutes_since_open": 104.0
+    },
+    {
+      "count": 503038,
+      "mean_spread": 0.011087194207992378,
+      "minutes_since_open": 105.0
+    },
+    {
+      "count": 522491,
+      "mean_spread": 0.011132842479583157,
+      "minutes_since_open": 106.0
+    },
+    {
+      "count": 512707,
+      "mean_spread": 0.011337742609326422,
+      "minutes_since_open": 107.0
+    },
+    {
+      "count": 536003,
+      "mean_spread": 0.011313071008930914,
+      "minutes_since_open": 108.0
+    },
+    {
+      "count": 484330,
+      "mean_spread": 0.011116222410340037,
+      "minutes_since_open": 109.0
+    },
+    {
+      "count": 496657,
+      "mean_spread": 0.011157801057873217,
+      "minutes_since_open": 110.0
+    },
+    {
+      "count": 489998,
+      "mean_spread": 0.011122657643500511,
+      "minutes_since_open": 111.0
+    },
+    {
+      "count": 486073,
+      "mean_spread": 0.011109792150562044,
+      "minutes_since_open": 112.0
+    },
+    {
+      "count": 462702,
+      "mean_spread": 0.011229646727267274,
+      "minutes_since_open": 113.0
+    },
+    {
+      "count": 605070,
+      "mean_spread": 0.012567306262085349,
+      "minutes_since_open": 114.0
+    },
+    {
+      "count": 562829,
+      "mean_spread": 0.011645348764899999,
+      "minutes_since_open": 115.0
+    },
+    {
+      "count": 499825,
+      "mean_spread": 0.01128136847896759,
+      "minutes_since_open": 116.0
+    },
+    {
+      "count": 472681,
+      "mean_spread": 0.011287993382428817,
+      "minutes_since_open": 117.0
+    },
+    {
+      "count": 450080,
+      "mean_spread": 0.011253888197653588,
+      "minutes_since_open": 118.0
+    },
+    {
+      "count": 440170,
+      "mean_spread": 0.011254151804984064,
+      "minutes_since_open": 119.0
+    },
+    {
+      "count": 530810,
+      "mean_spread": 0.011119383583579804,
+      "minutes_since_open": 120.0
+    },
+    {
+      "count": 485485,
+      "mean_spread": 0.011162486997538103,
+      "minutes_since_open": 121.0
+    },
+    {
+      "count": 457234,
+      "mean_spread": 0.01113607037097003,
+      "minutes_since_open": 122.0
+    },
+    {
+      "count": 448613,
+      "mean_spread": 0.011104493182319755,
+      "minutes_since_open": 123.0
+    },
+    {
+      "count": 441099,
+      "mean_spread": 0.011079032144711256,
+      "minutes_since_open": 124.0
+    },
+    {
+      "count": 512751,
+      "mean_spread": 0.011176711503244287,
+      "minutes_since_open": 125.0
+    },
+    {
+      "count": 464658,
+      "mean_spread": 0.01118919721601663,
+      "minutes_since_open": 126.0
+    },
+    {
+      "count": 437457,
+      "mean_spread": 0.01109722784182226,
+      "minutes_since_open": 127.0
+    },
+    {
+      "count": 416433,
+      "mean_spread": 0.011089370919211224,
+      "minutes_since_open": 128.0
+    },
+    {
+      "count": 390148,
+      "mean_spread": 0.011083537529348032,
+      "minutes_since_open": 129.0
+    },
+    {
+      "count": 498643,
+      "mean_spread": 0.011513688149638213,
+      "minutes_since_open": 130.0
+    },
+    {
+      "count": 443010,
+      "mean_spread": 0.01110688246314941,
+      "minutes_since_open": 131.0
+    },
+    {
+      "count": 429631,
+      "mean_spread": 0.01108935342189022,
+      "minutes_since_open": 132.0
+    },
+    {
+      "count": 404506,
+      "mean_spread": 0.011065027465600275,
+      "minutes_since_open": 133.0
+    },
+    {
+      "count": 353592,
+      "mean_spread": 0.011015860087331932,
+      "minutes_since_open": 134.0
+    },
+    {
+      "count": 441601,
+      "mean_spread": 0.011120966664477762,
+      "minutes_since_open": 135.0
+    },
+    {
+      "count": 447404,
+      "mean_spread": 0.011063110745545609,
+      "minutes_since_open": 136.0
+    },
+    {
+      "count": 425610,
+      "mean_spread": 0.011078640069546898,
+      "minutes_since_open": 137.0
+    },
+    {
+      "count": 402696,
+      "mean_spread": 0.011004827462899717,
+      "minutes_since_open": 138.0
+    },
+    {
+      "count": 413433,
+      "mean_spread": 0.011072628454913046,
+      "minutes_since_open": 139.0
+    },
+    {
+      "count": 457857,
+      "mean_spread": 0.01107959472062309,
+      "minutes_since_open": 140.0
+    },
+    {
+      "count": 428981,
+      "mean_spread": 0.011060862835417387,
+      "minutes_since_open": 141.0
+    },
+    {
+      "count": 420816,
+      "mean_spread": 0.01109869871867999,
+      "minutes_since_open": 142.0
+    },
+    {
+      "count": 447592,
+      "mean_spread": 0.011217805501439256,
+      "minutes_since_open": 143.0
+    },
+    {
+      "count": 394430,
+      "mean_spread": 0.011114240803184518,
+      "minutes_since_open": 144.0
+    },
+    {
+      "count": 418737,
+      "mean_spread": 0.011029906600085737,
+      "minutes_since_open": 145.0
+    },
+    {
+      "count": 409135,
+      "mean_spread": 0.01098471164774472,
+      "minutes_since_open": 146.0
+    },
+    {
+      "count": 392771,
+      "mean_spread": 0.011076581519511615,
+      "minutes_since_open": 147.0
+    },
+    {
+      "count": 426380,
+      "mean_spread": 0.01104953328017281,
+      "minutes_since_open": 148.0
+    },
+    {
+      "count": 381773,
+      "mean_spread": 0.01104659051320988,
+      "minutes_since_open": 149.0
+    },
+    {
+      "count": 505978,
+      "mean_spread": 0.010976504907328462,
+      "minutes_since_open": 150.0
+    },
+    {
+      "count": 581667,
+      "mean_spread": 0.011841362841625968,
+      "minutes_since_open": 151.0
+    },
+    {
+      "count": 513740,
+      "mean_spread": 0.01135920893837403,
+      "minutes_since_open": 152.0
+    },
+    {
+      "count": 567456,
+      "mean_spread": 0.012042907291490343,
+      "minutes_since_open": 153.0
+    },
+    {
+      "count": 518514,
+      "mean_spread": 0.011287043358520592,
+      "minutes_since_open": 154.0
+    },
+    {
+      "count": 522536,
+      "mean_spread": 0.01122621216528617,
+      "minutes_since_open": 155.0
+    },
+    {
+      "count": 479331,
+      "mean_spread": 0.011166417360862916,
+      "minutes_since_open": 156.0
+    },
+    {
+      "count": 498149,
+      "mean_spread": 0.011169429226998663,
+      "minutes_since_open": 157.0
+    },
+    {
+      "count": 500346,
+      "mean_spread": 0.011380564649262551,
+      "minutes_since_open": 158.0
+    },
+    {
+      "count": 473733,
+      "mean_spread": 0.01137250307662747,
+      "minutes_since_open": 159.0
+    },
+    {
+      "count": 537267,
+      "mean_spread": 0.011321558926939186,
+      "minutes_since_open": 160.0
+    },
+    {
+      "count": 502229,
+      "mean_spread": 0.011378534493228882,
+      "minutes_since_open": 161.0
+    },
+    {
+      "count": 492969,
+      "mean_spread": 0.011441551091447871,
+      "minutes_since_open": 162.0
+    },
+    {
+      "count": 430383,
+      "mean_spread": 0.011318895030705222,
+      "minutes_since_open": 163.0
+    },
+    {
+      "count": 452664,
+      "mean_spread": 0.011630569252248453,
+      "minutes_since_open": 164.0
+    },
+    {
+      "count": 447058,
+      "mean_spread": 0.011392817039400207,
+      "minutes_since_open": 165.0
+    },
+    {
+      "count": 458803,
+      "mean_spread": 0.011432510249496979,
+      "minutes_since_open": 166.0
+    },
+    {
+      "count": 450527,
+      "mean_spread": 0.011520486008607857,
+      "minutes_since_open": 167.0
+    },
+    {
+      "count": 495613,
+      "mean_spread": 0.012252725412771968,
+      "minutes_since_open": 168.0
+    },
+    {
+      "count": 453119,
+      "mean_spread": 0.011860460497132184,
+      "minutes_since_open": 169.0
+    },
+    {
+      "count": 449516,
+      "mean_spread": 0.011435899945718945,
+      "minutes_since_open": 170.0
+    },
+    {
+      "count": 448232,
+      "mean_spread": 0.01159428599475279,
+      "minutes_since_open": 171.0
+    },
+    {
+      "count": 494393,
+      "mean_spread": 0.012003466877564643,
+      "minutes_since_open": 172.0
+    },
+    {
+      "count": 460272,
+      "mean_spread": 0.011762110230471972,
+      "minutes_since_open": 173.0
+    },
+    {
+      "count": 471515,
+      "mean_spread": 0.011934636225782719,
+      "minutes_since_open": 174.0
+    },
+    {
+      "count": 487775,
+      "mean_spread": 0.011336866383066089,
+      "minutes_since_open": 175.0
+    },
+    {
+      "count": 442905,
+      "mean_spread": 0.011388220950316224,
+      "minutes_since_open": 176.0
+    },
+    {
+      "count": 404542,
+      "mean_spread": 0.011352368851689143,
+      "minutes_since_open": 177.0
+    },
+    {
+      "count": 400774,
+      "mean_spread": 0.011553194568509829,
+      "minutes_since_open": 178.0
+    },
+    {
+      "count": 357066,
+      "mean_spread": 0.011558199324494662,
+      "minutes_since_open": 179.0
+    },
+    {
+      "count": 425344,
+      "mean_spread": 0.011589231304544086,
+      "minutes_since_open": 180.0
+    },
+    {
+      "count": 410666,
+      "mean_spread": 0.01128320825196113,
+      "minutes_since_open": 181.0
+    },
+    {
+      "count": 365694,
+      "mean_spread": 0.011335542830891368,
+      "minutes_since_open": 182.0
+    },
+    {
+      "count": 352442,
+      "mean_spread": 0.011284722025184253,
+      "minutes_since_open": 183.0
+    },
+    {
+      "count": 350269,
+      "mean_spread": 0.011335659164813723,
+      "minutes_since_open": 184.0
+    },
+    {
+      "count": 406881,
+      "mean_spread": 0.012132220477240172,
+      "minutes_since_open": 185.0
+    },
+    {
+      "count": 391793,
+      "mean_spread": 0.011586679700759847,
+      "minutes_since_open": 186.0
+    },
+    {
+      "count": 369961,
+      "mean_spread": 0.011320923016210393,
+      "minutes_since_open": 187.0
+    },
+    {
+      "count": 355825,
+      "mean_spread": 0.01130513595166122,
+      "minutes_since_open": 188.0
+    },
+    {
+      "count": 353877,
+      "mean_spread": 0.011360613998649184,
+      "minutes_since_open": 189.0
+    },
+    {
+      "count": 409341,
+      "mean_spread": 0.011225042201978291,
+      "minutes_since_open": 190.0
+    },
+    {
+      "count": 394802,
+      "mean_spread": 0.011324182754899572,
+      "minutes_since_open": 191.0
+    },
+    {
+      "count": 366830,
+      "mean_spread": 0.011191859989641346,
+      "minutes_since_open": 192.0
+    },
+    {
+      "count": 344740,
+      "mean_spread": 0.011163862621105866,
+      "minutes_since_open": 193.0
+    },
+    {
+      "count": 322152,
+      "mean_spread": 0.011085108892697053,
+      "minutes_since_open": 194.0
+    },
+    {
+      "count": 383096,
+      "mean_spread": 0.011126976006014188,
+      "minutes_since_open": 195.0
+    },
+    {
+      "count": 357277,
+      "mean_spread": 0.01102281982887216,
+      "minutes_since_open": 196.0
+    },
+    {
+      "count": 335530,
+      "mean_spread": 0.011087533156498821,
+      "minutes_since_open": 197.0
+    },
+    {
+      "count": 355601,
+      "mean_spread": 0.011164676139831143,
+      "minutes_since_open": 198.0
+    },
+    {
+      "count": 292954,
+      "mean_spread": 0.010950763601111283,
+      "minutes_since_open": 199.0
+    },
+    {
+      "count": 328179,
+      "mean_spread": 0.011091782228601075,
+      "minutes_since_open": 200.0
+    },
+    {
+      "count": 319143,
+      "mean_spread": 0.011223652093261928,
+      "minutes_since_open": 201.0
+    },
+    {
+      "count": 281403,
+      "mean_spread": 0.011092383521141736,
+      "minutes_since_open": 202.0
+    },
+    {
+      "count": 300101,
+      "mean_spread": 0.011062442311088355,
+      "minutes_since_open": 203.0
+    },
+    {
+      "count": 326975,
+      "mean_spread": 0.011276794861992734,
+      "minutes_since_open": 204.0
+    },
+    {
+      "count": 361322,
+      "mean_spread": 0.011126612827339425,
+      "minutes_since_open": 205.0
+    },
+    {
+      "count": 383525,
+      "mean_spread": 0.011762544814549223,
+      "minutes_since_open": 206.0
+    },
+    {
+      "count": 321088,
+      "mean_spread": 0.011892284981064503,
+      "minutes_since_open": 207.0
+    },
+    {
+      "count": 327604,
+      "mean_spread": 0.011510940037361875,
+      "minutes_since_open": 208.0
+    },
+    {
+      "count": 297469,
+      "mean_spread": 0.011301917174562092,
+      "minutes_since_open": 209.0
+    },
+    {
+      "count": 325007,
+      "mean_spread": 0.01150713676936194,
+      "minutes_since_open": 210.0
+    },
+    {
+      "count": 306496,
+      "mean_spread": 0.011795618866151178,
+      "minutes_since_open": 211.0
+    },
+    {
+      "count": 312142,
+      "mean_spread": 0.011831442100070245,
+      "minutes_since_open": 212.0
+    },
+    {
+      "count": 315708,
+      "mean_spread": 0.011356728369252195,
+      "minutes_since_open": 213.0
+    },
+    {
+      "count": 277634,
+      "mean_spread": 0.011200213230368046,
+      "minutes_since_open": 214.0
+    },
+    {
+      "count": 297076,
+      "mean_spread": 0.011058617996742579,
+      "minutes_since_open": 215.0
+    },
+    {
+      "count": 297564,
+      "mean_spread": 0.011051471280127787,
+      "minutes_since_open": 216.0
+    },
+    {
+      "count": 301849,
+      "mean_spread": 0.011081335369672023,
+      "minutes_since_open": 217.0
+    },
+    {
+      "count": 279591,
+      "mean_spread": 0.01101054754981356,
+      "minutes_since_open": 218.0
+    },
+    {
+      "count": 264491,
+      "mean_spread": 0.010993228503049337,
+      "minutes_since_open": 219.0
+    },
+    {
+      "count": 322429,
+      "mean_spread": 0.011017650397452403,
+      "minutes_since_open": 220.0
+    },
+    {
+      "count": 317423,
+      "mean_spread": 0.011014009696840011,
+      "minutes_since_open": 221.0
+    },
+    {
+      "count": 290724,
+      "mean_spread": 0.011083639465610114,
+      "minutes_since_open": 222.0
+    },
+    {
+      "count": 299668,
+      "mean_spread": 0.011065812832867977,
+      "minutes_since_open": 223.0
+    },
+    {
+      "count": 288363,
+      "mean_spread": 0.011031338972059676,
+      "minutes_since_open": 224.0
+    },
+    {
+      "count": 327996,
+      "mean_spread": 0.011105104940304285,
+      "minutes_since_open": 225.0
+    },
+    {
+      "count": 311600,
+      "mean_spread": 0.011271694480102538,
+      "minutes_since_open": 226.0
+    },
+    {
+      "count": 272634,
+      "mean_spread": 0.010968587923737094,
+      "minutes_since_open": 227.0
+    },
+    {
+      "count": 259675,
+      "mean_spread": 0.011007990757677564,
+      "minutes_since_open": 228.0
+    },
+    {
+      "count": 276830,
+      "mean_spread": 0.011070368095943287,
+      "minutes_since_open": 229.0
+    },
+    {
+      "count": 289600,
+      "mean_spread": 0.011012189226519089,
+      "minutes_since_open": 230.0
+    },
+    {
+      "count": 290410,
+      "mean_spread": 0.011010743431700044,
+      "minutes_since_open": 231.0
+    },
+    {
+      "count": 285877,
+      "mean_spread": 0.011005117585534938,
+      "minutes_since_open": 232.0
+    },
+    {
+      "count": 260502,
+      "mean_spread": 0.010974503074831877,
+      "minutes_since_open": 233.0
+    },
+    {
+      "count": 279397,
+      "mean_spread": 0.01105044077065919,
+      "minutes_since_open": 234.0
+    },
+    {
+      "count": 300870,
+      "mean_spread": 0.011037025958054768,
+      "minutes_since_open": 235.0
+    },
+    {
+      "count": 334280,
+      "mean_spread": 0.011187776714131924,
+      "minutes_since_open": 236.0
+    },
+    {
+      "count": 269397,
+      "mean_spread": 0.01095116129726757,
+      "minutes_since_open": 237.0
+    },
+    {
+      "count": 267335,
+      "mean_spread": 0.010948809546075203,
+      "minutes_since_open": 238.0
+    },
+    {
+      "count": 257262,
+      "mean_spread": 0.010994705786318348,
+      "minutes_since_open": 239.0
+    },
+    {
+      "count": 305570,
+      "mean_spread": 0.01097761560362614,
+      "minutes_since_open": 240.0
+    },
+    {
+      "count": 301956,
+      "mean_spread": 0.010964014624647205,
+      "minutes_since_open": 241.0
+    },
+    {
+      "count": 294777,
+      "mean_spread": 0.011025487063101693,
+      "minutes_since_open": 242.0
+    },
+    {
+      "count": 290763,
+      "mean_spread": 0.011061792593967888,
+      "minutes_since_open": 243.0
+    },
+    {
+      "count": 263545,
+      "mean_spread": 0.010990494981881855,
+      "minutes_since_open": 244.0
+    },
+    {
+      "count": 335151,
+      "mean_spread": 0.010974874012012659,
+      "minutes_since_open": 245.0
+    },
+    {
+      "count": 352439,
+      "mean_spread": 0.011077122565890609,
+      "minutes_since_open": 246.0
+    },
+    {
+      "count": 317736,
+      "mean_spread": 0.011035041669814383,
+      "minutes_since_open": 247.0
+    },
+    {
+      "count": 331503,
+      "mean_spread": 0.011078874097670515,
+      "minutes_since_open": 248.0
+    },
+    {
+      "count": 303507,
+      "mean_spread": 0.011096482123970582,
+      "minutes_since_open": 249.0
+    },
+    {
+      "count": 342253,
+      "mean_spread": 0.011073825503356003,
+      "minutes_since_open": 250.0
+    },
+    {
+      "count": 343502,
+      "mean_spread": 0.011203952233174764,
+      "minutes_since_open": 251.0
+    },
+    {
+      "count": 330564,
+      "mean_spread": 0.011027788869932217,
+      "minutes_since_open": 252.0
+    },
+    {
+      "count": 350086,
+      "mean_spread": 0.011247979068000293,
+      "minutes_since_open": 253.0
+    },
+    {
+      "count": 330844,
+      "mean_spread": 0.011084589715999224,
+      "minutes_since_open": 254.0
+    },
+    {
+      "count": 403848,
+      "mean_spread": 0.01113151482736054,
+      "minutes_since_open": 255.0
+    },
+    {
+      "count": 366322,
+      "mean_spread": 0.011116476760882,
+      "minutes_since_open": 256.0
+    },
+    {
+      "count": 331775,
+      "mean_spread": 0.01104049431090338,
+      "minutes_since_open": 257.0
+    },
+    {
+      "count": 293524,
+      "mean_spread": 0.010997124596285162,
+      "minutes_since_open": 258.0
+    },
+    {
+      "count": 276680,
+      "mean_spread": 0.010933533323695337,
+      "minutes_since_open": 259.0
+    },
+    {
+      "count": 306716,
+      "mean_spread": 0.01098459160917667,
+      "minutes_since_open": 260.0
+    },
+    {
+      "count": 310072,
+      "mean_spread": 0.010963937408086042,
+      "minutes_since_open": 261.0
+    },
+    {
+      "count": 278202,
+      "mean_spread": 0.010964658773121898,
+      "minutes_since_open": 262.0
+    },
+    {
+      "count": 255134,
+      "mean_spread": 0.010898547429978636,
+      "minutes_since_open": 263.0
+    },
+    {
+      "count": 252294,
+      "mean_spread": 0.010908424298636142,
+      "minutes_since_open": 264.0
+    },
+    {
+      "count": 286054,
+      "mean_spread": 0.010897452928468393,
+      "minutes_since_open": 265.0
+    },
+    {
+      "count": 277384,
+      "mean_spread": 0.010931344273642217,
+      "minutes_since_open": 266.0
+    },
+    {
+      "count": 266671,
+      "mean_spread": 0.010954359491658242,
+      "minutes_since_open": 267.0
+    },
+    {
+      "count": 244383,
+      "mean_spread": 0.01109262919270133,
+      "minutes_since_open": 268.0
+    },
+    {
+      "count": 239974,
+      "mean_spread": 0.013443873086251886,
+      "minutes_since_open": 269.0
+    },
+    {
+      "count": 380933,
+      "mean_spread": 0.019459353744620905,
+      "minutes_since_open": 270.0
+    },
+    {
+      "count": 364222,
+      "mean_spread": 0.012857927308069353,
+      "minutes_since_open": 271.0
+    },
+    {
+      "count": 344890,
+      "mean_spread": 0.012862477891501994,
+      "minutes_since_open": 272.0
+    },
+    {
+      "count": 364682,
+      "mean_spread": 0.011757257007474743,
+      "minutes_since_open": 273.0
+    },
+    {
+      "count": 342570,
+      "mean_spread": 0.011611641416352209,
+      "minutes_since_open": 274.0
+    },
+    {
+      "count": 347284,
+      "mean_spread": 0.011159339330346175,
+      "minutes_since_open": 275.0
+    },
+    {
+      "count": 361232,
+      "mean_spread": 0.01132369225317792,
+      "minutes_since_open": 276.0
+    },
+    {
+      "count": 316957,
+      "mean_spread": 0.011352707149550422,
+      "minutes_since_open": 277.0
+    },
+    {
+      "count": 315454,
+      "mean_spread": 0.011538544447050287,
+      "minutes_since_open": 278.0
+    },
+    {
+      "count": 279616,
+      "mean_spread": 0.011233691920347382,
+      "minutes_since_open": 279.0
+    },
+    {
+      "count": 359501,
+      "mean_spread": 0.011163390366091014,
+      "minutes_since_open": 280.0
+    },
+    {
+      "count": 333213,
+      "mean_spread": 0.011199683085593848,
+      "minutes_since_open": 281.0
+    },
+    {
+      "count": 335037,
+      "mean_spread": 0.011091879404364183,
+      "minutes_since_open": 282.0
+    },
+    {
+      "count": 345104,
+      "mean_spread": 0.01115437665167606,
+      "minutes_since_open": 283.0
+    },
+    {
+      "count": 351069,
+      "mean_spread": 0.011200533228510003,
+      "minutes_since_open": 284.0
+    },
+    {
+      "count": 418204,
+      "mean_spread": 0.011379542041683436,
+      "minutes_since_open": 285.0
+    },
+    {
+      "count": 408626,
+      "mean_spread": 0.011480473587094576,
+      "minutes_since_open": 286.0
+    },
+    {
+      "count": 346619,
+      "mean_spread": 0.011243324803314267,
+      "minutes_since_open": 287.0
+    },
+    {
+      "count": 317177,
+      "mean_spread": 0.011260148119189699,
+      "minutes_since_open": 288.0
+    },
+    {
+      "count": 317603,
+      "mean_spread": 0.0112758380745771,
+      "minutes_since_open": 289.0
+    },
+    {
+      "count": 352491,
+      "mean_spread": 0.011316288926526334,
+      "minutes_since_open": 290.0
+    },
+    {
+      "count": 331048,
+      "mean_spread": 0.011072774945022986,
+      "minutes_since_open": 291.0
+    },
+    {
+      "count": 326445,
+      "mean_spread": 0.011068725206389757,
+      "minutes_since_open": 292.0
+    },
+    {
+      "count": 319027,
+      "mean_spread": 0.011144229171825136,
+      "minutes_since_open": 293.0
+    },
+    {
+      "count": 286778,
+      "mean_spread": 0.011038922093047797,
+      "minutes_since_open": 294.0
+    },
+    {
+      "count": 316800,
+      "mean_spread": 0.011063731060605705,
+      "minutes_since_open": 295.0
+    },
+    {
+      "count": 318288,
+      "mean_spread": 0.011001702860302644,
+      "minutes_since_open": 296.0
+    },
+    {
+      "count": 294136,
+      "mean_spread": 0.010965403758805553,
+      "minutes_since_open": 297.0
+    },
+    {
+      "count": 262038,
+      "mean_spread": 0.010916202993459764,
+      "minutes_since_open": 298.0
+    },
+    {
+      "count": 282041,
+      "mean_spread": 0.011030453019242057,
+      "minutes_since_open": 299.0
+    },
+    {
+      "count": 326117,
+      "mean_spread": 0.01095569994817828,
+      "minutes_since_open": 300.0
+    },
+    {
+      "count": 317661,
+      "mean_spread": 0.01109251686546359,
+      "minutes_since_open": 301.0
+    },
+    {
+      "count": 356391,
+      "mean_spread": 0.011116947397661173,
+      "minutes_since_open": 302.0
+    },
+    {
+      "count": 339110,
+      "mean_spread": 0.011153195128424739,
+      "minutes_since_open": 303.0
+    },
+    {
+      "count": 279856,
+      "mean_spread": 0.011106676290663543,
+      "minutes_since_open": 304.0
+    },
+    {
+      "count": 320688,
+      "mean_spread": 0.011402172828419039,
+      "minutes_since_open": 305.0
+    },
+    {
+      "count": 327819,
+      "mean_spread": 0.011101186935473966,
+      "minutes_since_open": 306.0
+    },
+    {
+      "count": 296663,
+      "mean_spread": 0.011073136858995065,
+      "minutes_since_open": 307.0
+    },
+    {
+      "count": 294988,
+      "mean_spread": 0.01093383459666145,
+      "minutes_since_open": 308.0
+    },
+    {
+      "count": 274121,
+      "mean_spread": 0.01105993338708084,
+      "minutes_since_open": 309.0
+    },
+    {
+      "count": 350490,
+      "mean_spread": 0.011206739136637101,
+      "minutes_since_open": 310.0
+    },
+    {
+      "count": 318884,
+      "mean_spread": 0.011203886052608992,
+      "minutes_since_open": 311.0
+    },
+    {
+      "count": 318733,
+      "mean_spread": 0.011186008351818181,
+      "minutes_since_open": 312.0
+    },
+    {
+      "count": 321039,
+      "mean_spread": 0.011252277760645683,
+      "minutes_since_open": 313.0
+    },
+    {
+      "count": 277219,
+      "mean_spread": 0.011101511801139016,
+      "minutes_since_open": 314.0
+    },
+    {
+      "count": 301475,
+      "mean_spread": 0.011162318600215639,
+      "minutes_since_open": 315.0
+    },
+    {
+      "count": 289221,
+      "mean_spread": 0.011024199487588704,
+      "minutes_since_open": 316.0
+    },
+    {
+      "count": 289233,
+      "mean_spread": 0.011175522848361204,
+      "minutes_since_open": 317.0
+    },
+    {
+      "count": 322638,
+      "mean_spread": 0.011260266924540381,
+      "minutes_since_open": 318.0
+    },
+    {
+      "count": 296504,
+      "mean_spread": 0.011283760084181449,
+      "minutes_since_open": 319.0
+    },
+    {
+      "count": 352070,
+      "mean_spread": 0.011539182548925673,
+      "minutes_since_open": 320.0
+    },
+    {
+      "count": 319859,
+      "mean_spread": 0.011102360727695701,
+      "minutes_since_open": 321.0
+    },
+    {
+      "count": 296473,
+      "mean_spread": 0.011259069122651812,
+      "minutes_since_open": 322.0
+    },
+    {
+      "count": 274434,
+      "mean_spread": 0.011232172398464088,
+      "minutes_since_open": 323.0
+    },
+    {
+      "count": 260841,
+      "mean_spread": 0.011179645837886373,
+      "minutes_since_open": 324.0
+    },
+    {
+      "count": 320348,
+      "mean_spread": 0.011298619001836015,
+      "minutes_since_open": 325.0
+    },
+    {
+      "count": 281643,
+      "mean_spread": 0.01124508686528667,
+      "minutes_since_open": 326.0
+    },
+    {
+      "count": 272908,
+      "mean_spread": 0.011257310155803456,
+      "minutes_since_open": 327.0
+    },
+    {
+      "count": 284155,
+      "mean_spread": 0.011175203674050773,
+      "minutes_since_open": 328.0
+    },
+    {
+      "count": 279747,
+      "mean_spread": 0.011277118253278757,
+      "minutes_since_open": 329.0
+    },
+    {
+      "count": 354991,
+      "mean_spread": 0.011173353690656983,
+      "minutes_since_open": 330.0
+    },
+    {
+      "count": 342731,
+      "mean_spread": 0.011493095167930536,
+      "minutes_since_open": 331.0
+    },
+    {
+      "count": 314802,
+      "mean_spread": 0.01141488935902568,
+      "minutes_since_open": 332.0
+    },
+    {
+      "count": 308677,
+      "mean_spread": 0.011308033964306173,
+      "minutes_since_open": 333.0
+    },
+    {
+      "count": 257432,
+      "mean_spread": 0.01123578265328342,
+      "minutes_since_open": 334.0
+    },
+    {
+      "count": 330385,
+      "mean_spread": 0.011480817833739589,
+      "minutes_since_open": 335.0
+    },
+    {
+      "count": 304526,
+      "mean_spread": 0.01120456053013545,
+      "minutes_since_open": 336.0
+    },
+    {
+      "count": 280610,
+      "mean_spread": 0.011163108941235437,
+      "minutes_since_open": 337.0
+    },
+    {
+      "count": 282725,
+      "mean_spread": 0.01105660977982156,
+      "minutes_since_open": 338.0
+    },
+    {
+      "count": 265068,
+      "mean_spread": 0.011130200552311113,
+      "minutes_since_open": 339.0
+    },
+    {
+      "count": 279973,
+      "mean_spread": 0.011099641751169457,
+      "minutes_since_open": 340.0
+    },
+    {
+      "count": 279613,
+      "mean_spread": 0.011097981853490889,
+      "minutes_since_open": 341.0
+    },
+    {
+      "count": 286580,
+      "mean_spread": 0.011090201688882521,
+      "minutes_since_open": 342.0
+    },
+    {
+      "count": 260312,
+      "mean_spread": 0.011010863886413175,
+      "minutes_since_open": 343.0
+    },
+    {
+      "count": 260914,
+      "mean_spread": 0.011093348766260497,
+      "minutes_since_open": 344.0
+    },
+    {
+      "count": 355291,
+      "mean_spread": 0.011087193314775364,
+      "minutes_since_open": 345.0
+    },
+    {
+      "count": 322534,
+      "mean_spread": 0.011028542727278127,
+      "minutes_since_open": 346.0
+    },
+    {
+      "count": 291522,
+      "mean_spread": 0.01102283875659465,
+      "minutes_since_open": 347.0
+    },
+    {
+      "count": 280242,
+      "mean_spread": 0.011033785085747835,
+      "minutes_since_open": 348.0
+    },
+    {
+      "count": 290267,
+      "mean_spread": 0.01096297546741459,
+      "minutes_since_open": 349.0
+    },
+    {
+      "count": 342928,
+      "mean_spread": 0.011227633789017418,
+      "minutes_since_open": 350.0
+    },
+    {
+      "count": 305015,
+      "mean_spread": 0.010968083536874887,
+      "minutes_since_open": 351.0
+    },
+    {
+      "count": 275115,
+      "mean_spread": 0.010945895352851816,
+      "minutes_since_open": 352.0
+    },
+    {
+      "count": 273633,
+      "mean_spread": 0.011089927019036414,
+      "minutes_since_open": 353.0
+    },
+    {
+      "count": 262065,
+      "mean_spread": 0.011131169747963778,
+      "minutes_since_open": 354.0
+    },
+    {
+      "count": 283794,
+      "mean_spread": 0.010963903394715582,
+      "minutes_since_open": 355.0
+    },
+    {
+      "count": 273954,
+      "mean_spread": 0.010985019382815507,
+      "minutes_since_open": 356.0
+    },
+    {
+      "count": 262645,
+      "mean_spread": 0.011138609149231806,
+      "minutes_since_open": 357.0
+    },
+    {
+      "count": 257781,
+      "mean_spread": 0.011098335408738261,
+      "minutes_since_open": 358.0
+    },
+    {
+      "count": 243334,
+      "mean_spread": 0.011049914931740411,
+      "minutes_since_open": 359.0
+    },
+    {
+      "count": 343059,
+      "mean_spread": 0.011005949413949478,
+      "minutes_since_open": 360.0
+    },
+    {
+      "count": 342840,
+      "mean_spread": 0.011089312798973301,
+      "minutes_since_open": 361.0
+    },
+    {
+      "count": 329376,
+      "mean_spread": 0.011203548528125702,
+      "minutes_since_open": 362.0
+    },
+    {
+      "count": 281663,
+      "mean_spread": 0.011032155448177698,
+      "minutes_since_open": 363.0
+    },
+    {
+      "count": 265147,
+      "mean_spread": 0.011114098971514105,
+      "minutes_since_open": 364.0
+    },
+    {
+      "count": 313604,
+      "mean_spread": 0.011098901799721821,
+      "minutes_since_open": 365.0
+    },
+    {
+      "count": 278564,
+      "mean_spread": 0.01109109576255396,
+      "minutes_since_open": 366.0
+    },
+    {
+      "count": 283825,
+      "mean_spread": 0.011008966792917728,
+      "minutes_since_open": 367.0
+    },
+    {
+      "count": 250163,
+      "mean_spread": 0.011052313891343112,
+      "minutes_since_open": 368.0
+    },
+    {
+      "count": 1628803,
+      "mean_spread": 0.010170302977093416,
+      "minutes_since_open": 369.0
+    },
+    {
+      "count": 357083,
+      "mean_spread": 0.011017326503921487,
+      "minutes_since_open": 370.0
+    },
+    {
+      "count": 302411,
+      "mean_spread": 0.01101183488695864,
+      "minutes_since_open": 371.0
+    },
+    {
+      "count": 276298,
+      "mean_spread": 0.010984987223939686,
+      "minutes_since_open": 372.0
+    },
+    {
+      "count": 276490,
+      "mean_spread": 0.010993019639046813,
+      "minutes_since_open": 373.0
+    },
+    {
+      "count": 263371,
+      "mean_spread": 0.011000717618871792,
+      "minutes_since_open": 374.0
+    },
+    {
+      "count": 330172,
+      "mean_spread": 0.01109982069951431,
+      "minutes_since_open": 375.0
+    },
+    {
+      "count": 295814,
+      "mean_spread": 0.01115565862332436,
+      "minutes_since_open": 376.0
+    },
+    {
+      "count": 343513,
+      "mean_spread": 0.010952627702590348,
+      "minutes_since_open": 377.0
+    },
+    {
+      "count": 353390,
+      "mean_spread": 0.01082984804323958,
+      "minutes_since_open": 378.0
+    },
+    {
+      "count": 289970,
+      "mean_spread": 0.011009207849087274,
+      "minutes_since_open": 379.0
+    },
+    {
+      "count": 978753,
+      "mean_spread": 0.0165159851361891,
+      "minutes_since_open": 380.0
+    },
+    {
+      "count": 551405,
+      "mean_spread": 0.011356734160915842,
+      "minutes_since_open": 381.0
+    },
+    {
+      "count": 485828,
+      "mean_spread": 0.011605300641378675,
+      "minutes_since_open": 382.0
+    },
+    {
+      "count": 439465,
+      "mean_spread": 0.011334554515149312,
+      "minutes_since_open": 383.0
+    },
+    {
+      "count": 691359,
+      "mean_spread": 0.012013570373713188,
+      "minutes_since_open": 384.0
+    },
+    {
+      "count": 1255131,
+      "mean_spread": 0.013277777379412823,
+      "minutes_since_open": 385.0
+    },
+    {
+      "count": 830180,
+      "mean_spread": 0.010723397335516973,
+      "minutes_since_open": 386.0
+    },
+    {
+      "count": 818119,
+      "mean_spread": 0.010727265837854685,
+      "minutes_since_open": 387.0
+    },
+    {
+      "count": 848695,
+      "mean_spread": 0.010683661386010143,
+      "minutes_since_open": 388.0
+    },
+    {
+      "count": 1552655,
+      "mean_spread": 0.012502197848201342,
+      "minutes_since_open": 389.0
+    }
+  ],
+  "n_days": 21,
+  "regime_conditional": {
+    "afternoon": {
+      "count": 19281825,
+      "max": 0.36000000000001364,
+      "mean": 0.011350917768416546,
+      "min": 0.009999999999990905,
+      "std": 0.006471710868053827
+    },
+    "close-auction": {
+      "count": 5304780,
+      "max": 0.37000000000000455,
+      "mean": 0.011842649459543357,
+      "min": 0.009999999999990905,
+      "std": 0.007623287194991346
+    },
+    "midday": {
+      "count": 111309540,
+      "max": 0.37000000000000455,
+      "mean": 0.011322833155180057,
+      "min": 0.009999999999990905,
+      "std": 0.004022249640106379
+    },
+    "morning": {
+      "count": 60759301,
+      "max": 0.29000000000002046,
+      "mean": 0.012817774516526876,
+      "min": 0.009999999999990905,
+      "std": 0.005614589998550039
+    },
+    "open-auction": {
+      "count": 8731638,
+      "max": 0.5200000000000102,
+      "mean": 0.03561717286035354,
+      "min": 0.009999999999990905,
+      "std": 0.02160987196627731
+    },
+    "post-market": {
+      "count": 5087781,
+      "max": 0.44999999999998863,
+      "mean": 0.03996275389998144,
+      "min": 0.009999999999990905,
+      "std": 0.032875414707628225
+    },
+    "pre-market": {
+      "count": 3900141,
+      "max": 188.64000000000001,
+      "mean": 0.04260750829265106,
+      "min": 0.009999999999990905,
+      "std": 0.3182054200823045
+    }
+  },
+  "tracker": "SpreadTracker",
+  "trade_conditional": {
+    "count": 16019519,
+    "kurtosis": 215.62680902959127,
+    "max": 15.900000000000006,
+    "mean": 0.014800035506684054,
+    "min": 0.009999999999990905,
+    "percentiles": {
+      "p1": 0.009999999999990905,
+      "p10": 0.009999999999990905,
+      "p25": 0.009999999999990905,
+      "p5": 0.009999999999990905,
+      "p50": 0.010000000000019327,
+      "p75": 0.01999999999998181,
+      "p90": 0.020000000000010232,
+      "p95": 0.030000000000001137,
+      "p99": 0.06999999999999318
+    },
+    "skewness": 11.195867698948824,
+    "std": 0.020328294012299367
+  },
+  "width_classification": {
+    "five_plus_tick_pct": 2.034284724404859,
+    "one_tick_pct": 77.58569765357815,
+    "three_four_tick_pct": 3.9967420455722347,
+    "two_tick_pct": 16.383275576444763
+  }
+}

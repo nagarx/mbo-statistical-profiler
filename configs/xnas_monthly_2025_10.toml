@@ -1,0 +1,33 @@
+# Monthly XNAS ITCH NVDA profiling — 2025_10
+# Date range: 2025-10-01 to 2025-10-31
+
+[input]
+hot_store_dir = "../data/hot_store"
+filename_pattern = "xnas-itch-{date}.mbo.dbn"
+symbol = "NVDA"
+exchange = "XNAS"
+date_start = "2025-10-01"
+date_end = "2025-10-31"
+
+[trackers]
+quality = true
+ofi = true
+spread = true
+returns = true
+volatility = true
+lifecycle = false
+trades = true
+depth = true
+liquidity = true
+jumps = true
+noise = true
+vpin = true
+
+timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
+reservoir_capacity = 10000
+vpin_volume_bar_size = 5000
+vpin_window_bars = 50
+
+[output]
+output_dir = "output_xnas_monthly/2025_10"
+write_summaries = true

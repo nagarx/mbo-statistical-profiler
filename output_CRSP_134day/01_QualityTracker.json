@@ -1,0 +1,55 @@
+{
+  "_provenance": {
+    "exchange": "XNAS",
+    "n_days": 134,
+    "profiler_version": "0.1.0",
+    "reservoir_capacity": 10000,
+    "runtime_secs": 28.283541125,
+    "symbol": "CRSP",
+    "throughput_events_per_sec": 1100387.3193406577,
+    "timescales": [
+      1.0,
+      5.0,
+      10.0,
+      30.0,
+      60.0,
+      300.0
+    ],
+    "total_events": 31122850
+  },
+  "action_distribution": {
+    "add_count": 14208117,
+    "add_pct": 45.65172212699029,
+    "cancel_count": 14418771,
+    "cancel_pct": 46.32856888106327,
+    "clear_count": 134,
+    "clear_pct": 0.0004305518292829867,
+    "fill_count": 0,
+    "fill_pct": 0.0,
+    "modify_count": 0,
+    "modify_pct": 0.0,
+    "none_count": 0,
+    "none_pct": 0.0,
+    "trade_count": 2495828,
+    "trade_pct": 8.019278440117148
+  },
+  "book_consistency": {
+    "crossed_pct": 0.0,
+    "empty_pct": 0.0031006157855080754,
+    "locked_pct": 0.0,
+    "valid_pct": 99.99689938421449
+  },
+  "mean_events_per_day": 232260.07462686568,
+  "n_days": 134,
+  "regime_distribution": {
+    "afternoon_pct": 18.18908615374235,
+    "close_auction_pct": 7.45230272934516,
+    "midday_pct": 51.506298427039944,
+    "morning_pct": 13.950936369901857,
+    "open_auction_pct": 4.313486714744955,
+    "post_market_pct": 3.383761448581991,
+    "pre_market_pct": 1.204128156643752
+  },
+  "total_events": 31122850,
+  "tracker": "QualityTracker"
+}

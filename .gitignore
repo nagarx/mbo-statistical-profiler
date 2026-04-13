@@ -1,0 +1,19 @@
+# Build artifacts (1.2 GB)
+/target/
+
+# Local development overrides (breaks fresh clones)
+.cargo/config.toml
+
+# OS files
+.DS_Store
+**/.DS_Store
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Log files (reproducible profiler output)
+*.log

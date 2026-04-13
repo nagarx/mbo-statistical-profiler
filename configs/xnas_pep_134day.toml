@@ -1,0 +1,32 @@
+# PEP 134-day XNAS ITCH profiling (multi-stock universality study)
+# Defensive, lowest beta (0.37), spread ~1 bps, 6M vol/day
+
+[input]
+data_dir = "../data/XNAS_ITCH/PEP/mbo_2025-07-01_to_2026-01-09"
+filename_pattern = "xnas-itch-{date}.mbo.PEP.dbn.zst"
+symbol = "PEP"
+exchange = "XNAS"
+
+[trackers]
+quality = true
+ofi = true
+spread = true
+returns = true
+volatility = true
+lifecycle = true
+trades = true
+depth = true
+liquidity = true
+jumps = true
+noise = true
+vpin = true
+cross_scale_ofi = true
+
+timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
+reservoir_capacity = 10000
+vpin_volume_bar_size = 1500
+vpin_window_bars = 50
+
+[output]
+output_dir = "output_PEP_134day"
+write_summaries = true

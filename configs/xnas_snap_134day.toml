@@ -1,0 +1,32 @@
+# SNAP 134-day XNAS ITCH profiling (multi-stock universality study)
+# Low price ($12), wide bps spread (8-17), high retail volume (20M/day)
+
+[input]
+data_dir = "../data/XNAS_ITCH/SNAP/mbo_2025-07-01_to_2026-01-09"
+filename_pattern = "xnas-itch-{date}.mbo.SNAP.dbn.zst"
+symbol = "SNAP"
+exchange = "XNAS"
+
+[trackers]
+quality = true
+ofi = true
+spread = true
+returns = true
+volatility = true
+lifecycle = true
+trades = true
+depth = true
+liquidity = true
+jumps = true
+noise = true
+vpin = true
+cross_scale_ofi = true
+
+timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
+reservoir_capacity = 10000
+vpin_volume_bar_size = 4000
+vpin_window_bars = 50
+
+[output]
+output_dir = "output_SNAP_134day"
+write_summaries = true

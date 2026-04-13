@@ -1,0 +1,59 @@
+{
+  "_provenance": {
+    "exchange": "XNAS",
+    "n_days": 134,
+    "profiler_version": "0.1.0",
+    "reservoir_capacity": 10000,
+    "runtime_secs": 28.283541125,
+    "symbol": "CRSP",
+    "throughput_events_per_sec": 1100387.3193406577,
+    "timescales": [
+      1.0,
+      5.0,
+      10.0,
+      30.0,
+      60.0,
+      300.0
+    ],
+    "total_events": 31122850
+  },
+  "daily_vw_effective_spread_bps": {
+    "count": 134,
+    "max": 24.415739573911218,
+    "mean": 9.565378430953105,
+    "min": 4.808065813923469,
+    "std": 2.9541163630614338
+  },
+  "effective_spread_bps": {
+    "count": 2495787,
+    "kurtosis": 5018.452749553163,
+    "max": 7090.994813767091,
+    "mean": 8.919036935067227,
+    "min": 0.0,
+    "percentiles": {
+      "p1": 0.0,
+      "p10": 1.5521202264666099,
+      "p25": 2.8448490559876176,
+      "p5": 2.4234898408164754e-12,
+      "p50": 5.69503109820457,
+      "p75": 10.996060022302286,
+      "p90": 18.23764648326524,
+      "p95": 25.123501994551255,
+      "p99": 52.02346476014018
+    },
+    "skewness": 61.281317937764115,
+    "std": 22.764953573380854
+  },
+  "microprice_deviation_bps": {
+    "count": 31121885,
+    "max": 3819.8376638921854,
+    "mean": 4.56131312215994,
+    "min": 0.0,
+    "std": 9.7663746676018
+  },
+  "n_days": 134,
+  "n_microprice_observations": 31121885,
+  "n_trade_events": 2495787,
+  "tracker": "LiquidityTracker",
+  "volume_weighted_effective_spread_bps": 9.364844185512425
+}

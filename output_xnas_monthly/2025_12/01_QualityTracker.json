@@ -1,0 +1,55 @@
+{
+  "_provenance": {
+    "exchange": "XNAS",
+    "n_days": 22,
+    "profiler_version": "0.1.0",
+    "reservoir_capacity": 10000,
+    "runtime_secs": 161.14686575,
+    "symbol": "NVDA",
+    "throughput_events_per_sec": 1382029.7277485214,
+    "timescales": [
+      1.0,
+      5.0,
+      10.0,
+      30.0,
+      60.0,
+      300.0
+    ],
+    "total_events": 222709759
+  },
+  "action_distribution": {
+    "add_count": 102850301,
+    "add_pct": 46.18131754163499,
+    "cancel_count": 103589386,
+    "cancel_pct": 46.51317771844924,
+    "clear_count": 22,
+    "clear_pct": 9.878327783561564e-6,
+    "fill_count": 0,
+    "fill_pct": 0.0,
+    "modify_count": 0,
+    "modify_pct": 0.0,
+    "none_count": 0,
+    "none_pct": 0.0,
+    "trade_count": 16270050,
+    "trade_pct": 7.3054948615879916
+  },
+  "book_consistency": {
+    "crossed_pct": 0.0,
+    "empty_pct": 0.0002150781367420904,
+    "locked_pct": 0.0,
+    "valid_pct": 99.99978492186325
+  },
+  "mean_events_per_day": 10123170.863636363,
+  "n_days": 22,
+  "regime_distribution": {
+    "afternoon_pct": 8.838565534077022,
+    "close_auction_pct": 2.563426059834226,
+    "midday_pct": 53.089929929833026,
+    "morning_pct": 26.588242143443747,
+    "open_auction_pct": 4.685373486484712,
+    "post_market_pct": 2.535364424690523,
+    "pre_market_pct": 1.6990984216367455
+  },
+  "total_events": 222709759,
+  "tracker": "QualityTracker"
+}

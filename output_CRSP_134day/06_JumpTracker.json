@@ -1,0 +1,55 @@
+{
+  "_provenance": {
+    "exchange": "XNAS",
+    "n_days": 134,
+    "profiler_version": "0.1.0",
+    "reservoir_capacity": 10000,
+    "runtime_secs": 28.283541125,
+    "symbol": "CRSP",
+    "throughput_events_per_sec": 1100387.3193406577,
+    "timescales": [
+      1.0,
+      5.0,
+      10.0,
+      30.0,
+      60.0,
+      300.0
+    ],
+    "total_events": 31122850
+  },
+  "bin_width_seconds": 1.0,
+  "daily_bv": {
+    "count": 134,
+    "max": 0.0015768979043393526,
+    "mean": 0.0003512478148284594,
+    "min": 0.00006860377544998482,
+    "std": 0.0002339675426119746
+  },
+  "daily_jump_fraction": {
+    "count": 134,
+    "max": 0.8438821441459693,
+    "mean": 0.7160907105826851,
+    "min": 0.5725578910537875,
+    "std": 0.04701128587906495
+  },
+  "daily_rv": {
+    "count": 134,
+    "max": 0.003689149644678041,
+    "mean": 0.0011890189713958425,
+    "min": 0.0002986350349064207,
+    "std": 0.0005983328553739251
+  },
+  "daily_z_statistic": {
+    "count": 134,
+    "max": 27702.065336280513,
+    "mean": 11925.951515540912,
+    "min": 1733.1303041058504,
+    "std": 5175.004103676627
+  },
+  "n_days": 134,
+  "n_significant_jump_days": 134,
+  "regime_conditional_jump_fraction": {},
+  "significant_jump_pct": 100.0,
+  "tracker": "JumpTracker",
+  "z_threshold": 2.0
+}

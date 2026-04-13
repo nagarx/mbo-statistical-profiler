@@ -1,0 +1,4457 @@
+{
+  "_provenance": {
+    "exchange": "XNAS",
+    "n_days": 233,
+    "profiler_version": "0.1.0",
+    "reservoir_capacity": 10000,
+    "runtime_secs": 2993.849201958,
+    "symbol": "NVDA",
+    "throughput_events_per_sec": 957885.9690476259,
+    "timescales": [
+      1.0,
+      5.0,
+      10.0,
+      30.0,
+      60.0,
+      300.0
+    ],
+    "total_events": 2867766144
+  },
+  "aggressor_ratio": 0.4998947474006272,
+  "component_fractions": {
+    "add_fraction": 0.5126499552794684,
+    "cancel_fraction": 0.40300026476695405,
+    "trade_fraction": 0.08434977995357747
+  },
+  "cumulative_delta": {
+    "mean_eod_delta": 18405.86266094431,
+    "std_eod_delta": 2759088.2027196987
+  },
+  "intraday_ofi_curve": [
+    {
+      "count": 53171470,
+      "mean_ofi": 0.06540646703952487,
+      "minutes_since_open": 0.0
+    },
+    {
+      "count": 15820762,
+      "mean_ofi": 0.15617218690230475,
+      "minutes_since_open": 1.0
+    },
+    {
+      "count": 11830810,
+      "mean_ofi": 0.005096946024825702,
+      "minutes_since_open": 2.0
+    },
+    {
+      "count": 11556781,
+      "mean_ofi": 0.1678027817607512,
+      "minutes_since_open": 3.0
+    },
+    {
+      "count": 11219395,
+      "mean_ofi": 0.2098222765131606,
+      "minutes_since_open": 4.0
+    },
+    {
+      "count": 18408526,
+      "mean_ofi": -0.04396647509962717,
+      "minutes_since_open": 5.0
+    },
+    {
+      "count": 17327158,
+      "mean_ofi": -0.01111901905667046,
+      "minutes_since_open": 6.0
+    },
+    {
+      "count": 15752918,
+      "mean_ofi": -0.0061610807597652206,
+      "minutes_since_open": 7.0
+    },
+    {
+      "count": 14552433,
+      "mean_ofi": -0.05675662619439508,
+      "minutes_since_open": 8.0
+    },
+    {
+      "count": 14059225,
+      "mean_ofi": -0.06157480230952092,
+      "minutes_since_open": 9.0
+    },
+    {
+      "count": 15414252,
+      "mean_ofi": -0.0483592067912197,
+      "minutes_since_open": 10.0
+    },
+    {
+      "count": 13182796,
+      "mean_ofi": -0.04876325174113014,
+      "minutes_since_open": 11.0
+    },
+    {
+      "count": 12568249,
+      "mean_ofi": 0.0009874883923721401,
+      "minutes_since_open": 12.0
+    },
+    {
+      "count": 12113345,
+      "mean_ofi": 0.012158738977547531,
+      "minutes_since_open": 13.0
+    },
+    {
+      "count": 11504561,
+      "mean_ofi": -0.02062269042686636,
+      "minutes_since_open": 14.0
+    },
+    {
+      "count": 13367307,
+      "mean_ofi": 0.0802623146157894,
+      "minutes_since_open": 15.0
+    },
+    {
+      "count": 12668490,
+      "mean_ofi": 0.051787071703104835,
+      "minutes_since_open": 16.0
+    },
+    {
+      "count": 12277677,
+      "mean_ofi": 0.07289334945038804,
+      "minutes_since_open": 17.0
+    },
+    {
+      "count": 13913121,
+      "mean_ofi": 0.04028592865683942,
+      "minutes_since_open": 18.0
+    },
+    {
+      "count": 14555753,
+      "mean_ofi": -0.10213171383162131,
+      "minutes_since_open": 19.0
+    },
+    {
+      "count": 15434960,
+      "mean_ofi": -0.08346202387307716,
+      "minutes_since_open": 20.0
+    },
+    {
+      "count": 14783054,
+      "mean_ofi": 0.013558565097573201,
+      "minutes_since_open": 21.0
+    },
+    {
+      "count": 14192405,
+      "mean_ofi": 0.033829572930031006,
+      "minutes_since_open": 22.0
+    },
+    {
+      "count": 13859448,
+      "mean_ofi": 0.03669756544416056,
+      "minutes_since_open": 23.0
+    },
+    {
+      "count": 13280946,
+      "mean_ofi": -0.003741450345481706,
+      "minutes_since_open": 24.0
+    },
+    {
+      "count": 13336793,
+      "mean_ofi": -0.06545884006746973,
+      "minutes_since_open": 25.0
+    },
+    {
+      "count": 12141777,
+      "mean_ofi": -0.09153487170783127,
+      "minutes_since_open": 26.0
+    },
+    {
+      "count": 11172654,
+      "mean_ofi": -0.10191481809068413,
+      "minutes_since_open": 27.0
+    },
+    {
+      "count": 10339714,
+      "mean_ofi": -0.09511839495753051,
+      "minutes_since_open": 28.0
+    },
+    {
+      "count": 10216284,
+      "mean_ofi": 0.02271677255644611,
+      "minutes_since_open": 29.0
+    },
+    {
+      "count": 15074523,
+      "mean_ofi": -0.004415463096238822,
+      "minutes_since_open": 30.0
+    },
+    {
+      "count": 13462926,
+      "mean_ofi": -0.04392328978113532,
+      "minutes_since_open": 31.0
+    },
+    {
+      "count": 12992450,
+      "mean_ofi": -0.0013699494706431122,
+      "minutes_since_open": 32.0
+    },
+    {
+      "count": 12804002,
+      "mean_ofi": 0.036100197422648764,
+      "minutes_since_open": 33.0
+    },
+    {
+      "count": 12368563,
+      "mean_ofi": -0.06917375931222147,
+      "minutes_since_open": 34.0
+    },
+    {
+      "count": 12983833,
+      "mean_ofi": 0.06560373966609016,
+      "minutes_since_open": 35.0
+    },
+    {
+      "count": 13090255,
+      "mean_ofi": 0.024921516043805967,
+      "minutes_since_open": 36.0
+    },
+    {
+      "count": 12362486,
+      "mean_ofi": -0.002534360807362684,
+      "minutes_since_open": 37.0
+    },
+    {
+      "count": 12137468,
+      "mean_ofi": -0.07949030226074248,
+      "minutes_since_open": 38.0
+    },
+    {
+      "count": 11605053,
+      "mean_ofi": -0.06841950657183075,
+      "minutes_since_open": 39.0
+    },
+    {
+      "count": 12451578,
+      "mean_ofi": -0.08044948198534303,
+      "minutes_since_open": 40.0
+    },
+    {
+      "count": 12055698,
+      "mean_ofi": -0.15398809757840992,
+      "minutes_since_open": 41.0
+    },
+    {
+      "count": 11712248,
+      "mean_ofi": 0.01450618190461145,
+      "minutes_since_open": 42.0
+    },
+    {
+      "count": 11268892,
+      "mean_ofi": 0.11490712662786622,
+      "minutes_since_open": 43.0
+    },
+    {
+      "count": 10916351,
+      "mean_ofi": -0.08229141770909779,
+      "minutes_since_open": 44.0
+    },
+    {
+      "count": 11725501,
+      "mean_ofi": -0.021830794266269334,
+      "minutes_since_open": 45.0
+    },
+    {
+      "count": 11283166,
+      "mean_ofi": -0.0241276251718702,
+      "minutes_since_open": 46.0
+    },
+    {
+      "count": 11071599,
+      "mean_ofi": 0.014251148366196011,
+      "minutes_since_open": 47.0
+    },
+    {
+      "count": 10674605,
+      "mean_ofi": -0.031772885273036414,
+      "minutes_since_open": 48.0
+    },
+    {
+      "count": 10213841,
+      "mean_ofi": -0.02520628625411292,
+      "minutes_since_open": 49.0
+    },
+    {
+      "count": 11363946,
+      "mean_ofi": 0.0992169445366958,
+      "minutes_since_open": 50.0
+    },
+    {
+      "count": 10938899,
+      "mean_ofi": -0.005145856086610647,
+      "minutes_since_open": 51.0
+    },
+    {
+      "count": 11073732,
+      "mean_ofi": 0.039162226429174114,
+      "minutes_since_open": 52.0
+    },
+    {
+      "count": 10821669,
+      "mean_ofi": 0.05509335020318228,
+      "minutes_since_open": 53.0
+    },
+    {
+      "count": 10139271,
+      "mean_ofi": -0.03467300558393221,
+      "minutes_since_open": 54.0
+    },
+    {
+      "count": 11010263,
+      "mean_ofi": 0.005755448348514451,
+      "minutes_since_open": 55.0
+    },
+    {
+      "count": 10828605,
+      "mean_ofi": -0.08104995980554826,
+      "minutes_since_open": 56.0
+    },
+    {
+      "count": 10202272,
+      "mean_ofi": -0.08667647755323642,
+      "minutes_since_open": 57.0
+    },
+    {
+      "count": 10514082,
+      "mean_ofi": -0.19092099528991632,
+      "minutes_since_open": 58.0
+    },
+    {
+      "count": 9742835,
+      "mean_ofi": -0.026101540260096923,
+      "minutes_since_open": 59.0
+    },
+    {
+      "count": 11560967,
+      "mean_ofi": 0.1808562380638407,
+      "minutes_since_open": 60.0
+    },
+    {
+      "count": 10716018,
+      "mean_ofi": 0.10183502864589826,
+      "minutes_since_open": 61.0
+    },
+    {
+      "count": 10286277,
+      "mean_ofi": -0.016840787001953902,
+      "minutes_since_open": 62.0
+    },
+    {
+      "count": 9837802,
+      "mean_ofi": 0.027330800111649078,
+      "minutes_since_open": 63.0
+    },
+    {
+      "count": 9540110,
+      "mean_ofi": -0.09043480630727843,
+      "minutes_since_open": 64.0
+    },
+    {
+      "count": 10152962,
+      "mean_ofi": 0.03497048447536765,
+      "minutes_since_open": 65.0
+    },
+    {
+      "count": 9906493,
+      "mean_ofi": -0.041792489027155315,
+      "minutes_since_open": 66.0
+    },
+    {
+      "count": 9560262,
+      "mean_ofi": 0.030129927401569567,
+      "minutes_since_open": 67.0
+    },
+    {
+      "count": 9368358,
+      "mean_ofi": 0.13086113916654513,
+      "minutes_since_open": 68.0
+    },
+    {
+      "count": 8729583,
+      "mean_ofi": 0.00032773615876263495,
+      "minutes_since_open": 69.0
+    },
+    {
+      "count": 9399064,
+      "mean_ofi": 0.11890162680028446,
+      "minutes_since_open": 70.0
+    },
+    {
+      "count": 9149145,
+      "mean_ofi": 0.03359603547654484,
+      "minutes_since_open": 71.0
+    },
+    {
+      "count": 8856851,
+      "mean_ofi": -0.06445541423243308,
+      "minutes_since_open": 72.0
+    },
+    {
+      "count": 8688482,
+      "mean_ofi": -0.06615056577203737,
+      "minutes_since_open": 73.0
+    },
+    {
+      "count": 8506250,
+      "mean_ofi": -0.028959647318150563,
+      "minutes_since_open": 74.0
+    },
+    {
+      "count": 9265703,
+      "mean_ofi": -0.007386055866453245,
+      "minutes_since_open": 75.0
+    },
+    {
+      "count": 9046173,
+      "mean_ofi": -0.11056211284041666,
+      "minutes_since_open": 76.0
+    },
+    {
+      "count": 8637812,
+      "mean_ofi": -0.06686484957068958,
+      "minutes_since_open": 77.0
+    },
+    {
+      "count": 8597056,
+      "mean_ofi": -0.07257670532797092,
+      "minutes_since_open": 78.0
+    },
+    {
+      "count": 8405773,
+      "mean_ofi": -0.09656803722868396,
+      "minutes_since_open": 79.0
+    },
+    {
+      "count": 9157271,
+      "mean_ofi": -0.2424598988060903,
+      "minutes_since_open": 80.0
+    },
+    {
+      "count": 8708327,
+      "mean_ofi": -0.049095423265574104,
+      "minutes_since_open": 81.0
+    },
+    {
+      "count": 8730836,
+      "mean_ofi": -0.024371549299516966,
+      "minutes_since_open": 82.0
+    },
+    {
+      "count": 8464065,
+      "mean_ofi": 0.14627817721153805,
+      "minutes_since_open": 83.0
+    },
+    {
+      "count": 8169796,
+      "mean_ofi": 0.058474042681113385,
+      "minutes_since_open": 84.0
+    },
+    {
+      "count": 8725600,
+      "mean_ofi": 0.15242848629319777,
+      "minutes_since_open": 85.0
+    },
+    {
+      "count": 8384629,
+      "mean_ofi": -0.13305025183584349,
+      "minutes_since_open": 86.0
+    },
+    {
+      "count": 8029735,
+      "mean_ofi": 0.030370989827185457,
+      "minutes_since_open": 87.0
+    },
+    {
+      "count": 8295940,
+      "mean_ofi": 0.006322851901050009,
+      "minutes_since_open": 88.0
+    },
+    {
+      "count": 7871232,
+      "mean_ofi": -0.07887647067192731,
+      "minutes_since_open": 89.0
+    },
+    {
+      "count": 10417696,
+      "mean_ofi": 0.06346902424491499,
+      "minutes_since_open": 90.0
+    },
+    {
+      "count": 9136079,
+      "mean_ofi": 0.03684359559499521,
+      "minutes_since_open": 91.0
+    },
+    {
+      "count": 8524791,
+      "mean_ofi": -0.15232197481441245,
+      "minutes_since_open": 92.0
+    },
+    {
+      "count": 8251661,
+      "mean_ofi": -0.050464142916193055,
+      "minutes_since_open": 93.0
+    },
+    {
+      "count": 8224504,
+      "mean_ofi": 0.06160347177167968,
+      "minutes_since_open": 94.0
+    },
+    {
+      "count": 8706826,
+      "mean_ofi": -0.10233614407822732,
+      "minutes_since_open": 95.0
+    },
+    {
+      "count": 8616721,
+      "mean_ofi": 0.038705210485526165,
+      "minutes_since_open": 96.0
+    },
+    {
+      "count": 8099607,
+      "mean_ofi": -0.026747840975492237,
+      "minutes_since_open": 97.0
+    },
+    {
+      "count": 7902656,
+      "mean_ofi": -0.055051365009434035,
+      "minutes_since_open": 98.0
+    },
+    {
+      "count": 7671445,
+      "mean_ofi": -0.036998244789603896,
+      "minutes_since_open": 99.0
+    },
+    {
+      "count": 8400036,
+      "mean_ofi": 0.04215862884398288,
+      "minutes_since_open": 100.0
+    },
+    {
+      "count": 7993899,
+      "mean_ofi": 0.1328200418844417,
+      "minutes_since_open": 101.0
+    },
+    {
+      "count": 7884623,
+      "mean_ofi": -0.0936467095509847,
+      "minutes_since_open": 102.0
+    },
+    {
+      "count": 7388632,
+      "mean_ofi": 0.05565495750769263,
+      "minutes_since_open": 103.0
+    },
+    {
+      "count": 7245679,
+      "mean_ofi": -0.043247706667653825,
+      "minutes_since_open": 104.0
+    },
+    {
+      "count": 8135643,
+      "mean_ofi": 0.025229966457477486,
+      "minutes_since_open": 105.0
+    },
+    {
+      "count": 7686548,
+      "mean_ofi": -0.010899821350231136,
+      "minutes_since_open": 106.0
+    },
+    {
+      "count": 7303568,
+      "mean_ofi": 0.09748796752490098,
+      "minutes_since_open": 107.0
+    },
+    {
+      "count": 7196068,
+      "mean_ofi": 0.10812849461680028,
+      "minutes_since_open": 108.0
+    },
+    {
+      "count": 6894020,
+      "mean_ofi": -0.0071959466320148545,
+      "minutes_since_open": 109.0
+    },
+    {
+      "count": 7738952,
+      "mean_ofi": 0.02963837997702945,
+      "minutes_since_open": 110.0
+    },
+    {
+      "count": 7224923,
+      "mean_ofi": 0.041889304564208495,
+      "minutes_since_open": 111.0
+    },
+    {
+      "count": 7177762,
+      "mean_ofi": 0.035552446570395246,
+      "minutes_since_open": 112.0
+    },
+    {
+      "count": 7013899,
+      "mean_ofi": -0.027522067255317088,
+      "minutes_since_open": 113.0
+    },
+    {
+      "count": 6812108,
+      "mean_ofi": 0.02641326297233695,
+      "minutes_since_open": 114.0
+    },
+    {
+      "count": 7411837,
+      "mean_ofi": -0.06776147397736619,
+      "minutes_since_open": 115.0
+    },
+    {
+      "count": 7190968,
+      "mean_ofi": -0.010074443385093706,
+      "minutes_since_open": 116.0
+    },
+    {
+      "count": 6928124,
+      "mean_ofi": -0.025895899091872645,
+      "minutes_since_open": 117.0
+    },
+    {
+      "count": 6732789,
+      "mean_ofi": -0.017595531361521744,
+      "minutes_since_open": 118.0
+    },
+    {
+      "count": 6890881,
+      "mean_ofi": -0.13774944016594057,
+      "minutes_since_open": 119.0
+    },
+    {
+      "count": 8214073,
+      "mean_ofi": 0.005774479968716171,
+      "minutes_since_open": 120.0
+    },
+    {
+      "count": 7214948,
+      "mean_ofi": -0.007145581645216461,
+      "minutes_since_open": 121.0
+    },
+    {
+      "count": 6972560,
+      "mean_ofi": -0.03560930275250298,
+      "minutes_since_open": 122.0
+    },
+    {
+      "count": 6870110,
+      "mean_ofi": -0.03744059410984514,
+      "minutes_since_open": 123.0
+    },
+    {
+      "count": 6840880,
+      "mean_ofi": 0.009324969886915828,
+      "minutes_since_open": 124.0
+    },
+    {
+      "count": 7432939,
+      "mean_ofi": -0.1327429163618873,
+      "minutes_since_open": 125.0
+    },
+    {
+      "count": 7223348,
+      "mean_ofi": 0.053952682329579414,
+      "minutes_since_open": 126.0
+    },
+    {
+      "count": 6810441,
+      "mean_ofi": 0.010282447201287258,
+      "minutes_since_open": 127.0
+    },
+    {
+      "count": 6592676,
+      "mean_ofi": -0.024801309817137778,
+      "minutes_since_open": 128.0
+    },
+    {
+      "count": 6346267,
+      "mean_ofi": 0.0019208142361502964,
+      "minutes_since_open": 129.0
+    },
+    {
+      "count": 7041114,
+      "mean_ofi": 0.0038464083950372537,
+      "minutes_since_open": 130.0
+    },
+    {
+      "count": 6640255,
+      "mean_ofi": -0.048427658275168206,
+      "minutes_since_open": 131.0
+    },
+    {
+      "count": 6650996,
+      "mean_ofi": 0.07765739146437048,
+      "minutes_since_open": 132.0
+    },
+    {
+      "count": 6364000,
+      "mean_ofi": -0.02811627906976217,
+      "minutes_since_open": 133.0
+    },
+    {
+      "count": 6281187,
+      "mean_ofi": 0.1920140253744885,
+      "minutes_since_open": 134.0
+    },
+    {
+      "count": 6785777,
+      "mean_ofi": 0.03285872789512429,
+      "minutes_since_open": 135.0
+    },
+    {
+      "count": 6629667,
+      "mean_ofi": -0.0993603449464459,
+      "minutes_since_open": 136.0
+    },
+    {
+      "count": 6439781,
+      "mean_ofi": -0.11457004516146399,
+      "minutes_since_open": 137.0
+    },
+    {
+      "count": 6268666,
+      "mean_ofi": 0.10962731145670614,
+      "minutes_since_open": 138.0
+    },
+    {
+      "count": 6037257,
+      "mean_ofi": 0.05165955333689052,
+      "minutes_since_open": 139.0
+    },
+    {
+      "count": 6563213,
+      "mean_ofi": -0.14561084639491265,
+      "minutes_since_open": 140.0
+    },
+    {
+      "count": 6322137,
+      "mean_ofi": 0.0075887314684910225,
+      "minutes_since_open": 141.0
+    },
+    {
+      "count": 6203427,
+      "mean_ofi": -0.09040938178202976,
+      "minutes_since_open": 142.0
+    },
+    {
+      "count": 6009843,
+      "mean_ofi": 0.018319779734682493,
+      "minutes_since_open": 143.0
+    },
+    {
+      "count": 5756966,
+      "mean_ofi": -0.09680098857628038,
+      "minutes_since_open": 144.0
+    },
+    {
+      "count": 6222304,
+      "mean_ofi": 0.0184288649349145,
+      "minutes_since_open": 145.0
+    },
+    {
+      "count": 6136745,
+      "mean_ofi": -0.06993414261143659,
+      "minutes_since_open": 146.0
+    },
+    {
+      "count": 6038368,
+      "mean_ofi": -0.15302959342659503,
+      "minutes_since_open": 147.0
+    },
+    {
+      "count": 6046795,
+      "mean_ofi": -0.1504317576501352,
+      "minutes_since_open": 148.0
+    },
+    {
+      "count": 5605657,
+      "mean_ofi": -0.21136309267585343,
+      "minutes_since_open": 149.0
+    },
+    {
+      "count": 7409064,
+      "mean_ofi": -0.00019516635300202478,
+      "minutes_since_open": 150.0
+    },
+    {
+      "count": 6711134,
+      "mean_ofi": 0.05403319319803783,
+      "minutes_since_open": 151.0
+    },
+    {
+      "count": 6198788,
+      "mean_ofi": 0.022814459858935345,
+      "minutes_since_open": 152.0
+    },
+    {
+      "count": 6013006,
+      "mean_ofi": -0.1252731163082284,
+      "minutes_since_open": 153.0
+    },
+    {
+      "count": 5907580,
+      "mean_ofi": -0.03685146879094658,
+      "minutes_since_open": 154.0
+    },
+    {
+      "count": 6202961,
+      "mean_ofi": -0.03170969477318789,
+      "minutes_since_open": 155.0
+    },
+    {
+      "count": 6102797,
+      "mean_ofi": 0.03800126401058484,
+      "minutes_since_open": 156.0
+    },
+    {
+      "count": 6030950,
+      "mean_ofi": -0.0241927059584303,
+      "minutes_since_open": 157.0
+    },
+    {
+      "count": 5665570,
+      "mean_ofi": -0.006162133730586127,
+      "minutes_since_open": 158.0
+    },
+    {
+      "count": 5347037,
+      "mean_ofi": -0.015946962775834767,
+      "minutes_since_open": 159.0
+    },
+    {
+      "count": 6115027,
+      "mean_ofi": 0.054979642771812005,
+      "minutes_since_open": 160.0
+    },
+    {
+      "count": 5898979,
+      "mean_ofi": 0.1409267603766585,
+      "minutes_since_open": 161.0
+    },
+    {
+      "count": 5785336,
+      "mean_ofi": 0.04572387844024676,
+      "minutes_since_open": 162.0
+    },
+    {
+      "count": 5396876,
+      "mean_ofi": 0.2191130572575721,
+      "minutes_since_open": 163.0
+    },
+    {
+      "count": 5132506,
+      "mean_ofi": 0.18304703394402314,
+      "minutes_since_open": 164.0
+    },
+    {
+      "count": 5661852,
+      "mean_ofi": 0.03534832772034438,
+      "minutes_since_open": 165.0
+    },
+    {
+      "count": 5473981,
+      "mean_ofi": -0.06408425604692575,
+      "minutes_since_open": 166.0
+    },
+    {
+      "count": 5414167,
+      "mean_ofi": -0.06353590496931,
+      "minutes_since_open": 167.0
+    },
+    {
+      "count": 5337668,
+      "mean_ofi": 0.040871781459620955,
+      "minutes_since_open": 168.0
+    },
+    {
+      "count": 5416515,
+      "mean_ofi": -0.09928487228412036,
+      "minutes_since_open": 169.0
+    },
+    {
+      "count": 5903867,
+      "mean_ofi": 0.01484383032341587,
+      "minutes_since_open": 170.0
+    },
+    {
+      "count": 5754617,
+      "mean_ofi": 0.07107353973340323,
+      "minutes_since_open": 171.0
+    },
+    {
+      "count": 5643586,
+      "mean_ofi": 0.0807481271659606,
+      "minutes_since_open": 172.0
+    },
+    {
+      "count": 5397586,
+      "mean_ofi": 0.028211685742478745,
+      "minutes_since_open": 173.0
+    },
+    {
+      "count": 5197530,
+      "mean_ofi": 0.13219894834663057,
+      "minutes_since_open": 174.0
+    },
+    {
+      "count": 5515365,
+      "mean_ofi": 0.0889099814790146,
+      "minutes_since_open": 175.0
+    },
+    {
+      "count": 5578372,
+      "mean_ofi": 0.0459270195677269,
+      "minutes_since_open": 176.0
+    },
+    {
+      "count": 5220465,
+      "mean_ofi": -0.09347577275203812,
+      "minutes_since_open": 177.0
+    },
+    {
+      "count": 5241336,
+      "mean_ofi": 0.1557400632205272,
+      "minutes_since_open": 178.0
+    },
+    {
+      "count": 4967463,
+      "mean_ofi": -0.05236657021904528,
+      "minutes_since_open": 179.0
+    },
+    {
+      "count": 6263894,
+      "mean_ofi": 0.03488516887418682,
+      "minutes_since_open": 180.0
+    },
+    {
+      "count": 5731683,
+      "mean_ofi": -0.012892722783168062,
+      "minutes_since_open": 181.0
+    },
+    {
+      "count": 5405426,
+      "mean_ofi": 0.0020745820958409686,
+      "minutes_since_open": 182.0
+    },
+    {
+      "count": 5154380,
+      "mean_ofi": 0.05646459904004279,
+      "minutes_since_open": 183.0
+    },
+    {
+      "count": 4829108,
+      "mean_ofi": 0.0640445399026073,
+      "minutes_since_open": 184.0
+    },
+    {
+      "count": 5301468,
+      "mean_ofi": 0.2082042181523835,
+      "minutes_since_open": 185.0
+    },
+    {
+      "count": 5260628,
+      "mean_ofi": 0.13778316961398138,
+      "minutes_since_open": 186.0
+    },
+    {
+      "count": 5058117,
+      "mean_ofi": 0.03815115387801072,
+      "minutes_since_open": 187.0
+    },
+    {
+      "count": 4899862,
+      "mean_ofi": 0.03241825994284462,
+      "minutes_since_open": 188.0
+    },
+    {
+      "count": 4816496,
+      "mean_ofi": 0.010997829127236812,
+      "minutes_since_open": 189.0
+    },
+    {
+      "count": 5369235,
+      "mean_ofi": -0.04653176849216121,
+      "minutes_since_open": 190.0
+    },
+    {
+      "count": 5222045,
+      "mean_ofi": 0.024981400964561397,
+      "minutes_since_open": 191.0
+    },
+    {
+      "count": 4975612,
+      "mean_ofi": -0.007590021086854887,
+      "minutes_since_open": 192.0
+    },
+    {
+      "count": 4806151,
+      "mean_ofi": -0.0929546325115435,
+      "minutes_since_open": 193.0
+    },
+    {
+      "count": 4808293,
+      "mean_ofi": -0.18092574641353798,
+      "minutes_since_open": 194.0
+    },
+    {
+      "count": 5318954,
+      "mean_ofi": -0.12866928347187345,
+      "minutes_since_open": 195.0
+    },
+    {
+      "count": 5104033,
+      "mean_ofi": -0.14925745973819854,
+      "minutes_since_open": 196.0
+    },
+    {
+      "count": 4862274,
+      "mean_ofi": 0.11944226096677761,
+      "minutes_since_open": 197.0
+    },
+    {
+      "count": 4918017,
+      "mean_ofi": -0.09178191128659241,
+      "minutes_since_open": 198.0
+    },
+    {
+      "count": 4652311,
+      "mean_ofi": -0.0371383168494121,
+      "minutes_since_open": 199.0
+    },
+    {
+      "count": 5325066,
+      "mean_ofi": 0.10955826650785813,
+      "minutes_since_open": 200.0
+    },
+    {
+      "count": 5021430,
+      "mean_ofi": 0.09590853601464079,
+      "minutes_since_open": 201.0
+    },
+    {
+      "count": 4935118,
+      "mean_ofi": 0.054777616259629944,
+      "minutes_since_open": 202.0
+    },
+    {
+      "count": 4830779,
+      "mean_ofi": 0.04805539644848211,
+      "minutes_since_open": 203.0
+    },
+    {
+      "count": 4674645,
+      "mean_ofi": 0.20755864883856687,
+      "minutes_since_open": 204.0
+    },
+    {
+      "count": 5061924,
+      "mean_ofi": -0.049233058418105755,
+      "minutes_since_open": 205.0
+    },
+    {
+      "count": 5195228,
+      "mean_ofi": -0.054130251838796634,
+      "minutes_since_open": 206.0
+    },
+    {
+      "count": 4850501,
+      "mean_ofi": 0.37405991669725824,
+      "minutes_since_open": 207.0
+    },
+    {
+      "count": 4671073,
+      "mean_ofi": -0.0008925144179906114,
+      "minutes_since_open": 208.0
+    },
+    {
+      "count": 4411146,
+      "mean_ofi": -0.0263017818952299,
+      "minutes_since_open": 209.0
+    },
+    {
+      "count": 6273487,
+      "mean_ofi": 0.030897170903518494,
+      "minutes_since_open": 210.0
+    },
+    {
+      "count": 4849692,
+      "mean_ofi": 0.034414556635766674,
+      "minutes_since_open": 211.0
+    },
+    {
+      "count": 5223983,
+      "mean_ofi": 0.12543781248906197,
+      "minutes_since_open": 212.0
+    },
+    {
+      "count": 5002461,
+      "mean_ofi": 0.023335514259883422,
+      "minutes_since_open": 213.0
+    },
+    {
+      "count": 4705819,
+      "mean_ofi": 0.024635669157699578,
+      "minutes_since_open": 214.0
+    },
+    {
+      "count": 5224920,
+      "mean_ofi": -0.06446701576292467,
+      "minutes_since_open": 215.0
+    },
+    {
+      "count": 4996045,
+      "mean_ofi": 0.021235397199181195,
+      "minutes_since_open": 216.0
+    },
+    {
+      "count": 4789902,
+      "mean_ofi": 0.041956808302136196,
+      "minutes_since_open": 217.0
+    },
+    {
+      "count": 4880302,
+      "mean_ofi": 0.05004792736187244,
+      "minutes_since_open": 218.0
+    },
+    {
+      "count": 4811985,
+      "mean_ofi": -0.07319993724005887,
+      "minutes_since_open": 219.0
+    },
+    {
+      "count": 5141178,
+      "mean_ofi": -0.21313695032541413,
+      "minutes_since_open": 220.0
+    },
+    {
+      "count": 5212376,
+      "mean_ofi": -0.5485931943513761,
+      "minutes_since_open": 221.0
+    },
+    {
+      "count": 5168664,
+      "mean_ofi": 0.3001593835467116,
+      "minutes_since_open": 222.0
+    },
+    {
+      "count": 4944089,
+      "mean_ofi": -0.2680095362361461,
+      "minutes_since_open": 223.0
+    },
+    {
+      "count": 4613862,
+      "mean_ofi": -0.11879570737052216,
+      "minutes_since_open": 224.0
+    },
+    {
+      "count": 5223213,
+      "mean_ofi": 0.06367460028912572,
+      "minutes_since_open": 225.0
+    },
+    {
+      "count": 5008581,
+      "mean_ofi": -0.07941331087587607,
+      "minutes_since_open": 226.0
+    },
+    {
+      "count": 4798611,
+      "mean_ofi": -0.030922073074893388,
+      "minutes_since_open": 227.0
+    },
+    {
+      "count": 4836699,
+      "mean_ofi": -0.14346644271227973,
+      "minutes_since_open": 228.0
+    },
+    {
+      "count": 4882590,
+      "mean_ofi": 0.09781652770353522,
+      "minutes_since_open": 229.0
+    },
+    {
+      "count": 4978444,
+      "mean_ofi": -0.07526488195910612,
+      "minutes_since_open": 230.0
+    },
+    {
+      "count": 4882576,
+      "mean_ofi": 0.07408159135670034,
+      "minutes_since_open": 231.0
+    },
+    {
+      "count": 4652257,
+      "mean_ofi": 0.06613327681596116,
+      "minutes_since_open": 232.0
+    },
+    {
+      "count": 4621707,
+      "mean_ofi": 0.029853471888201387,
+      "minutes_since_open": 233.0
+    },
+    {
+      "count": 4460505,
+      "mean_ofi": 0.1584970760037356,
+      "minutes_since_open": 234.0
+    },
+    {
+      "count": 4900301,
+      "mean_ofi": -0.07582411774297465,
+      "minutes_since_open": 235.0
+    },
+    {
+      "count": 4801111,
+      "mean_ofi": -0.1850813280509369,
+      "minutes_since_open": 236.0
+    },
+    {
+      "count": 4576978,
+      "mean_ofi": -0.0990592482638148,
+      "minutes_since_open": 237.0
+    },
+    {
+      "count": 4741451,
+      "mean_ofi": -0.07996581637140097,
+      "minutes_since_open": 238.0
+    },
+    {
+      "count": 4621478,
+      "mean_ofi": -0.14022267335256963,
+      "minutes_since_open": 239.0
+    },
+    {
+      "count": 5707271,
+      "mean_ofi": 0.07339970364119995,
+      "minutes_since_open": 240.0
+    },
+    {
+      "count": 5055252,
+      "mean_ofi": -0.09619540232613548,
+      "minutes_since_open": 241.0
+    },
+    {
+      "count": 4902513,
+      "mean_ofi": -0.03577247015968967,
+      "minutes_since_open": 242.0
+    },
+    {
+      "count": 4769594,
+      "mean_ofi": 0.057954199036653935,
+      "minutes_since_open": 243.0
+    },
+    {
+      "count": 4519566,
+      "mean_ofi": 0.0487697270047618,
+      "minutes_since_open": 244.0
+    },
+    {
+      "count": 4863184,
+      "mean_ofi": 0.19811074390768185,
+      "minutes_since_open": 245.0
+    },
+    {
+      "count": 4885363,
+      "mean_ofi": 0.05798238534168275,
+      "minutes_since_open": 246.0
+    },
+    {
+      "count": 4666600,
+      "mean_ofi": -0.03007542964899361,
+      "minutes_since_open": 247.0
+    },
+    {
+      "count": 4670041,
+      "mean_ofi": 0.10497616616213926,
+      "minutes_since_open": 248.0
+    },
+    {
+      "count": 4453028,
+      "mean_ofi": -0.07002313931104849,
+      "minutes_since_open": 249.0
+    },
+    {
+      "count": 5161343,
+      "mean_ofi": -0.0685856374978339,
+      "minutes_since_open": 250.0
+    },
+    {
+      "count": 4912770,
+      "mean_ofi": -0.13094445699677093,
+      "minutes_since_open": 251.0
+    },
+    {
+      "count": 4753725,
+      "mean_ofi": -0.15466965379780684,
+      "minutes_since_open": 252.0
+    },
+    {
+      "count": 4673326,
+      "mean_ofi": -0.17684942158969896,
+      "minutes_since_open": 253.0
+    },
+    {
+      "count": 4493210,
+      "mean_ofi": -0.058927136724074486,
+      "minutes_since_open": 254.0
+    },
+    {
+      "count": 5012318,
+      "mean_ofi": 0.08546824044283974,
+      "minutes_since_open": 255.0
+    },
+    {
+      "count": 4875173,
+      "mean_ofi": -0.06485718558089688,
+      "minutes_since_open": 256.0
+    },
+    {
+      "count": 4699661,
+      "mean_ofi": 0.02286313842636679,
+      "minutes_since_open": 257.0
+    },
+    {
+      "count": 4868375,
+      "mean_ofi": 0.20653441856881766,
+      "minutes_since_open": 258.0
+    },
+    {
+      "count": 4486721,
+      "mean_ofi": -0.0024055429343592455,
+      "minutes_since_open": 259.0
+    },
+    {
+      "count": 5061615,
+      "mean_ofi": -0.050418295346446304,
+      "minutes_since_open": 260.0
+    },
+    {
+      "count": 4775055,
+      "mean_ofi": 0.029101444904825326,
+      "minutes_since_open": 261.0
+    },
+    {
+      "count": 4579118,
+      "mean_ofi": -0.05501649007515003,
+      "minutes_since_open": 262.0
+    },
+    {
+      "count": 4460592,
+      "mean_ofi": 0.11693851399098126,
+      "minutes_since_open": 263.0
+    },
+    {
+      "count": 4178102,
+      "mean_ofi": 0.044446497476608865,
+      "minutes_since_open": 264.0
+    },
+    {
+      "count": 4790244,
+      "mean_ofi": -0.17777236399648164,
+      "minutes_since_open": 265.0
+    },
+    {
+      "count": 4453024,
+      "mean_ofi": -0.09438552318604733,
+      "minutes_since_open": 266.0
+    },
+    {
+      "count": 4212320,
+      "mean_ofi": 0.008702567706159483,
+      "minutes_since_open": 267.0
+    },
+    {
+      "count": 4167106,
+      "mean_ofi": 0.10182726333334922,
+      "minutes_since_open": 268.0
+    },
+    {
+      "count": 3869936,
+      "mean_ofi": 0.07339707943490525,
+      "minutes_since_open": 269.0
+    },
+    {
+      "count": 5983236,
+      "mean_ofi": 0.1518363975614235,
+      "minutes_since_open": 270.0
+    },
+    {
+      "count": 5309807,
+      "mean_ofi": 0.0007034153972044133,
+      "minutes_since_open": 271.0
+    },
+    {
+      "count": 5273361,
+      "mean_ofi": -0.034473839359761775,
+      "minutes_since_open": 272.0
+    },
+    {
+      "count": 5174854,
+      "mean_ofi": -0.013262403151860416,
+      "minutes_since_open": 273.0
+    },
+    {
+      "count": 4969423,
+      "mean_ofi": -0.11008521512456731,
+      "minutes_since_open": 274.0
+    },
+    {
+      "count": 5298218,
+      "mean_ofi": -0.050438845664708416,
+      "minutes_since_open": 275.0
+    },
+    {
+      "count": 5092625,
+      "mean_ofi": -0.009044844260081354,
+      "minutes_since_open": 276.0
+    },
+    {
+      "count": 4995859,
+      "mean_ofi": 0.06932181232496064,
+      "minutes_since_open": 277.0
+    },
+    {
+      "count": 4750451,
+      "mean_ofi": -0.045204129039538375,
+      "minutes_since_open": 278.0
+    },
+    {
+      "count": 4555115,
+      "mean_ofi": -0.14014574824127887,
+      "minutes_since_open": 279.0
+    },
+    {
+      "count": 5107556,
+      "mean_ofi": 0.015429688876636915,
+      "minutes_since_open": 280.0
+    },
+    {
+      "count": 4729037,
+      "mean_ofi": -0.07721635504226042,
+      "minutes_since_open": 281.0
+    },
+    {
+      "count": 4603515,
+      "mean_ofi": -0.0029331934402253897,
+      "minutes_since_open": 282.0
+    },
+    {
+      "count": 4545942,
+      "mean_ofi": 0.07096350987321018,
+      "minutes_since_open": 283.0
+    },
+    {
+      "count": 4391127,
+      "mean_ofi": -0.14671586588134553,
+      "minutes_since_open": 284.0
+    },
+    {
+      "count": 4979210,
+      "mean_ofi": 0.10966679453166793,
+      "minutes_since_open": 285.0
+    },
+    {
+      "count": 4893138,
+      "mean_ofi": -0.2694747215386051,
+      "minutes_since_open": 286.0
+    },
+    {
+      "count": 4572111,
+      "mean_ofi": -0.10564244831326765,
+      "minutes_since_open": 287.0
+    },
+    {
+      "count": 4520076,
+      "mean_ofi": -0.08081080937577109,
+      "minutes_since_open": 288.0
+    },
+    {
+      "count": 4321742,
+      "mean_ofi": -0.05639276939714418,
+      "minutes_since_open": 289.0
+    },
+    {
+      "count": 4957968,
+      "mean_ofi": 0.04995494121785148,
+      "minutes_since_open": 290.0
+    },
+    {
+      "count": 4733812,
+      "mean_ofi": -0.06848518699095087,
+      "minutes_since_open": 291.0
+    },
+    {
+      "count": 4630476,
+      "mean_ofi": 0.09725198878041695,
+      "minutes_since_open": 292.0
+    },
+    {
+      "count": 4316914,
+      "mean_ofi": 0.1679764757880549,
+      "minutes_since_open": 293.0
+    },
+    {
+      "count": 4098170,
+      "mean_ofi": 0.10319044841966313,
+      "minutes_since_open": 294.0
+    },
+    {
+      "count": 4542837,
+      "mean_ofi": 0.08482276603804427,
+      "minutes_since_open": 295.0
+    },
+    {
+      "count": 4442502,
+      "mean_ofi": -0.14902773257053004,
+      "minutes_since_open": 296.0
+    },
+    {
+      "count": 4317722,
+      "mean_ofi": 0.016915632826743517,
+      "minutes_since_open": 297.0
+    },
+    {
+      "count": 4216752,
+      "mean_ofi": 0.009302657590487564,
+      "minutes_since_open": 298.0
+    },
+    {
+      "count": 4112359,
+      "mean_ofi": -0.023926899378184183,
+      "minutes_since_open": 299.0
+    },
+    {
+      "count": 5368271,
+      "mean_ofi": 0.07912398610280448,
+      "minutes_since_open": 300.0
+    },
+    {
+      "count": 4928168,
+      "mean_ofi": 0.03454163900256716,
+      "minutes_since_open": 301.0
+    },
+    {
+      "count": 4645797,
+      "mean_ofi": -0.03137437989649242,
+      "minutes_since_open": 302.0
+    },
+    {
+      "count": 4545907,
+      "mean_ofi": 0.06545932417886723,
+      "minutes_since_open": 303.0
+    },
+    {
+      "count": 4211437,
+      "mean_ofi": -0.03345770101749445,
+      "minutes_since_open": 304.0
+    },
+    {
+      "count": 4836862,
+      "mean_ofi": 0.0783714730748972,
+      "minutes_since_open": 305.0
+    },
+    {
+      "count": 4830381,
+      "mean_ofi": 0.0403692793591206,
+      "minutes_since_open": 306.0
+    },
+    {
+      "count": 4602892,
+      "mean_ofi": 0.060377258471410934,
+      "minutes_since_open": 307.0
+    },
+    {
+      "count": 4504386,
+      "mean_ofi": -0.1664717455386794,
+      "minutes_since_open": 308.0
+    },
+    {
+      "count": 4210354,
+      "mean_ofi": 0.03614399169285178,
+      "minutes_since_open": 309.0
+    },
+    {
+      "count": 4937934,
+      "mean_ofi": -0.006453508694123626,
+      "minutes_since_open": 310.0
+    },
+    {
+      "count": 4565420,
+      "mean_ofi": -0.13822737009955713,
+      "minutes_since_open": 311.0
+    },
+    {
+      "count": 4520498,
+      "mean_ofi": -0.2194581216494325,
+      "minutes_since_open": 312.0
+    },
+    {
+      "count": 4410922,
+      "mean_ofi": -0.08843819954195456,
+      "minutes_since_open": 313.0
+    },
+    {
+      "count": 4233329,
+      "mean_ofi": -0.03853704732139012,
+      "minutes_since_open": 314.0
+    },
+    {
+      "count": 4601951,
+      "mean_ofi": -0.09067784511395949,
+      "minutes_since_open": 315.0
+    },
+    {
+      "count": 4471153,
+      "mean_ofi": 0.11231666641692457,
+      "minutes_since_open": 316.0
+    },
+    {
+      "count": 4330060,
+      "mean_ofi": -0.009703791633372058,
+      "minutes_since_open": 317.0
+    },
+    {
+      "count": 4302448,
+      "mean_ofi": 0.1623059709263047,
+      "minutes_since_open": 318.0
+    },
+    {
+      "count": 3984197,
+      "mean_ofi": -0.03587548507265287,
+      "minutes_since_open": 319.0
+    },
+    {
+      "count": 4813049,
+      "mean_ofi": 0.08668538383881406,
+      "minutes_since_open": 320.0
+    },
+    {
+      "count": 4420970,
+      "mean_ofi": 0.0797478833830662,
+      "minutes_since_open": 321.0
+    },
+    {
+      "count": 4479676,
+      "mean_ofi": 0.19675485459217507,
+      "minutes_since_open": 322.0
+    },
+    {
+      "count": 4284000,
+      "mean_ofi": 0.03876867413631927,
+      "minutes_since_open": 323.0
+    },
+    {
+      "count": 4130988,
+      "mean_ofi": 0.09887295726833671,
+      "minutes_since_open": 324.0
+    },
+    {
+      "count": 4626429,
+      "mean_ofi": 0.18843993931387684,
+      "minutes_since_open": 325.0
+    },
+    {
+      "count": 4555126,
+      "mean_ofi": 0.020933998313110113,
+      "minutes_since_open": 326.0
+    },
+    {
+      "count": 4366686,
+      "mean_ofi": 0.06682229956539698,
+      "minutes_since_open": 327.0
+    },
+    {
+      "count": 4175611,
+      "mean_ofi": 0.02892127643116124,
+      "minutes_since_open": 328.0
+    },
+    {
+      "count": 4276480,
+      "mean_ofi": -0.29738242666865033,
+      "minutes_since_open": 329.0
+    },
+    {
+      "count": 6081392,
+      "mean_ofi": 0.21962586855114283,
+      "minutes_since_open": 330.0
+    },
+    {
+      "count": 5316007,
+      "mean_ofi": -0.07617879359451754,
+      "minutes_since_open": 331.0
+    },
+    {
+      "count": 4951404,
+      "mean_ofi": -0.1476153026495223,
+      "minutes_since_open": 332.0
+    },
+    {
+      "count": 4585065,
+      "mean_ofi": -0.0635733626459024,
+      "minutes_since_open": 333.0
+    },
+    {
+      "count": 4266983,
+      "mean_ofi": -0.14188104335076673,
+      "minutes_since_open": 334.0
+    },
+    {
+      "count": 4734873,
+      "mean_ofi": -0.12658290940432027,
+      "minutes_since_open": 335.0
+    },
+    {
+      "count": 4606808,
+      "mean_ofi": 0.011044957810263756,
+      "minutes_since_open": 336.0
+    },
+    {
+      "count": 4493109,
+      "mean_ofi": -0.06881003777118144,
+      "minutes_since_open": 337.0
+    },
+    {
+      "count": 4438587,
+      "mean_ofi": -0.028058028377055188,
+      "minutes_since_open": 338.0
+    },
+    {
+      "count": 4034039,
+      "mean_ofi": -0.060120142616381426,
+      "minutes_since_open": 339.0
+    },
+    {
+      "count": 4541706,
+      "mean_ofi": -0.15791709106664675,
+      "minutes_since_open": 340.0
+    },
+    {
+      "count": 4243578,
+      "mean_ofi": -0.17412004680954044,
+      "minutes_since_open": 341.0
+    },
+    {
+      "count": 4386484,
+      "mean_ofi": 0.03626913947481405,
+      "minutes_since_open": 342.0
+    },
+    {
+      "count": 4236005,
+      "mean_ofi": 0.022599359538052883,
+      "minutes_since_open": 343.0
+    },
+    {
+      "count": 4196236,
+      "mean_ofi": -0.0458992296906085,
+      "minutes_since_open": 344.0
+    },
+    {
+      "count": 4909495,
+      "mean_ofi": -0.07729756319132669,
+      "minutes_since_open": 345.0
+    },
+    {
+      "count": 4640721,
+      "mean_ofi": -0.1493302441581745,
+      "minutes_since_open": 346.0
+    },
+    {
+      "count": 4385860,
+      "mean_ofi": -0.3389725162226205,
+      "minutes_since_open": 347.0
+    },
+    {
+      "count": 4342270,
+      "mean_ofi": 0.015567433623428426,
+      "minutes_since_open": 348.0
+    },
+    {
+      "count": 4181056,
+      "mean_ofi": 0.1650422764009654,
+      "minutes_since_open": 349.0
+    },
+    {
+      "count": 4839570,
+      "mean_ofi": 0.030133255640481083,
+      "minutes_since_open": 350.0
+    },
+    {
+      "count": 4635445,
+      "mean_ofi": -0.1615242980986665,
+      "minutes_since_open": 351.0
+    },
+    {
+      "count": 4558676,
+      "mean_ofi": -0.19042765925895813,
+      "minutes_since_open": 352.0
+    },
+    {
+      "count": 4369782,
+      "mean_ofi": -0.12593259801062157,
+      "minutes_since_open": 353.0
+    },
+    {
+      "count": 4151242,
+      "mean_ofi": -0.06407865405099941,
+      "minutes_since_open": 354.0
+    },
+    {
+      "count": 4520865,
+      "mean_ofi": -0.2108377489706141,
+      "minutes_since_open": 355.0
+    },
+    {
+      "count": 4375606,
+      "mean_ofi": -0.25654023694093336,
+      "minutes_since_open": 356.0
+    },
+    {
+      "count": 4275299,
+      "mean_ofi": -0.07683930410481633,
+      "minutes_since_open": 357.0
+    },
+    {
+      "count": 4257504,
+      "mean_ofi": -0.2038555923846448,
+      "minutes_since_open": 358.0
+    },
+    {
+      "count": 4229051,
+      "mean_ofi": -0.43999138340967336,
+      "minutes_since_open": 359.0
+    },
+    {
+      "count": 5905682,
+      "mean_ofi": -0.05531825113509775,
+      "minutes_since_open": 360.0
+    },
+    {
+      "count": 5005534,
+      "mean_ofi": -0.15587208078098233,
+      "minutes_since_open": 361.0
+    },
+    {
+      "count": 4735804,
+      "mean_ofi": 0.05688115470995076,
+      "minutes_since_open": 362.0
+    },
+    {
+      "count": 4504691,
+      "mean_ofi": -0.0009292535270441669,
+      "minutes_since_open": 363.0
+    },
+    {
+      "count": 4322917,
+      "mean_ofi": -0.1471129332346661,
+      "minutes_since_open": 364.0
+    },
+    {
+      "count": 4867125,
+      "mean_ofi": -0.21974779772450734,
+      "minutes_since_open": 365.0
+    },
+    {
+      "count": 4733512,
+      "mean_ofi": -0.2594921064951513,
+      "minutes_since_open": 366.0
+    },
+    {
+      "count": 4801753,
+      "mean_ofi": -0.32364700974831656,
+      "minutes_since_open": 367.0
+    },
+    {
+      "count": 4687841,
+      "mean_ofi": -0.19751928446378217,
+      "minutes_since_open": 368.0
+    },
+    {
+      "count": 14469632,
+      "mean_ofi": -0.0663186181929183,
+      "minutes_since_open": 369.0
+    },
+    {
+      "count": 6131433,
+      "mean_ofi": 0.14076905023669323,
+      "minutes_since_open": 370.0
+    },
+    {
+      "count": 5342236,
+      "mean_ofi": 0.06554858302778892,
+      "minutes_since_open": 371.0
+    },
+    {
+      "count": 5372226,
+      "mean_ofi": 0.08341309542821654,
+      "minutes_since_open": 372.0
+    },
+    {
+      "count": 5032745,
+      "mean_ofi": -0.12389878684494234,
+      "minutes_since_open": 373.0
+    },
+    {
+      "count": 4761053,
+      "mean_ofi": 0.060472756762000875,
+      "minutes_since_open": 374.0
+    },
+    {
+      "count": 5674302,
+      "mean_ofi": -0.03238072277436902,
+      "minutes_since_open": 375.0
+    },
+    {
+      "count": 5640664,
+      "mean_ofi": -0.2135115653050902,
+      "minutes_since_open": 376.0
+    },
+    {
+      "count": 6217575,
+      "mean_ofi": 0.19398640145073187,
+      "minutes_since_open": 377.0
+    },
+    {
+      "count": 5719564,
+      "mean_ofi": 0.1431369593905931,
+      "minutes_since_open": 378.0
+    },
+    {
+      "count": 5203108,
+      "mean_ofi": 0.18672455001896313,
+      "minutes_since_open": 379.0
+    },
+    {
+      "count": 12845817,
+      "mean_ofi": 0.33838595085074274,
+      "minutes_since_open": 380.0
+    },
+    {
+      "count": 7769709,
+      "mean_ofi": -0.2097214966480542,
+      "minutes_since_open": 381.0
+    },
+    {
+      "count": 6947582,
+      "mean_ofi": 0.06083526614008182,
+      "minutes_since_open": 382.0
+    },
+    {
+      "count": 6976981,
+      "mean_ofi": 0.16816800848391544,
+      "minutes_since_open": 383.0
+    },
+    {
+      "count": 11115674,
+      "mean_ofi": 0.3303886026164951,
+      "minutes_since_open": 384.0
+    },
+    {
+      "count": 15829904,
+      "mean_ofi": 0.12773109678999783,
+      "minutes_since_open": 385.0
+    },
+    {
+      "count": 11009887,
+      "mean_ofi": 0.08243109125459692,
+      "minutes_since_open": 386.0
+    },
+    {
+      "count": 10398312,
+      "mean_ofi": 0.5044708218025871,
+      "minutes_since_open": 387.0
+    },
+    {
+      "count": 13883044,
+      "mean_ofi": 0.13615407399128435,
+      "minutes_since_open": 388.0
+    },
+    {
+      "count": 19408658,
+      "mean_ofi": 0.4933827985428211,
+      "minutes_since_open": 389.0
+    }
+  ],
+  "intraday_ofi_return_r_curve": [
+    {
+      "count": 13747,
+      "minutes_since_open": 0.0,
+      "ofi_return_r": 0.4260630911984556
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 1.0,
+      "ofi_return_r": 0.37001328178609716
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 2.0,
+      "ofi_return_r": 0.33859531302642687
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 3.0,
+      "ofi_return_r": 0.36381456554815234
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 4.0,
+      "ofi_return_r": 0.15412807242487095
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 5.0,
+      "ofi_return_r": 0.47866978500788776
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 6.0,
+      "ofi_return_r": 0.4904376429555099
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 7.0,
+      "ofi_return_r": 0.47587605957915824
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 8.0,
+      "ofi_return_r": 0.5592332913113689
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 9.0,
+      "ofi_return_r": 0.5480329573160192
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 10.0,
+      "ofi_return_r": 0.4801759902378536
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 11.0,
+      "ofi_return_r": 0.45589466553335806
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 12.0,
+      "ofi_return_r": 0.5564941047503102
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 13.0,
+      "ofi_return_r": 0.5887023751002043
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 14.0,
+      "ofi_return_r": 0.5753585088707145
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 15.0,
+      "ofi_return_r": 0.6146182806212013
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 16.0,
+      "ofi_return_r": 0.5504284616318275
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 17.0,
+      "ofi_return_r": 0.5441684421044072
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 18.0,
+      "ofi_return_r": 0.617118374275648
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 19.0,
+      "ofi_return_r": 0.6221126127134055
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 20.0,
+      "ofi_return_r": 0.6058760573590158
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 21.0,
+      "ofi_return_r": 0.42476634132887703
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 22.0,
+      "ofi_return_r": 0.5893172184288009
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 23.0,
+      "ofi_return_r": 0.4920947729910726
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 24.0,
+      "ofi_return_r": 0.535051734768297
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 25.0,
+      "ofi_return_r": 0.6345381002479418
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 26.0,
+      "ofi_return_r": 0.5370912911501078
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 27.0,
+      "ofi_return_r": 0.4359600137943688
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 28.0,
+      "ofi_return_r": 0.5468377057964605
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 29.0,
+      "ofi_return_r": 0.5117502756413982
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 30.0,
+      "ofi_return_r": 0.4817665488557556
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 31.0,
+      "ofi_return_r": 0.5963560639278619
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 32.0,
+      "ofi_return_r": 0.4018524614264551
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 33.0,
+      "ofi_return_r": 0.5582176864983078
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 34.0,
+      "ofi_return_r": 0.33411898305243737
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 35.0,
+      "ofi_return_r": 0.6243330822796154
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 36.0,
+      "ofi_return_r": 0.5945258580979673
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 37.0,
+      "ofi_return_r": 0.502103096858689
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 38.0,
+      "ofi_return_r": 0.6156833048922736
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 39.0,
+      "ofi_return_r": 0.5756943241677942
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 40.0,
+      "ofi_return_r": 0.6027810889589688
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 41.0,
+      "ofi_return_r": 0.5629338303942819
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 42.0,
+      "ofi_return_r": 0.4472931229660572
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 43.0,
+      "ofi_return_r": 0.5975261938947458
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 44.0,
+      "ofi_return_r": 0.5991413667613041
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 45.0,
+      "ofi_return_r": 0.5257671917632731
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 46.0,
+      "ofi_return_r": 0.5450026212679587
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 47.0,
+      "ofi_return_r": 0.6289945706732758
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 48.0,
+      "ofi_return_r": 0.48484434583463354
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 49.0,
+      "ofi_return_r": 0.5043496241339309
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 50.0,
+      "ofi_return_r": 0.30803577270539445
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 51.0,
+      "ofi_return_r": 0.5796351648329453
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 52.0,
+      "ofi_return_r": 0.508930287891368
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 53.0,
+      "ofi_return_r": 0.42157497915287623
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 54.0,
+      "ofi_return_r": 0.5635542389861831
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 55.0,
+      "ofi_return_r": 0.5979013102812372
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 56.0,
+      "ofi_return_r": 0.533262621334999
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 57.0,
+      "ofi_return_r": 0.5272791940817321
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 58.0,
+      "ofi_return_r": 0.3687780672721507
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 59.0,
+      "ofi_return_r": 0.6030850073311985
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 60.0,
+      "ofi_return_r": 0.3537603566686161
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 61.0,
+      "ofi_return_r": 0.5722008798244976
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 62.0,
+      "ofi_return_r": 0.3403300077267353
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 63.0,
+      "ofi_return_r": 0.6196469825716963
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 64.0,
+      "ofi_return_r": 0.5334584760067985
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 65.0,
+      "ofi_return_r": 0.5381723213768698
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 66.0,
+      "ofi_return_r": 0.6617042249960894
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 67.0,
+      "ofi_return_r": 0.6297498499517997
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 68.0,
+      "ofi_return_r": 0.3915993971545996
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 69.0,
+      "ofi_return_r": 0.6150443130273943
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 70.0,
+      "ofi_return_r": 0.6012170673956314
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 71.0,
+      "ofi_return_r": 0.5723654737679058
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 72.0,
+      "ofi_return_r": 0.7055832504951908
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 73.0,
+      "ofi_return_r": 0.6130076296874828
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 74.0,
+      "ofi_return_r": 0.6032925820131345
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 75.0,
+      "ofi_return_r": 0.5968999292361549
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 76.0,
+      "ofi_return_r": 0.5877772713263748
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 77.0,
+      "ofi_return_r": 0.647032241774054
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 78.0,
+      "ofi_return_r": 0.5863609984429219
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 79.0,
+      "ofi_return_r": 0.5210697972294523
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 80.0,
+      "ofi_return_r": 0.6525732830900359
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 81.0,
+      "ofi_return_r": 0.6382720932657848
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 82.0,
+      "ofi_return_r": 0.6249574004331175
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 83.0,
+      "ofi_return_r": 0.6621033996395207
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 84.0,
+      "ofi_return_r": 0.7008029261613975
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 85.0,
+      "ofi_return_r": 0.2317314099907735
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 86.0,
+      "ofi_return_r": 0.6895229885411106
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 87.0,
+      "ofi_return_r": 0.6974396953292372
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 88.0,
+      "ofi_return_r": 0.5605652982965244
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 89.0,
+      "ofi_return_r": 0.7255653171742228
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 90.0,
+      "ofi_return_r": 0.5951410012903389
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 91.0,
+      "ofi_return_r": 0.556877071202067
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 92.0,
+      "ofi_return_r": 0.43910641175664744
+    },
+    {
+      "count": 13978,
+      "minutes_since_open": 93.0,
+      "ofi_return_r": 0.6289411878393711
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 94.0,
+      "ofi_return_r": 0.33489851037749263
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 95.0,
+      "ofi_return_r": 0.5968378883287245
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 96.0,
+      "ofi_return_r": 0.667184172644304
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 97.0,
+      "ofi_return_r": 0.6528025675227548
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 98.0,
+      "ofi_return_r": 0.6478111027862327
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 99.0,
+      "ofi_return_r": 0.7087132573320585
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 100.0,
+      "ofi_return_r": 0.6784636091795129
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 101.0,
+      "ofi_return_r": 0.5172706757641149
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 102.0,
+      "ofi_return_r": 0.579468782366476
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 103.0,
+      "ofi_return_r": 0.5455955918603094
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 104.0,
+      "ofi_return_r": 0.6387974557566015
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 105.0,
+      "ofi_return_r": 0.6395245151483763
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 106.0,
+      "ofi_return_r": 0.5636287270547191
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 107.0,
+      "ofi_return_r": 0.6539201351786366
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 108.0,
+      "ofi_return_r": 0.6131347076045198
+    },
+    {
+      "count": 13978,
+      "minutes_since_open": 109.0,
+      "ofi_return_r": 0.6408499469006274
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 110.0,
+      "ofi_return_r": 0.7010591367645033
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 111.0,
+      "ofi_return_r": 0.6352301082609738
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 112.0,
+      "ofi_return_r": 0.6751438239210988
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 113.0,
+      "ofi_return_r": 0.6427565955474853
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 114.0,
+      "ofi_return_r": 0.68040191924308
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 115.0,
+      "ofi_return_r": 0.6678089071619945
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 116.0,
+      "ofi_return_r": 0.7371709871406612
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 117.0,
+      "ofi_return_r": 0.7124174913903051
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 118.0,
+      "ofi_return_r": 0.669613183729858
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 119.0,
+      "ofi_return_r": 0.5415747691945866
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 120.0,
+      "ofi_return_r": 0.6850374579646923
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 121.0,
+      "ofi_return_r": 0.6830140263064366
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 122.0,
+      "ofi_return_r": 0.5541626025974442
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 123.0,
+      "ofi_return_r": 0.5491928482528922
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 124.0,
+      "ofi_return_r": 0.7016448674043799
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 125.0,
+      "ofi_return_r": 0.6070042230468455
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 126.0,
+      "ofi_return_r": 0.5413985883510594
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 127.0,
+      "ofi_return_r": 0.4685063338361069
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 128.0,
+      "ofi_return_r": 0.5998868745168033
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 129.0,
+      "ofi_return_r": 0.719445936636247
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 130.0,
+      "ofi_return_r": 0.45732902366629474
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 131.0,
+      "ofi_return_r": 0.6931527299793108
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 132.0,
+      "ofi_return_r": 0.6289953361914458
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 133.0,
+      "ofi_return_r": 0.6546160892116785
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 134.0,
+      "ofi_return_r": 0.664506679729215
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 135.0,
+      "ofi_return_r": 0.6515172737737638
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 136.0,
+      "ofi_return_r": 0.5712698860944849
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 137.0,
+      "ofi_return_r": 0.6109965392026651
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 138.0,
+      "ofi_return_r": 0.7102489973189076
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 139.0,
+      "ofi_return_r": 0.6114388914050323
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 140.0,
+      "ofi_return_r": 0.6384022343645397
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 141.0,
+      "ofi_return_r": 0.546387349257397
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 142.0,
+      "ofi_return_r": 0.5548664947231995
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 143.0,
+      "ofi_return_r": 0.486336318792016
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 144.0,
+      "ofi_return_r": 0.3659379698102276
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 145.0,
+      "ofi_return_r": 0.5953196414880243
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 146.0,
+      "ofi_return_r": 0.6276560961048481
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 147.0,
+      "ofi_return_r": 0.538858657270234
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 148.0,
+      "ofi_return_r": 0.6537608419527335
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 149.0,
+      "ofi_return_r": 0.6866634143037116
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 150.0,
+      "ofi_return_r": 0.5135482259092568
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 151.0,
+      "ofi_return_r": 0.5118815918974056
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 152.0,
+      "ofi_return_r": 0.7093352759319221
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 153.0,
+      "ofi_return_r": 0.4841099923679366
+    },
+    {
+      "count": 13978,
+      "minutes_since_open": 154.0,
+      "ofi_return_r": 0.5281152543193189
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 155.0,
+      "ofi_return_r": 0.6370001781625048
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 156.0,
+      "ofi_return_r": 0.6275947846685859
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 157.0,
+      "ofi_return_r": 0.6252881569695904
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 158.0,
+      "ofi_return_r": 0.7428396533892688
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 159.0,
+      "ofi_return_r": 0.7595265234335906
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 160.0,
+      "ofi_return_r": 0.6898841895900425
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 161.0,
+      "ofi_return_r": 0.7223796756875525
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 162.0,
+      "ofi_return_r": 0.6701222016828376
+    },
+    {
+      "count": 13978,
+      "minutes_since_open": 163.0,
+      "ofi_return_r": 0.5274029536678815
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 164.0,
+      "ofi_return_r": 0.4525580144895843
+    },
+    {
+      "count": 13978,
+      "minutes_since_open": 165.0,
+      "ofi_return_r": 0.7122706519554162
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 166.0,
+      "ofi_return_r": 0.5781800146817185
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 167.0,
+      "ofi_return_r": 0.6327242286250052
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 168.0,
+      "ofi_return_r": 0.6168029478723814
+    },
+    {
+      "count": 13978,
+      "minutes_since_open": 169.0,
+      "ofi_return_r": 0.45886176899231124
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 170.0,
+      "ofi_return_r": 0.6758491760707056
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 171.0,
+      "ofi_return_r": 0.7264877639070764
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 172.0,
+      "ofi_return_r": 0.45522379240728017
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 173.0,
+      "ofi_return_r": 0.6933556305458917
+    },
+    {
+      "count": 13978,
+      "minutes_since_open": 174.0,
+      "ofi_return_r": 0.6710448801529222
+    },
+    {
+      "count": 13978,
+      "minutes_since_open": 175.0,
+      "ofi_return_r": 0.5453363123546616
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 176.0,
+      "ofi_return_r": 0.26487733838971234
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 177.0,
+      "ofi_return_r": 0.7171444375312723
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 178.0,
+      "ofi_return_r": 0.6793148658824486
+    },
+    {
+      "count": 13976,
+      "minutes_since_open": 179.0,
+      "ofi_return_r": 0.658619254095179
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 180.0,
+      "ofi_return_r": 0.6794878270379339
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 181.0,
+      "ofi_return_r": 0.7264719763418911
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 182.0,
+      "ofi_return_r": 0.4138245670629431
+    },
+    {
+      "count": 13976,
+      "minutes_since_open": 183.0,
+      "ofi_return_r": 0.437345463038319
+    },
+    {
+      "count": 13976,
+      "minutes_since_open": 184.0,
+      "ofi_return_r": 0.6154351746171175
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 185.0,
+      "ofi_return_r": 0.6008373722627596
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 186.0,
+      "ofi_return_r": 0.5010045120221869
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 187.0,
+      "ofi_return_r": 0.711483766672133
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 188.0,
+      "ofi_return_r": 0.508047733186882
+    },
+    {
+      "count": 13978,
+      "minutes_since_open": 189.0,
+      "ofi_return_r": 0.6586844786010934
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 190.0,
+      "ofi_return_r": 0.7226529221114193
+    },
+    {
+      "count": 13978,
+      "minutes_since_open": 191.0,
+      "ofi_return_r": 0.6989820862947402
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 192.0,
+      "ofi_return_r": 0.6961129812392786
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 193.0,
+      "ofi_return_r": 0.6483808348422205
+    },
+    {
+      "count": 13978,
+      "minutes_since_open": 194.0,
+      "ofi_return_r": 0.6558692629632719
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 195.0,
+      "ofi_return_r": 0.4690797013428633
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 196.0,
+      "ofi_return_r": 0.7035232519529595
+    },
+    {
+      "count": 13978,
+      "minutes_since_open": 197.0,
+      "ofi_return_r": 0.5352148217663677
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 198.0,
+      "ofi_return_r": 0.7295307973524152
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 199.0,
+      "ofi_return_r": 0.5621401527219189
+    },
+    {
+      "count": 13974,
+      "minutes_since_open": 200.0,
+      "ofi_return_r": 0.6201754850511011
+    },
+    {
+      "count": 13978,
+      "minutes_since_open": 201.0,
+      "ofi_return_r": 0.6877960575359403
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 202.0,
+      "ofi_return_r": 0.6742048467986392
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 203.0,
+      "ofi_return_r": 0.7187332734689115
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 204.0,
+      "ofi_return_r": 0.48327520494260356
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 205.0,
+      "ofi_return_r": 0.6390693736581894
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 206.0,
+      "ofi_return_r": 0.637920192721754
+    },
+    {
+      "count": 13980,
+      "minutes_since_open": 207.0,
+      "ofi_return_r": 0.2093228828772378
+    },
+    {
+      "count": 13978,
+      "minutes_since_open": 208.0,
+      "ofi_return_r": 0.5803039884397666
+    },
+    {
+      "count": 13974,
+      "minutes_since_open": 209.0,
+      "ofi_return_r": 0.560717381322699
+    },
+    {
+      "count": 13966,
+      "minutes_since_open": 210.0,
+      "ofi_return_r": 0.6669263313449685
+    },
+    {
+      "count": 13952,
+      "minutes_since_open": 211.0,
+      "ofi_return_r": 0.6309231200911709
+    },
+    {
+      "count": 13921,
+      "minutes_since_open": 212.0,
+      "ofi_return_r": 0.5554686276218227
+    },
+    {
+      "count": 13909,
+      "minutes_since_open": 213.0,
+      "ofi_return_r": 0.5925602485163681
+    },
+    {
+      "count": 13896,
+      "minutes_since_open": 214.0,
+      "ofi_return_r": 0.6554784436053822
+    },
+    {
+      "count": 13906,
+      "minutes_since_open": 215.0,
+      "ofi_return_r": 0.5022182205464685
+    },
+    {
+      "count": 13898,
+      "minutes_since_open": 216.0,
+      "ofi_return_r": 0.6925150049718996
+    },
+    {
+      "count": 13900,
+      "minutes_since_open": 217.0,
+      "ofi_return_r": 0.6743862538944246
+    },
+    {
+      "count": 13892,
+      "minutes_since_open": 218.0,
+      "ofi_return_r": 0.6618696629950475
+    },
+    {
+      "count": 13887,
+      "minutes_since_open": 219.0,
+      "ofi_return_r": 0.65143008247008
+    },
+    {
+      "count": 13887,
+      "minutes_since_open": 220.0,
+      "ofi_return_r": 0.6810999756126486
+    },
+    {
+      "count": 13885,
+      "minutes_since_open": 221.0,
+      "ofi_return_r": 0.2590571431608863
+    },
+    {
+      "count": 13882,
+      "minutes_since_open": 222.0,
+      "ofi_return_r": 0.5013550584179345
+    },
+    {
+      "count": 13881,
+      "minutes_since_open": 223.0,
+      "ofi_return_r": 0.22742646819375223
+    },
+    {
+      "count": 13868,
+      "minutes_since_open": 224.0,
+      "ofi_return_r": 0.7195185512027416
+    },
+    {
+      "count": 13865,
+      "minutes_since_open": 225.0,
+      "ofi_return_r": 0.3118886954728829
+    },
+    {
+      "count": 13887,
+      "minutes_since_open": 226.0,
+      "ofi_return_r": 0.6156987233406077
+    },
+    {
+      "count": 13877,
+      "minutes_since_open": 227.0,
+      "ofi_return_r": 0.5444273783026694
+    },
+    {
+      "count": 13877,
+      "minutes_since_open": 228.0,
+      "ofi_return_r": 0.5668569269446415
+    },
+    {
+      "count": 13869,
+      "minutes_since_open": 229.0,
+      "ofi_return_r": 0.5935745769568299
+    },
+    {
+      "count": 13863,
+      "minutes_since_open": 230.0,
+      "ofi_return_r": 0.5467040716363968
+    },
+    {
+      "count": 13851,
+      "minutes_since_open": 231.0,
+      "ofi_return_r": 0.5516573994304595
+    },
+    {
+      "count": 13858,
+      "minutes_since_open": 232.0,
+      "ofi_return_r": 0.5811168172848166
+    },
+    {
+      "count": 13872,
+      "minutes_since_open": 233.0,
+      "ofi_return_r": 0.6098308777920876
+    },
+    {
+      "count": 13854,
+      "minutes_since_open": 234.0,
+      "ofi_return_r": 0.5781635113346257
+    },
+    {
+      "count": 13851,
+      "minutes_since_open": 235.0,
+      "ofi_return_r": 0.6496796474437259
+    },
+    {
+      "count": 13856,
+      "minutes_since_open": 236.0,
+      "ofi_return_r": 0.6616535094144917
+    },
+    {
+      "count": 13844,
+      "minutes_since_open": 237.0,
+      "ofi_return_r": 0.6481157639242845
+    },
+    {
+      "count": 13859,
+      "minutes_since_open": 238.0,
+      "ofi_return_r": 0.6367432658349624
+    },
+    {
+      "count": 13853,
+      "minutes_since_open": 239.0,
+      "ofi_return_r": 0.5726335061279416
+    },
+    {
+      "count": 13835,
+      "minutes_since_open": 240.0,
+      "ofi_return_r": 0.4467255315597459
+    },
+    {
+      "count": 13846,
+      "minutes_since_open": 241.0,
+      "ofi_return_r": 0.6614218964045723
+    },
+    {
+      "count": 13847,
+      "minutes_since_open": 242.0,
+      "ofi_return_r": 0.6580164481893088
+    },
+    {
+      "count": 13853,
+      "minutes_since_open": 243.0,
+      "ofi_return_r": 0.5405304195793184
+    },
+    {
+      "count": 13843,
+      "minutes_since_open": 244.0,
+      "ofi_return_r": 0.5753584996794257
+    },
+    {
+      "count": 13849,
+      "minutes_since_open": 245.0,
+      "ofi_return_r": 0.5172814417096461
+    },
+    {
+      "count": 13862,
+      "minutes_since_open": 246.0,
+      "ofi_return_r": 0.6330337215246673
+    },
+    {
+      "count": 13854,
+      "minutes_since_open": 247.0,
+      "ofi_return_r": 0.4160277597429823
+    },
+    {
+      "count": 13858,
+      "minutes_since_open": 248.0,
+      "ofi_return_r": 0.6649207802320455
+    },
+    {
+      "count": 13860,
+      "minutes_since_open": 249.0,
+      "ofi_return_r": 0.601982964955439
+    },
+    {
+      "count": 13840,
+      "minutes_since_open": 250.0,
+      "ofi_return_r": 0.5991592979985547
+    },
+    {
+      "count": 13838,
+      "minutes_since_open": 251.0,
+      "ofi_return_r": 0.6534174681713715
+    },
+    {
+      "count": 13846,
+      "minutes_since_open": 252.0,
+      "ofi_return_r": 0.6967603651749751
+    },
+    {
+      "count": 13859,
+      "minutes_since_open": 253.0,
+      "ofi_return_r": 0.6606962938099289
+    },
+    {
+      "count": 13861,
+      "minutes_since_open": 254.0,
+      "ofi_return_r": 0.6550598936601835
+    },
+    {
+      "count": 13845,
+      "minutes_since_open": 255.0,
+      "ofi_return_r": 0.5788515834153094
+    },
+    {
+      "count": 13874,
+      "minutes_since_open": 256.0,
+      "ofi_return_r": 0.6677242068211668
+    },
+    {
+      "count": 13849,
+      "minutes_since_open": 257.0,
+      "ofi_return_r": 0.6841194674769113
+    },
+    {
+      "count": 13860,
+      "minutes_since_open": 258.0,
+      "ofi_return_r": 0.5980209825260207
+    },
+    {
+      "count": 13851,
+      "minutes_since_open": 259.0,
+      "ofi_return_r": 0.6039278062112553
+    },
+    {
+      "count": 13844,
+      "minutes_since_open": 260.0,
+      "ofi_return_r": 0.634716501646797
+    },
+    {
+      "count": 13845,
+      "minutes_since_open": 261.0,
+      "ofi_return_r": 0.622247965642356
+    },
+    {
+      "count": 13840,
+      "minutes_since_open": 262.0,
+      "ofi_return_r": 0.6696027087324788
+    },
+    {
+      "count": 13835,
+      "minutes_since_open": 263.0,
+      "ofi_return_r": 0.6620978439437405
+    },
+    {
+      "count": 13850,
+      "minutes_since_open": 264.0,
+      "ofi_return_r": 0.3776285081209047
+    },
+    {
+      "count": 13836,
+      "minutes_since_open": 265.0,
+      "ofi_return_r": 0.6951414363380383
+    },
+    {
+      "count": 13834,
+      "minutes_since_open": 266.0,
+      "ofi_return_r": 0.7042867565727317
+    },
+    {
+      "count": 13834,
+      "minutes_since_open": 267.0,
+      "ofi_return_r": 0.6888836444197454
+    },
+    {
+      "count": 13835,
+      "minutes_since_open": 268.0,
+      "ofi_return_r": 0.5673382389470559
+    },
+    {
+      "count": 13832,
+      "minutes_since_open": 269.0,
+      "ofi_return_r": 0.38164891931536377
+    },
+    {
+      "count": 13854,
+      "minutes_since_open": 270.0,
+      "ofi_return_r": 0.6090759774833977
+    },
+    {
+      "count": 13834,
+      "minutes_since_open": 271.0,
+      "ofi_return_r": 0.5991770689565183
+    },
+    {
+      "count": 13833,
+      "minutes_since_open": 272.0,
+      "ofi_return_r": 0.5768631245335429
+    },
+    {
+      "count": 13841,
+      "minutes_since_open": 273.0,
+      "ofi_return_r": 0.66007738518205
+    },
+    {
+      "count": 13833,
+      "minutes_since_open": 274.0,
+      "ofi_return_r": 0.6760299358546438
+    },
+    {
+      "count": 13839,
+      "minutes_since_open": 275.0,
+      "ofi_return_r": 0.7038615246275457
+    },
+    {
+      "count": 13833,
+      "minutes_since_open": 276.0,
+      "ofi_return_r": 0.6817167258253357
+    },
+    {
+      "count": 13836,
+      "minutes_since_open": 277.0,
+      "ofi_return_r": 0.6446047787846179
+    },
+    {
+      "count": 13815,
+      "minutes_since_open": 278.0,
+      "ofi_return_r": 0.6346135222571495
+    },
+    {
+      "count": 13827,
+      "minutes_since_open": 279.0,
+      "ofi_return_r": 0.6970581798977267
+    },
+    {
+      "count": 13846,
+      "minutes_since_open": 280.0,
+      "ofi_return_r": 0.563734767845668
+    },
+    {
+      "count": 13833,
+      "minutes_since_open": 281.0,
+      "ofi_return_r": 0.6881478010727976
+    },
+    {
+      "count": 13840,
+      "minutes_since_open": 282.0,
+      "ofi_return_r": 0.7124363408286487
+    },
+    {
+      "count": 13827,
+      "minutes_since_open": 283.0,
+      "ofi_return_r": 0.5195863600583254
+    },
+    {
+      "count": 13832,
+      "minutes_since_open": 284.0,
+      "ofi_return_r": 0.6648571874400258
+    },
+    {
+      "count": 13827,
+      "minutes_since_open": 285.0,
+      "ofi_return_r": 0.6386724955076326
+    },
+    {
+      "count": 13825,
+      "minutes_since_open": 286.0,
+      "ofi_return_r": 0.44498431878461714
+    },
+    {
+      "count": 13824,
+      "minutes_since_open": 287.0,
+      "ofi_return_r": 0.7040712803838721
+    },
+    {
+      "count": 13829,
+      "minutes_since_open": 288.0,
+      "ofi_return_r": 0.6728500826888855
+    },
+    {
+      "count": 13817,
+      "minutes_since_open": 289.0,
+      "ofi_return_r": 0.6502663991801856
+    },
+    {
+      "count": 13820,
+      "minutes_since_open": 290.0,
+      "ofi_return_r": 0.672639882493204
+    },
+    {
+      "count": 13817,
+      "minutes_since_open": 291.0,
+      "ofi_return_r": 0.6686270596390184
+    },
+    {
+      "count": 13826,
+      "minutes_since_open": 292.0,
+      "ofi_return_r": 0.7215946190628612
+    },
+    {
+      "count": 13833,
+      "minutes_since_open": 293.0,
+      "ofi_return_r": 0.7008546283507981
+    },
+    {
+      "count": 13833,
+      "minutes_since_open": 294.0,
+      "ofi_return_r": 0.650740451327382
+    },
+    {
+      "count": 13830,
+      "minutes_since_open": 295.0,
+      "ofi_return_r": 0.703854657130647
+    },
+    {
+      "count": 13816,
+      "minutes_since_open": 296.0,
+      "ofi_return_r": 0.7020663317345093
+    },
+    {
+      "count": 13846,
+      "minutes_since_open": 297.0,
+      "ofi_return_r": 0.5155278863151951
+    },
+    {
+      "count": 13832,
+      "minutes_since_open": 298.0,
+      "ofi_return_r": 0.6488807235610656
+    },
+    {
+      "count": 13837,
+      "minutes_since_open": 299.0,
+      "ofi_return_r": 0.43923074906145565
+    },
+    {
+      "count": 13837,
+      "minutes_since_open": 300.0,
+      "ofi_return_r": 0.7132530735819659
+    },
+    {
+      "count": 13837,
+      "minutes_since_open": 301.0,
+      "ofi_return_r": 0.6942673210577364
+    },
+    {
+      "count": 13827,
+      "minutes_since_open": 302.0,
+      "ofi_return_r": 0.759309002348859
+    },
+    {
+      "count": 13820,
+      "minutes_since_open": 303.0,
+      "ofi_return_r": 0.7148165875563307
+    },
+    {
+      "count": 13833,
+      "minutes_since_open": 304.0,
+      "ofi_return_r": 0.7113879013908283
+    },
+    {
+      "count": 13831,
+      "minutes_since_open": 305.0,
+      "ofi_return_r": 0.7141358209488479
+    },
+    {
+      "count": 13823,
+      "minutes_since_open": 306.0,
+      "ofi_return_r": 0.7239512670114256
+    },
+    {
+      "count": 13825,
+      "minutes_since_open": 307.0,
+      "ofi_return_r": 0.5215822813951919
+    },
+    {
+      "count": 13838,
+      "minutes_since_open": 308.0,
+      "ofi_return_r": 0.5798457472388905
+    },
+    {
+      "count": 13837,
+      "minutes_since_open": 309.0,
+      "ofi_return_r": 0.5621394265399896
+    },
+    {
+      "count": 13824,
+      "minutes_since_open": 310.0,
+      "ofi_return_r": 0.6686046966303857
+    },
+    {
+      "count": 13831,
+      "minutes_since_open": 311.0,
+      "ofi_return_r": 0.670624988860992
+    },
+    {
+      "count": 13829,
+      "minutes_since_open": 312.0,
+      "ofi_return_r": 0.5850573518473559
+    },
+    {
+      "count": 13819,
+      "minutes_since_open": 313.0,
+      "ofi_return_r": 0.5615850854173624
+    },
+    {
+      "count": 13809,
+      "minutes_since_open": 314.0,
+      "ofi_return_r": 0.7124571916744868
+    },
+    {
+      "count": 13816,
+      "minutes_since_open": 315.0,
+      "ofi_return_r": 0.7095666265292825
+    },
+    {
+      "count": 13822,
+      "minutes_since_open": 316.0,
+      "ofi_return_r": 0.6496607697622745
+    },
+    {
+      "count": 13814,
+      "minutes_since_open": 317.0,
+      "ofi_return_r": 0.730722816939869
+    },
+    {
+      "count": 13834,
+      "minutes_since_open": 318.0,
+      "ofi_return_r": 0.6089408999965679
+    },
+    {
+      "count": 13823,
+      "minutes_since_open": 319.0,
+      "ofi_return_r": 0.5502113104848588
+    },
+    {
+      "count": 13827,
+      "minutes_since_open": 320.0,
+      "ofi_return_r": 0.7458222998751495
+    },
+    {
+      "count": 13820,
+      "minutes_since_open": 321.0,
+      "ofi_return_r": 0.6924191030840039
+    },
+    {
+      "count": 13824,
+      "minutes_since_open": 322.0,
+      "ofi_return_r": 0.6030845993145507
+    },
+    {
+      "count": 13824,
+      "minutes_since_open": 323.0,
+      "ofi_return_r": 0.708150051028376
+    },
+    {
+      "count": 13846,
+      "minutes_since_open": 324.0,
+      "ofi_return_r": 0.6521381003964172
+    },
+    {
+      "count": 13849,
+      "minutes_since_open": 325.0,
+      "ofi_return_r": 0.6226891534131695
+    },
+    {
+      "count": 13833,
+      "minutes_since_open": 326.0,
+      "ofi_return_r": 0.687229139173644
+    },
+    {
+      "count": 13823,
+      "minutes_since_open": 327.0,
+      "ofi_return_r": 0.6568195626066855
+    },
+    {
+      "count": 13825,
+      "minutes_since_open": 328.0,
+      "ofi_return_r": 0.5845108052707424
+    },
+    {
+      "count": 13818,
+      "minutes_since_open": 329.0,
+      "ofi_return_r": 0.42749171019199417
+    },
+    {
+      "count": 13833,
+      "minutes_since_open": 330.0,
+      "ofi_return_r": 0.31432312151716835
+    },
+    {
+      "count": 13809,
+      "minutes_since_open": 331.0,
+      "ofi_return_r": 0.72559738336356
+    },
+    {
+      "count": 13815,
+      "minutes_since_open": 332.0,
+      "ofi_return_r": 0.5899712722586353
+    },
+    {
+      "count": 13809,
+      "minutes_since_open": 333.0,
+      "ofi_return_r": 0.7046168183581788
+    },
+    {
+      "count": 13821,
+      "minutes_since_open": 334.0,
+      "ofi_return_r": 0.7048616223683336
+    },
+    {
+      "count": 13828,
+      "minutes_since_open": 335.0,
+      "ofi_return_r": 0.6354027344114208
+    },
+    {
+      "count": 13829,
+      "minutes_since_open": 336.0,
+      "ofi_return_r": 0.7083711474251845
+    },
+    {
+      "count": 13832,
+      "minutes_since_open": 337.0,
+      "ofi_return_r": 0.59160257673091
+    },
+    {
+      "count": 13827,
+      "minutes_since_open": 338.0,
+      "ofi_return_r": 0.7006593589502732
+    },
+    {
+      "count": 13817,
+      "minutes_since_open": 339.0,
+      "ofi_return_r": 0.7442338084329976
+    },
+    {
+      "count": 13821,
+      "minutes_since_open": 340.0,
+      "ofi_return_r": 0.6341598602513089
+    },
+    {
+      "count": 13819,
+      "minutes_since_open": 341.0,
+      "ofi_return_r": 0.7056157798539636
+    },
+    {
+      "count": 13810,
+      "minutes_since_open": 342.0,
+      "ofi_return_r": 0.7133792216573859
+    },
+    {
+      "count": 13821,
+      "minutes_since_open": 343.0,
+      "ofi_return_r": 0.6516038871844981
+    },
+    {
+      "count": 13816,
+      "minutes_since_open": 344.0,
+      "ofi_return_r": 0.6677466028738406
+    },
+    {
+      "count": 13822,
+      "minutes_since_open": 345.0,
+      "ofi_return_r": 0.7074812013636523
+    },
+    {
+      "count": 13823,
+      "minutes_since_open": 346.0,
+      "ofi_return_r": 0.7211293443679294
+    },
+    {
+      "count": 13826,
+      "minutes_since_open": 347.0,
+      "ofi_return_r": 0.7377786913458924
+    },
+    {
+      "count": 13843,
+      "minutes_since_open": 348.0,
+      "ofi_return_r": 0.7141453674443208
+    },
+    {
+      "count": 13830,
+      "minutes_since_open": 349.0,
+      "ofi_return_r": 0.6895009905630829
+    },
+    {
+      "count": 13827,
+      "minutes_since_open": 350.0,
+      "ofi_return_r": 0.683923881744886
+    },
+    {
+      "count": 13826,
+      "minutes_since_open": 351.0,
+      "ofi_return_r": 0.6620875823341403
+    },
+    {
+      "count": 13819,
+      "minutes_since_open": 352.0,
+      "ofi_return_r": 0.6319164608877913
+    },
+    {
+      "count": 13823,
+      "minutes_since_open": 353.0,
+      "ofi_return_r": 0.6872110656840887
+    },
+    {
+      "count": 13845,
+      "minutes_since_open": 354.0,
+      "ofi_return_r": 0.7070792254060004
+    },
+    {
+      "count": 13825,
+      "minutes_since_open": 355.0,
+      "ofi_return_r": 0.7265068941954865
+    },
+    {
+      "count": 13833,
+      "minutes_since_open": 356.0,
+      "ofi_return_r": 0.7172984305432594
+    },
+    {
+      "count": 13823,
+      "minutes_since_open": 357.0,
+      "ofi_return_r": 0.6158204224598001
+    },
+    {
+      "count": 13826,
+      "minutes_since_open": 358.0,
+      "ofi_return_r": 0.7206497623103483
+    },
+    {
+      "count": 13811,
+      "minutes_since_open": 359.0,
+      "ofi_return_r": 0.5846453913546058
+    },
+    {
+      "count": 13815,
+      "minutes_since_open": 360.0,
+      "ofi_return_r": 0.7504688954895893
+    },
+    {
+      "count": 13825,
+      "minutes_since_open": 361.0,
+      "ofi_return_r": 0.673317669214956
+    },
+    {
+      "count": 13830,
+      "minutes_since_open": 362.0,
+      "ofi_return_r": 0.7265268433624343
+    },
+    {
+      "count": 13821,
+      "minutes_since_open": 363.0,
+      "ofi_return_r": 0.7194793880815654
+    },
+    {
+      "count": 13829,
+      "minutes_since_open": 364.0,
+      "ofi_return_r": 0.6720130602837334
+    },
+    {
+      "count": 13825,
+      "minutes_since_open": 365.0,
+      "ofi_return_r": 0.6511087293526019
+    },
+    {
+      "count": 13827,
+      "minutes_since_open": 366.0,
+      "ofi_return_r": 0.7265712790100967
+    },
+    {
+      "count": 13826,
+      "minutes_since_open": 367.0,
+      "ofi_return_r": 0.5922320817696537
+    },
+    {
+      "count": 13823,
+      "minutes_since_open": 368.0,
+      "ofi_return_r": 0.6731433624651376
+    },
+    {
+      "count": 13824,
+      "minutes_since_open": 369.0,
+      "ofi_return_r": 0.6652154487996431
+    },
+    {
+      "count": 13824,
+      "minutes_since_open": 370.0,
+      "ofi_return_r": 0.6511265591333076
+    },
+    {
+      "count": 13817,
+      "minutes_since_open": 371.0,
+      "ofi_return_r": 0.6358435468913616
+    },
+    {
+      "count": 13833,
+      "minutes_since_open": 372.0,
+      "ofi_return_r": 0.38105536049860705
+    },
+    {
+      "count": 13817,
+      "minutes_since_open": 373.0,
+      "ofi_return_r": 0.6423287237423939
+    },
+    {
+      "count": 13819,
+      "minutes_since_open": 374.0,
+      "ofi_return_r": 0.6860434839682601
+    },
+    {
+      "count": 13829,
+      "minutes_since_open": 375.0,
+      "ofi_return_r": 0.7182011117133323
+    },
+    {
+      "count": 13823,
+      "minutes_since_open": 376.0,
+      "ofi_return_r": 0.5721266276386151
+    },
+    {
+      "count": 13826,
+      "minutes_since_open": 377.0,
+      "ofi_return_r": 0.5764295723437418
+    },
+    {
+      "count": 13821,
+      "minutes_since_open": 378.0,
+      "ofi_return_r": 0.5619981242323097
+    },
+    {
+      "count": 13815,
+      "minutes_since_open": 379.0,
+      "ofi_return_r": 0.485197549606094
+    },
+    {
+      "count": 13827,
+      "minutes_since_open": 380.0,
+      "ofi_return_r": 0.6782470944563187
+    },
+    {
+      "count": 13829,
+      "minutes_since_open": 381.0,
+      "ofi_return_r": 0.7146566369155123
+    },
+    {
+      "count": 13821,
+      "minutes_since_open": 382.0,
+      "ofi_return_r": 0.6899477340795998
+    },
+    {
+      "count": 13825,
+      "minutes_since_open": 383.0,
+      "ofi_return_r": 0.6924972549475069
+    },
+    {
+      "count": 13819,
+      "minutes_since_open": 384.0,
+      "ofi_return_r": 0.7274232724374432
+    },
+    {
+      "count": 13823,
+      "minutes_since_open": 385.0,
+      "ofi_return_r": 0.676723732659365
+    },
+    {
+      "count": 13830,
+      "minutes_since_open": 386.0,
+      "ofi_return_r": 0.65864357016951
+    },
+    {
+      "count": 13828,
+      "minutes_since_open": 387.0,
+      "ofi_return_r": 0.6732638909539356
+    },
+    {
+      "count": 13819,
+      "minutes_since_open": 388.0,
+      "ofi_return_r": 0.6838959931197373
+    },
+    {
+      "count": 13848,
+      "minutes_since_open": 389.0,
+      "ofi_return_r": 0.3337445051963623
+    }
+  ],
+  "n_days": 233,
+  "per_scale": {
+    "10s": {
+      "acf": [
+        0.056828937743002746,
+        0.050893297035817985,
+        0.0579687054612803,
+        0.009412766185102207,
+        0.037130984447745055,
+        0.021433129979943195,
+        0.025542493971250774,
+        0.031535949216313156,
+        0.00951921796519745,
+        0.02172239427536795,
+        0.019364101446758878,
+        -0.00920377252909081,
+        0.02006775595435017,
+        0.014118850329607234,
+        0.016464138077854275,
+        0.028706798307613305,
+        0.025327885887848622,
+        0.03173725756641559,
+        0.04635579737103107,
+        0.019398222245824423
+      ],
+      "conditional_ofi_return": {
+        "1_tick": {
+          "n": 502770,
+          "r": 0.5888393442844325
+        },
+        "2_tick": {
+          "n": 34504,
+          "r": 0.4915412932903346
+        },
+        "3_4_tick": {
+          "n": 6322,
+          "r": 0.3167815528891586
+        },
+        "5_plus_tick": {
+          "n": 959,
+          "r": 0.580657087017193
+        }
+      },
+      "distribution": {
+        "count": 544982,
+        "kurtosis": 177.44890147395083,
+        "max": 3072083.0,
+        "mean": 6.984138925689429,
+        "min": -1517043.0,
+        "percentiles": {
+          "p1": -36664.189999999995,
+          "p10": -10605.0,
+          "p25": -4320.0,
+          "p5": -15841.099999999999,
+          "p50": -30.5,
+          "p75": 4451.5,
+          "p90": 10682.1,
+          "p95": 16702.69999999999,
+          "p99": 37038.650000000016
+        },
+        "skewness": 5.159175339445071,
+        "std": 17806.952254206913
+      },
+      "ofi_return_correlation": {
+        "lag_0": 0.639028642044845,
+        "lag_1": -0.009548823727585594,
+        "lag_2": -0.0025938225949567557,
+        "lag_3": -0.004439890666397147,
+        "lag_4": -0.0010627724375203151,
+        "lag_5": 0.0036368198185380966
+      },
+      "ofi_spread_correlation": {
+        "lag_0": 0.013031188595242932,
+        "lag_1": -0.013222385154588456,
+        "lag_2": 0.006657022454485597,
+        "lag_3": -0.0034082909513581867,
+        "lag_4": 0.0026642644987652396,
+        "lag_5": 0.0003468079153568024
+      }
+    },
+    "1m": {
+      "acf": [
+        0.19697670269030243,
+        0.11337011452391635,
+        0.10126874586705499,
+        0.09310668613471271,
+        0.07138365419670444,
+        0.08345287665462532,
+        0.0502488629101235,
+        0.052391593635618273,
+        0.053055052804719734,
+        0.05250600888215643,
+        0.05020998657134144,
+        0.04922521081884438,
+        0.05514974276035697,
+        0.023276723204671747,
+        0.02266458433474845,
+        0.019290799511101322,
+        0.026875171086310826,
+        0.011309260187447078,
+        0.0239026176957791,
+        0.010386377369429173
+      ],
+      "conditional_ofi_return": {
+        "1_tick": {
+          "n": 83610,
+          "r": 0.6301742274158424
+        },
+        "2_tick": {
+          "n": 5916,
+          "r": 0.47723079088116477
+        },
+        "3_4_tick": {
+          "n": 967,
+          "r": 0.4989578310835155
+        },
+        "5_plus_tick": {
+          "n": 144,
+          "r": 0.6433447825622773
+        }
+      },
+      "distribution": {
+        "count": 90870,
+        "kurtosis": 776.1630143187227,
+        "max": 3115532.0,
+        "mean": 41.886541212722115,
+        "min": -1650391.0,
+        "percentiles": {
+          "p1": -113366.9,
+          "p10": -36815.1,
+          "p25": -15779.0,
+          "p5": -55595.84999999999,
+          "p50": -349.5,
+          "p75": 14316.5,
+          "p90": 34037.50000000004,
+          "p95": 53373.49999999995,
+          "p99": 131282.32000000018
+        },
+        "skewness": 16.27037520639713,
+        "std": 49092.79275393509
+      },
+      "ofi_return_correlation": {
+        "lag_0": 0.674827631346281,
+        "lag_1": -0.0001428556691817247,
+        "lag_2": -0.010185447575192803,
+        "lag_3": -0.005815514843474469,
+        "lag_4": -0.004559499014992485,
+        "lag_5": -0.011771415762448587
+      },
+      "ofi_spread_correlation": {
+        "lag_0": 0.017832997038447252,
+        "lag_1": -0.006884550230434355,
+        "lag_2": 0.00502710967683562,
+        "lag_3": -0.0038184704784662324,
+        "lag_4": -0.0028316413230704465,
+        "lag_5": -0.004124029828856291
+      }
+    },
+    "1s": {
+      "acf": [
+        0.04169333059062386,
+        0.01913651627383722,
+        0.020369339893199723,
+        0.010918117283743362,
+        -0.014943329338244335,
+        0.01600617646867615,
+        0.013710806844486959,
+        0.0198762237530832,
+        0.0022381362160668727,
+        0.01785316709126769,
+        -0.00005249277866027513,
+        0.01654736402294644,
+        0.011714943517671394,
+        -0.006888374958351304,
+        0.004796889470739803,
+        -0.01126481351513526,
+        0.004649176419466747,
+        0.02134732726702302,
+        0.00766919764174815,
+        0.008827262808445221
+      ],
+      "conditional_ofi_return": {
+        "1_tick": {
+          "n": 4981236,
+          "r": 0.546311085975632
+        },
+        "2_tick": {
+          "n": 380408,
+          "r": 0.3654145461396873
+        },
+        "3_4_tick": {
+          "n": 57286,
+          "r": 0.3536080555997327
+        },
+        "5_plus_tick": {
+          "n": 7666,
+          "r": 0.48893839932026206
+        }
+      },
+      "distribution": {
+        "count": 5432868,
+        "kurtosis": 4111.922782783754,
+        "max": 2608593.0,
+        "mean": 0.7005931305532125,
+        "min": -1507062.0,
+        "percentiles": {
+          "p1": -8595.13,
+          "p10": -2617.0,
+          "p25": -974.25,
+          "p5": -4090.0,
+          "p50": 0.0,
+          "p75": 904.0,
+          "p90": 2487.1000000000004,
+          "p95": 3930.7999999999884,
+          "p99": 8811.340000000007
+        },
+        "skewness": 53.17414011220695,
+        "std": 5001.032057912705
+      },
+      "ofi_return_correlation": {
+        "lag_0": 0.5773564076885445,
+        "lag_1": 0.006217971294948162,
+        "lag_2": 0.003151093925788263,
+        "lag_3": -0.0008799644431449792,
+        "lag_4": -0.0026260753751953577,
+        "lag_5": -0.0010571585853452314
+      },
+      "ofi_spread_correlation": {
+        "lag_0": 0.004913013210447138,
+        "lag_1": -0.002725179979591583,
+        "lag_2": -0.0027646900206577817,
+        "lag_3": -0.000434180101501677,
+        "lag_4": -0.000941555312915752,
+        "lag_5": 0.000030043385051876296
+      }
+    },
+    "30s": {
+      "acf": [
+        0.10120303099627814,
+        0.06290640667572558,
+        0.07429920227351723,
+        0.03696525182354091,
+        0.047534251707257585,
+        0.06478723918275638,
+        0.05697947134194293,
+        0.06878370894761322,
+        0.043087108018343735,
+        0.035990461872481234,
+        0.03462273997809176,
+        0.02588125330482287,
+        0.01980953757685896,
+        0.031133263640546027,
+        0.018350537388816413,
+        0.028082375396541258,
+        0.01620420152176545,
+        0.03656693798843684,
+        0.03690327208684647,
+        0.02794449998469419
+      ],
+      "conditional_ofi_return": {
+        "1_tick": {
+          "n": 167452,
+          "r": 0.6234489654268449
+        },
+        "2_tick": {
+          "n": 11650,
+          "r": 0.4544605821407495
+        },
+        "3_4_tick": {
+          "n": 2073,
+          "r": 0.4867679094560498
+        },
+        "5_plus_tick": {
+          "n": 330,
+          "r": 0.6393287605161905
+        }
+      },
+      "distribution": {
+        "count": 181739,
+        "kurtosis": 292.34956388939986,
+        "max": 3109666.0,
+        "mean": 20.94338584453334,
+        "min": -1737661.0,
+        "percentiles": {
+          "p1": -76832.77,
+          "p10": -22249.199999999997,
+          "p25": -9731.25,
+          "p5": -34722.25,
+          "p50": -257.0,
+          "p75": 8650.0,
+          "p90": 21200.2,
+          "p95": 33292.14999999988,
+          "p99": 82075.61000000013
+        },
+        "skewness": 7.362893711973655,
+        "std": 33152.78063299351
+      },
+      "ofi_return_correlation": {
+        "lag_0": 0.66437410631713,
+        "lag_1": -0.008171481856840924,
+        "lag_2": 0.000023154589865028213,
+        "lag_3": -0.0056787302221130076,
+        "lag_4": -0.0031284914404455734,
+        "lag_5": -0.006348885720307379
+      },
+      "ofi_spread_correlation": {
+        "lag_0": 0.007847681702321712,
+        "lag_1": -0.007957198705314595,
+        "lag_2": -0.0006900438296391661,
+        "lag_3": 0.00027664854833204866,
+        "lag_4": 0.00447498790758616,
+        "lag_5": -0.0014620498068713865
+      }
+    },
+    "5m": {
+      "acf": [
+        0.2662552311627276,
+        0.16574238578181574,
+        0.14455519496450459,
+        0.09454722543307577,
+        0.08060589536461384,
+        0.09499114595683014,
+        0.052526682387514456,
+        0.058979295875340905,
+        0.0580940157631226,
+        0.05737854726871838,
+        0.04877972461716826,
+        0.06587077463976977,
+        0.054598251958682405,
+        0.04693667617383215,
+        0.03427083870147012,
+        0.006157397793835837,
+        0.01495904903546098,
+        0.014917042689385153,
+        0.01277986098401349,
+        0.011677034842266051
+      ],
+      "conditional_ofi_return": {
+        "1_tick": {
+          "n": 16718,
+          "r": 0.6380405783461366
+        },
+        "2_tick": {
+          "n": 1103,
+          "r": 0.5889580186475197
+        },
+        "3_4_tick": {
+          "n": 101,
+          "r": 0.6124055263805259
+        },
+        "5_plus_tick": {
+          "n": 19,
+          "r": 0.9783106859844524
+        }
+      },
+      "distribution": {
+        "count": 18174,
+        "kurtosis": 56.690858334103076,
+        "max": 3420981.0,
+        "mean": 209.43270606361284,
+        "min": -3154534.0,
+        "percentiles": {
+          "p1": -376300.64999999997,
+          "p10": -108850.4,
+          "p25": -46743.75,
+          "p5": -166696.2,
+          "p50": -2170.0,
+          "p75": 43585.0,
+          "p90": 109469.10000000002,
+          "p95": 168718.69999999998,
+          "p99": 392722.23000000045
+        },
+        "skewness": -0.2668256812182169,
+        "std": 138785.16359018153
+      },
+      "ofi_return_correlation": {
+        "lag_0": 0.7073379314417892,
+        "lag_1": -0.022120473778804876,
+        "lag_2": -0.010859334232342659,
+        "lag_3": -0.017259833419178597,
+        "lag_4": -0.012284426479273238,
+        "lag_5": -0.045235189554606495
+      },
+      "ofi_spread_correlation": {
+        "lag_0": 0.007946036227559924,
+        "lag_1": -0.01188697656204462,
+        "lag_2": -0.007915429762601092,
+        "lag_3": 0.01036231445365646,
+        "lag_4": 0.0008012234066189355,
+        "lag_5": 0.015527540671978209
+      }
+    },
+    "5s": {
+      "acf": [
+        0.12353353389372045,
+        0.055152733555310064,
+        0.018974026408216056,
+        0.03601180859654363,
+        0.0421930956700471,
+        0.010951794606235741,
+        -0.0015650306955299126,
+        0.01692931326649307,
+        0.008777838001581969,
+        0.018207862262465697,
+        0.023570705874001972,
+        0.012367325901963865,
+        0.01736657403957334,
+        0.03740981415482278,
+        0.014053809736704708,
+        0.01395033362080856,
+        0.03020189307423435,
+        0.01726896432551428,
+        0.013544786131159397,
+        0.0265738138594868
+      ],
+      "conditional_ofi_return": {
+        "1_tick": {
+          "n": 1004965,
+          "r": 0.5726843748336753
+        },
+        "2_tick": {
+          "n": 69254,
+          "r": 0.3980622257533121
+        },
+        "3_4_tick": {
+          "n": 12272,
+          "r": 0.401604199153829
+        },
+        "5_plus_tick": {
+          "n": 1727,
+          "r": 0.5109208714749446
+        }
+      },
+      "distribution": {
+        "count": 1089209,
+        "kurtosis": 379.32207318642,
+        "max": 3144533.0,
+        "mean": 3.494490038183719,
+        "min": -1508464.0,
+        "percentiles": {
+          "p1": -22472.64,
+          "p10": -6896.299999999999,
+          "p25": -2784.25,
+          "p5": -10452.15,
+          "p50": 10.5,
+          "p75": 2850.0,
+          "p90": 6679.300000000001,
+          "p95": 10536.05,
+          "p99": 22127.200000000004
+        },
+        "skewness": 4.787727321859569,
+        "std": 12235.57831880603
+      },
+      "ofi_return_correlation": {
+        "lag_0": 0.6175378478775265,
+        "lag_1": -0.001087094761369114,
+        "lag_2": -0.0048530111794734265,
+        "lag_3": -0.0016001711298134305,
+        "lag_4": 0.0020390625414413925,
+        "lag_5": -0.0018229754332422048
+      },
+      "ofi_spread_correlation": {
+        "lag_0": 0.007334207019835459,
+        "lag_1": -0.011139994585618096,
+        "lag_2": 0.00024154163675774913,
+        "lag_3": 0.003062541089336261,
+        "lag_4": 0.0008217491417731703,
+        "lag_5": -0.001305072322503978
+      }
+    }
+  },
+  "regime_intensity": {
+    "afternoon": {
+      "count": 294569878,
+      "max": 288540.0,
+      "mean": 32.019325319464016,
+      "min": 0.0,
+      "std": 114.6793312317458
+    },
+    "close-auction": {
+      "count": 70529805,
+      "max": 163867.0,
+      "mean": 37.424992086696086,
+      "min": 0.0,
+      "std": 241.70302562224617
+    },
+    "midday": {
+      "count": 1591899502,
+      "max": 250000.0,
+      "mean": 24.668994768615224,
+      "min": 0.0,
+      "std": 102.72435925752805
+    },
+    "morning": {
+      "count": 689314458,
+      "max": 311060.0,
+      "mean": 21.18287598573601,
+      "min": 0.0,
+      "std": 100.92156310064422
+    },
+    "open-auction": {
+      "count": 103599218,
+      "max": 369100.0,
+      "mean": 14.057874210976587,
+      "min": 0.0,
+      "std": 144.54471778955408
+    },
+    "post-market": {
+      "count": 65475828,
+      "max": 103960.0,
+      "mean": 8.897212922606581,
+      "min": 0.0,
+      "std": 182.2255360023002
+    },
+    "pre-market": {
+      "count": 52374003,
+      "max": 113532.0,
+      "mean": 30.73782225507092,
+      "min": 0.0,
+      "std": 255.23178964372067
+    }
+  },
+  "tracker": "OfiTracker"
+}

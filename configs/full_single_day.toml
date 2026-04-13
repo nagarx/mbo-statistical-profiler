@@ -1,0 +1,29 @@
+# Full profiling - single day test
+
+[input]
+hot_store_dir = "../data/hot_store"
+filename_pattern = "xnas-itch-{date}.mbo.dbn"
+symbol = "NVDA"
+exchange = "XNAS"
+date_start = "2025-02-03"
+date_end = "2025-02-03"
+
+[trackers]
+quality = true
+ofi = true
+spread = true
+returns = true
+volatility = true
+lifecycle = true
+trades = true
+depth = true
+liquidity = true
+jumps = true
+noise = true
+
+timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
+reservoir_capacity = 10000
+
+[output]
+output_dir = "test_output_full"
+write_summaries = true

@@ -1,0 +1,55 @@
+{
+  "_provenance": {
+    "exchange": "XNAS",
+    "n_days": 21,
+    "profiler_version": "0.1.0",
+    "reservoir_capacity": 10000,
+    "runtime_secs": 172.203942666,
+    "symbol": "NVDA",
+    "throughput_events_per_sec": 1226721.5240810427,
+    "timescales": [
+      1.0,
+      5.0,
+      10.0,
+      30.0,
+      60.0,
+      300.0
+    ],
+    "total_events": 211246283
+  },
+  "bin_width_seconds": 1.0,
+  "daily_bv": {
+    "count": 21,
+    "max": 0.0004667696194321902,
+    "mean": 0.0002147599873196767,
+    "min": 0.00010049949431501968,
+    "std": 0.00010054007324117674
+  },
+  "daily_jump_fraction": {
+    "count": 21,
+    "max": 0.23571054934222893,
+    "mean": 0.17781576370995858,
+    "min": 0.10575449038075524,
+    "std": 0.03753202927769611
+  },
+  "daily_rv": {
+    "count": 21,
+    "max": 0.0005286851493449223,
+    "mean": 0.00025711148998512547,
+    "min": 0.0001297927208991787,
+    "std": 0.00010936886813530438
+  },
+  "daily_z_statistic": {
+    "count": 21,
+    "max": 4513.745960659383,
+    "mean": 3129.9785488363027,
+    "min": 1854.1309425848895,
+    "std": 739.2107770257551
+  },
+  "n_days": 21,
+  "n_significant_jump_days": 21,
+  "regime_conditional_jump_fraction": {},
+  "significant_jump_pct": 100.0,
+  "tracker": "JumpTracker",
+  "z_threshold": 2.0
+}

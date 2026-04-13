@@ -1,0 +1,2006 @@
+{
+  "_provenance": {
+    "exchange": "XNAS",
+    "n_days": 134,
+    "profiler_version": "0.1.0",
+    "reservoir_capacity": 10000,
+    "runtime_secs": 28.283541125,
+    "symbol": "CRSP",
+    "throughput_events_per_sec": 1100387.3193406577,
+    "timescales": [
+      1.0,
+      5.0,
+      10.0,
+      30.0,
+      60.0,
+      300.0
+    ],
+    "total_events": 31122850
+  },
+  "daily_mean_vpin": {
+    "count": 134,
+    "max": 0.7403086049222951,
+    "mean": 0.15953067573124968,
+    "min": 0.0612471100260091,
+    "std": 0.08664907436340673
+  },
+  "intraday_vpin_curve": [
+    {
+      "count": 38,
+      "mean_vpin": 0.3463420041862366,
+      "minutes_since_open": 0.0
+    },
+    {
+      "count": 29,
+      "mean_vpin": 0.4242517470707294,
+      "minutes_since_open": 1.0
+    },
+    {
+      "count": 70,
+      "mean_vpin": 0.3671353023476569,
+      "minutes_since_open": 2.0
+    },
+    {
+      "count": 33,
+      "mean_vpin": 0.33112938615927384,
+      "minutes_since_open": 3.0
+    },
+    {
+      "count": 34,
+      "mean_vpin": 0.40397500645006196,
+      "minutes_since_open": 4.0
+    },
+    {
+      "count": 22,
+      "mean_vpin": 0.32342005166722376,
+      "minutes_since_open": 5.0
+    },
+    {
+      "count": 22,
+      "mean_vpin": 0.24025031482424128,
+      "minutes_since_open": 6.0
+    },
+    {
+      "count": 13,
+      "mean_vpin": 0.2650991374810493,
+      "minutes_since_open": 7.0
+    },
+    {
+      "count": 20,
+      "mean_vpin": 0.1967000528691152,
+      "minutes_since_open": 8.0
+    },
+    {
+      "count": 26,
+      "mean_vpin": 0.1841961530886372,
+      "minutes_since_open": 9.0
+    },
+    {
+      "count": 32,
+      "mean_vpin": 0.17021066585601943,
+      "minutes_since_open": 10.0
+    },
+    {
+      "count": 21,
+      "mean_vpin": 0.24947117027748045,
+      "minutes_since_open": 11.0
+    },
+    {
+      "count": 40,
+      "mean_vpin": 0.16275692007946882,
+      "minutes_since_open": 12.0
+    },
+    {
+      "count": 21,
+      "mean_vpin": 0.24121884425893803,
+      "minutes_since_open": 13.0
+    },
+    {
+      "count": 19,
+      "mean_vpin": 0.23173588466012374,
+      "minutes_since_open": 14.0
+    },
+    {
+      "count": 32,
+      "mean_vpin": 0.35849555676470546,
+      "minutes_since_open": 15.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.29082623117610645,
+      "minutes_since_open": 16.0
+    },
+    {
+      "count": 21,
+      "mean_vpin": 0.2994158201998197,
+      "minutes_since_open": 17.0
+    },
+    {
+      "count": 68,
+      "mean_vpin": 0.36033153728341066,
+      "minutes_since_open": 18.0
+    },
+    {
+      "count": 21,
+      "mean_vpin": 0.2724150363968896,
+      "minutes_since_open": 19.0
+    },
+    {
+      "count": 26,
+      "mean_vpin": 0.2716587568671669,
+      "minutes_since_open": 20.0
+    },
+    {
+      "count": 15,
+      "mean_vpin": 0.29629520065440074,
+      "minutes_since_open": 21.0
+    },
+    {
+      "count": 18,
+      "mean_vpin": 0.29224246356175954,
+      "minutes_since_open": 22.0
+    },
+    {
+      "count": 20,
+      "mean_vpin": 0.3064214668696824,
+      "minutes_since_open": 23.0
+    },
+    {
+      "count": 17,
+      "mean_vpin": 0.3058112647895775,
+      "minutes_since_open": 24.0
+    },
+    {
+      "count": 27,
+      "mean_vpin": 0.2853817376419066,
+      "minutes_since_open": 25.0
+    },
+    {
+      "count": 14,
+      "mean_vpin": 0.20866116036336138,
+      "minutes_since_open": 26.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.22999541347458785,
+      "minutes_since_open": 27.0
+    },
+    {
+      "count": 25,
+      "mean_vpin": 0.25372271032120247,
+      "minutes_since_open": 28.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.3151460965005585,
+      "minutes_since_open": 29.0
+    },
+    {
+      "count": 36,
+      "mean_vpin": 0.3226565353301045,
+      "minutes_since_open": 30.0
+    },
+    {
+      "count": 52,
+      "mean_vpin": 0.35141266498938517,
+      "minutes_since_open": 31.0
+    },
+    {
+      "count": 23,
+      "mean_vpin": 0.26900802362914933,
+      "minutes_since_open": 32.0
+    },
+    {
+      "count": 21,
+      "mean_vpin": 0.25707279869421795,
+      "minutes_since_open": 33.0
+    },
+    {
+      "count": 18,
+      "mean_vpin": 0.30765489973727006,
+      "minutes_since_open": 34.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.25471239580546373,
+      "minutes_since_open": 35.0
+    },
+    {
+      "count": 22,
+      "mean_vpin": 0.24890868367822547,
+      "minutes_since_open": 36.0
+    },
+    {
+      "count": 26,
+      "mean_vpin": 0.2638956715442306,
+      "minutes_since_open": 37.0
+    },
+    {
+      "count": 29,
+      "mean_vpin": 0.19130964598700112,
+      "minutes_since_open": 38.0
+    },
+    {
+      "count": 41,
+      "mean_vpin": 0.265237746766589,
+      "minutes_since_open": 39.0
+    },
+    {
+      "count": 33,
+      "mean_vpin": 0.23710402090752883,
+      "minutes_since_open": 40.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.14233438419570968,
+      "minutes_since_open": 41.0
+    },
+    {
+      "count": 25,
+      "mean_vpin": 0.20200687727642774,
+      "minutes_since_open": 42.0
+    },
+    {
+      "count": 27,
+      "mean_vpin": 0.20480303218701917,
+      "minutes_since_open": 43.0
+    },
+    {
+      "count": 44,
+      "mean_vpin": 0.2681416156266378,
+      "minutes_since_open": 44.0
+    },
+    {
+      "count": 23,
+      "mean_vpin": 0.18172458086320525,
+      "minutes_since_open": 45.0
+    },
+    {
+      "count": 26,
+      "mean_vpin": 0.21709195966796355,
+      "minutes_since_open": 46.0
+    },
+    {
+      "count": 24,
+      "mean_vpin": 0.20854303504426985,
+      "minutes_since_open": 47.0
+    },
+    {
+      "count": 21,
+      "mean_vpin": 0.20612928570715133,
+      "minutes_since_open": 48.0
+    },
+    {
+      "count": 17,
+      "mean_vpin": 0.20271335158293433,
+      "minutes_since_open": 49.0
+    },
+    {
+      "count": 26,
+      "mean_vpin": 0.18188190350358838,
+      "minutes_since_open": 50.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.17860353729369183,
+      "minutes_since_open": 51.0
+    },
+    {
+      "count": 40,
+      "mean_vpin": 0.20430320027158216,
+      "minutes_since_open": 52.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.205592353486379,
+      "minutes_since_open": 53.0
+    },
+    {
+      "count": 25,
+      "mean_vpin": 0.18601373830277027,
+      "minutes_since_open": 54.0
+    },
+    {
+      "count": 26,
+      "mean_vpin": 0.12269729974911861,
+      "minutes_since_open": 55.0
+    },
+    {
+      "count": 46,
+      "mean_vpin": 0.20979995396777767,
+      "minutes_since_open": 56.0
+    },
+    {
+      "count": 40,
+      "mean_vpin": 0.202786799124923,
+      "minutes_since_open": 57.0
+    },
+    {
+      "count": 29,
+      "mean_vpin": 0.2157920530153036,
+      "minutes_since_open": 58.0
+    },
+    {
+      "count": 29,
+      "mean_vpin": 0.1695262528953727,
+      "minutes_since_open": 59.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.18313290728599865,
+      "minutes_since_open": 60.0
+    },
+    {
+      "count": 49,
+      "mean_vpin": 0.16627735760253548,
+      "minutes_since_open": 61.0
+    },
+    {
+      "count": 56,
+      "mean_vpin": 0.16788389366227102,
+      "minutes_since_open": 62.0
+    },
+    {
+      "count": 41,
+      "mean_vpin": 0.1882210250051684,
+      "minutes_since_open": 63.0
+    },
+    {
+      "count": 17,
+      "mean_vpin": 0.15327081310140206,
+      "minutes_since_open": 64.0
+    },
+    {
+      "count": 50,
+      "mean_vpin": 0.17624330147936984,
+      "minutes_since_open": 65.0
+    },
+    {
+      "count": 40,
+      "mean_vpin": 0.15178220530032188,
+      "minutes_since_open": 66.0
+    },
+    {
+      "count": 36,
+      "mean_vpin": 0.19562349019950373,
+      "minutes_since_open": 67.0
+    },
+    {
+      "count": 34,
+      "mean_vpin": 0.15316668019033614,
+      "minutes_since_open": 68.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.13712827042594702,
+      "minutes_since_open": 69.0
+    },
+    {
+      "count": 43,
+      "mean_vpin": 0.15059615073123458,
+      "minutes_since_open": 70.0
+    },
+    {
+      "count": 53,
+      "mean_vpin": 0.15939757233151391,
+      "minutes_since_open": 71.0
+    },
+    {
+      "count": 41,
+      "mean_vpin": 0.11902074557752952,
+      "minutes_since_open": 72.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.15551945051069557,
+      "minutes_since_open": 73.0
+    },
+    {
+      "count": 36,
+      "mean_vpin": 0.11194939994307078,
+      "minutes_since_open": 74.0
+    },
+    {
+      "count": 47,
+      "mean_vpin": 0.13982726138844775,
+      "minutes_since_open": 75.0
+    },
+    {
+      "count": 47,
+      "mean_vpin": 0.12905639084400972,
+      "minutes_since_open": 76.0
+    },
+    {
+      "count": 54,
+      "mean_vpin": 0.1656601509514561,
+      "minutes_since_open": 77.0
+    },
+    {
+      "count": 36,
+      "mean_vpin": 0.10639395662706452,
+      "minutes_since_open": 78.0
+    },
+    {
+      "count": 32,
+      "mean_vpin": 0.1657528401923306,
+      "minutes_since_open": 79.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.12369575413057911,
+      "minutes_since_open": 80.0
+    },
+    {
+      "count": 43,
+      "mean_vpin": 0.16506000964686024,
+      "minutes_since_open": 81.0
+    },
+    {
+      "count": 40,
+      "mean_vpin": 0.1641615287875359,
+      "minutes_since_open": 82.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.10499246715589988,
+      "minutes_since_open": 83.0
+    },
+    {
+      "count": 52,
+      "mean_vpin": 0.14883908564495016,
+      "minutes_since_open": 84.0
+    },
+    {
+      "count": 32,
+      "mean_vpin": 0.12754745524749322,
+      "minutes_since_open": 85.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.13642143142315832,
+      "minutes_since_open": 86.0
+    },
+    {
+      "count": 46,
+      "mean_vpin": 0.10587923786538264,
+      "minutes_since_open": 87.0
+    },
+    {
+      "count": 46,
+      "mean_vpin": 0.11664174967125718,
+      "minutes_since_open": 88.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.12080049145543606,
+      "minutes_since_open": 89.0
+    },
+    {
+      "count": 48,
+      "mean_vpin": 0.14468074475399148,
+      "minutes_since_open": 90.0
+    },
+    {
+      "count": 32,
+      "mean_vpin": 0.10253320001554547,
+      "minutes_since_open": 91.0
+    },
+    {
+      "count": 41,
+      "mean_vpin": 0.11084348135604445,
+      "minutes_since_open": 92.0
+    },
+    {
+      "count": 39,
+      "mean_vpin": 0.13121052273905767,
+      "minutes_since_open": 93.0
+    },
+    {
+      "count": 59,
+      "mean_vpin": 0.1647574863147448,
+      "minutes_since_open": 94.0
+    },
+    {
+      "count": 29,
+      "mean_vpin": 0.09491966873417677,
+      "minutes_since_open": 95.0
+    },
+    {
+      "count": 29,
+      "mean_vpin": 0.15288107896910313,
+      "minutes_since_open": 96.0
+    },
+    {
+      "count": 38,
+      "mean_vpin": 0.1277224899439978,
+      "minutes_since_open": 97.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.12870454621943747,
+      "minutes_since_open": 98.0
+    },
+    {
+      "count": 32,
+      "mean_vpin": 0.1352396180393784,
+      "minutes_since_open": 99.0
+    },
+    {
+      "count": 41,
+      "mean_vpin": 0.11862799911245764,
+      "minutes_since_open": 100.0
+    },
+    {
+      "count": 35,
+      "mean_vpin": 0.11523667781400286,
+      "minutes_since_open": 101.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.12394469068982152,
+      "minutes_since_open": 102.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.12505905648395116,
+      "minutes_since_open": 103.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.10421221389907769,
+      "minutes_since_open": 104.0
+    },
+    {
+      "count": 36,
+      "mean_vpin": 0.11571655388774049,
+      "minutes_since_open": 105.0
+    },
+    {
+      "count": 47,
+      "mean_vpin": 0.12444849738302448,
+      "minutes_since_open": 106.0
+    },
+    {
+      "count": 40,
+      "mean_vpin": 0.11650128082898938,
+      "minutes_since_open": 107.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.10971283449133828,
+      "minutes_since_open": 108.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.09686439659179347,
+      "minutes_since_open": 109.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.07689860570938217,
+      "minutes_since_open": 110.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.09105186624016297,
+      "minutes_since_open": 111.0
+    },
+    {
+      "count": 56,
+      "mean_vpin": 0.11883649983659776,
+      "minutes_since_open": 112.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.12306122320824384,
+      "minutes_since_open": 113.0
+    },
+    {
+      "count": 29,
+      "mean_vpin": 0.09177406818823598,
+      "minutes_since_open": 114.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.11571158653894088,
+      "minutes_since_open": 115.0
+    },
+    {
+      "count": 42,
+      "mean_vpin": 0.10471627612545106,
+      "minutes_since_open": 116.0
+    },
+    {
+      "count": 46,
+      "mean_vpin": 0.11574242202403329,
+      "minutes_since_open": 117.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.09394761642692795,
+      "minutes_since_open": 118.0
+    },
+    {
+      "count": 48,
+      "mean_vpin": 0.10782556811592167,
+      "minutes_since_open": 119.0
+    },
+    {
+      "count": 41,
+      "mean_vpin": 0.10090811059012045,
+      "minutes_since_open": 120.0
+    },
+    {
+      "count": 57,
+      "mean_vpin": 0.10478552356222835,
+      "minutes_since_open": 121.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.12803469914761395,
+      "minutes_since_open": 122.0
+    },
+    {
+      "count": 36,
+      "mean_vpin": 0.11071201085280956,
+      "minutes_since_open": 123.0
+    },
+    {
+      "count": 29,
+      "mean_vpin": 0.10268901482501394,
+      "minutes_since_open": 124.0
+    },
+    {
+      "count": 42,
+      "mean_vpin": 0.11554147966919201,
+      "minutes_since_open": 125.0
+    },
+    {
+      "count": 38,
+      "mean_vpin": 0.12394637013730743,
+      "minutes_since_open": 126.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.12366358957681864,
+      "minutes_since_open": 127.0
+    },
+    {
+      "count": 38,
+      "mean_vpin": 0.10189176025109019,
+      "minutes_since_open": 128.0
+    },
+    {
+      "count": 34,
+      "mean_vpin": 0.0867259314543081,
+      "minutes_since_open": 129.0
+    },
+    {
+      "count": 25,
+      "mean_vpin": 0.10309052165792797,
+      "minutes_since_open": 130.0
+    },
+    {
+      "count": 33,
+      "mean_vpin": 0.13677499531179704,
+      "minutes_since_open": 131.0
+    },
+    {
+      "count": 24,
+      "mean_vpin": 0.11655341760105395,
+      "minutes_since_open": 132.0
+    },
+    {
+      "count": 35,
+      "mean_vpin": 0.0899588117749088,
+      "minutes_since_open": 133.0
+    },
+    {
+      "count": 36,
+      "mean_vpin": 0.10818676495751767,
+      "minutes_since_open": 134.0
+    },
+    {
+      "count": 22,
+      "mean_vpin": 0.08530338094076813,
+      "minutes_since_open": 135.0
+    },
+    {
+      "count": 41,
+      "mean_vpin": 0.08447809743166833,
+      "minutes_since_open": 136.0
+    },
+    {
+      "count": 35,
+      "mean_vpin": 0.10287695543627659,
+      "minutes_since_open": 137.0
+    },
+    {
+      "count": 36,
+      "mean_vpin": 0.11503146734996701,
+      "minutes_since_open": 138.0
+    },
+    {
+      "count": 33,
+      "mean_vpin": 0.11480095508473268,
+      "minutes_since_open": 139.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.10774369559928083,
+      "minutes_since_open": 140.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.08687945033186087,
+      "minutes_since_open": 141.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.10761348455175114,
+      "minutes_since_open": 142.0
+    },
+    {
+      "count": 34,
+      "mean_vpin": 0.09204921330710149,
+      "minutes_since_open": 143.0
+    },
+    {
+      "count": 35,
+      "mean_vpin": 0.10909862961561877,
+      "minutes_since_open": 144.0
+    },
+    {
+      "count": 39,
+      "mean_vpin": 0.0938502605949193,
+      "minutes_since_open": 145.0
+    },
+    {
+      "count": 29,
+      "mean_vpin": 0.1372635122670157,
+      "minutes_since_open": 146.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.1196064958397255,
+      "minutes_since_open": 147.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.11639159231694597,
+      "minutes_since_open": 148.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.1017123201701311,
+      "minutes_since_open": 149.0
+    },
+    {
+      "count": 32,
+      "mean_vpin": 0.13563500649516402,
+      "minutes_since_open": 150.0
+    },
+    {
+      "count": 51,
+      "mean_vpin": 0.11521368327712156,
+      "minutes_since_open": 151.0
+    },
+    {
+      "count": 42,
+      "mean_vpin": 0.0974880235386404,
+      "minutes_since_open": 152.0
+    },
+    {
+      "count": 30,
+      "mean_vpin": 0.11048500187410944,
+      "minutes_since_open": 153.0
+    },
+    {
+      "count": 41,
+      "mean_vpin": 0.11294089391064689,
+      "minutes_since_open": 154.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.11564815404357345,
+      "minutes_since_open": 155.0
+    },
+    {
+      "count": 35,
+      "mean_vpin": 0.12225326771074274,
+      "minutes_since_open": 156.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.11234971659852368,
+      "minutes_since_open": 157.0
+    },
+    {
+      "count": 42,
+      "mean_vpin": 0.09799353149580163,
+      "minutes_since_open": 158.0
+    },
+    {
+      "count": 20,
+      "mean_vpin": 0.10710132283172859,
+      "minutes_since_open": 159.0
+    },
+    {
+      "count": 36,
+      "mean_vpin": 0.11826163879460491,
+      "minutes_since_open": 160.0
+    },
+    {
+      "count": 47,
+      "mean_vpin": 0.13277808264044083,
+      "minutes_since_open": 161.0
+    },
+    {
+      "count": 36,
+      "mean_vpin": 0.08642633559379526,
+      "minutes_since_open": 162.0
+    },
+    {
+      "count": 27,
+      "mean_vpin": 0.09558517491242208,
+      "minutes_since_open": 163.0
+    },
+    {
+      "count": 39,
+      "mean_vpin": 0.10505196232983335,
+      "minutes_since_open": 164.0
+    },
+    {
+      "count": 23,
+      "mean_vpin": 0.08775281259727072,
+      "minutes_since_open": 165.0
+    },
+    {
+      "count": 35,
+      "mean_vpin": 0.11044060215790882,
+      "minutes_since_open": 166.0
+    },
+    {
+      "count": 33,
+      "mean_vpin": 0.11545575820331046,
+      "minutes_since_open": 167.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.12795603379528317,
+      "minutes_since_open": 168.0
+    },
+    {
+      "count": 30,
+      "mean_vpin": 0.0915667345362517,
+      "minutes_since_open": 169.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.10870323626183323,
+      "minutes_since_open": 170.0
+    },
+    {
+      "count": 27,
+      "mean_vpin": 0.09968285622141737,
+      "minutes_since_open": 171.0
+    },
+    {
+      "count": 26,
+      "mean_vpin": 0.0919324386761574,
+      "minutes_since_open": 172.0
+    },
+    {
+      "count": 30,
+      "mean_vpin": 0.07589381677100554,
+      "minutes_since_open": 173.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.08356697387218041,
+      "minutes_since_open": 174.0
+    },
+    {
+      "count": 38,
+      "mean_vpin": 0.0930885043189715,
+      "minutes_since_open": 175.0
+    },
+    {
+      "count": 25,
+      "mean_vpin": 0.08813626058303511,
+      "minutes_since_open": 176.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.10172917823791847,
+      "minutes_since_open": 177.0
+    },
+    {
+      "count": 29,
+      "mean_vpin": 0.08721518072188772,
+      "minutes_since_open": 178.0
+    },
+    {
+      "count": 33,
+      "mean_vpin": 0.09292592965136896,
+      "minutes_since_open": 179.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.0899113687055285,
+      "minutes_since_open": 180.0
+    },
+    {
+      "count": 25,
+      "mean_vpin": 0.07761751778388148,
+      "minutes_since_open": 181.0
+    },
+    {
+      "count": 27,
+      "mean_vpin": 0.11337689164376055,
+      "minutes_since_open": 182.0
+    },
+    {
+      "count": 33,
+      "mean_vpin": 0.08410060876174066,
+      "minutes_since_open": 183.0
+    },
+    {
+      "count": 24,
+      "mean_vpin": 0.09048600238023323,
+      "minutes_since_open": 184.0
+    },
+    {
+      "count": 34,
+      "mean_vpin": 0.08467547675954971,
+      "minutes_since_open": 185.0
+    },
+    {
+      "count": 38,
+      "mean_vpin": 0.10137994161780012,
+      "minutes_since_open": 186.0
+    },
+    {
+      "count": 27,
+      "mean_vpin": 0.12652838704323383,
+      "minutes_since_open": 187.0
+    },
+    {
+      "count": 36,
+      "mean_vpin": 0.07462005469664433,
+      "minutes_since_open": 188.0
+    },
+    {
+      "count": 43,
+      "mean_vpin": 0.07272854407276107,
+      "minutes_since_open": 189.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.08704171482796372,
+      "minutes_since_open": 190.0
+    },
+    {
+      "count": 55,
+      "mean_vpin": 0.15246650076670046,
+      "minutes_since_open": 191.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.08740197968759135,
+      "minutes_since_open": 192.0
+    },
+    {
+      "count": 25,
+      "mean_vpin": 0.09256360418994784,
+      "minutes_since_open": 193.0
+    },
+    {
+      "count": 52,
+      "mean_vpin": 0.08177228265531021,
+      "minutes_since_open": 194.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.08121611829204597,
+      "minutes_since_open": 195.0
+    },
+    {
+      "count": 33,
+      "mean_vpin": 0.07046299844235684,
+      "minutes_since_open": 196.0
+    },
+    {
+      "count": 42,
+      "mean_vpin": 0.08954057392113916,
+      "minutes_since_open": 197.0
+    },
+    {
+      "count": 38,
+      "mean_vpin": 0.08643074322938268,
+      "minutes_since_open": 198.0
+    },
+    {
+      "count": 32,
+      "mean_vpin": 0.06962822031581914,
+      "minutes_since_open": 199.0
+    },
+    {
+      "count": 26,
+      "mean_vpin": 0.07135862623144781,
+      "minutes_since_open": 200.0
+    },
+    {
+      "count": 39,
+      "mean_vpin": 0.07548384833958627,
+      "minutes_since_open": 201.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.08017666237791872,
+      "minutes_since_open": 202.0
+    },
+    {
+      "count": 41,
+      "mean_vpin": 0.06468025163687671,
+      "minutes_since_open": 203.0
+    },
+    {
+      "count": 34,
+      "mean_vpin": 0.07494079369036988,
+      "minutes_since_open": 204.0
+    },
+    {
+      "count": 51,
+      "mean_vpin": 0.09818971876369369,
+      "minutes_since_open": 205.0
+    },
+    {
+      "count": 36,
+      "mean_vpin": 0.06838248957955773,
+      "minutes_since_open": 206.0
+    },
+    {
+      "count": 34,
+      "mean_vpin": 0.059411318683736045,
+      "minutes_since_open": 207.0
+    },
+    {
+      "count": 51,
+      "mean_vpin": 0.06657637725230177,
+      "minutes_since_open": 208.0
+    },
+    {
+      "count": 70,
+      "mean_vpin": 0.08353610152394948,
+      "minutes_since_open": 209.0
+    },
+    {
+      "count": 107,
+      "mean_vpin": 0.20340208791820058,
+      "minutes_since_open": 210.0
+    },
+    {
+      "count": 33,
+      "mean_vpin": 0.06556002222844418,
+      "minutes_since_open": 211.0
+    },
+    {
+      "count": 54,
+      "mean_vpin": 0.09854257657623619,
+      "minutes_since_open": 212.0
+    },
+    {
+      "count": 34,
+      "mean_vpin": 0.07678223736218308,
+      "minutes_since_open": 213.0
+    },
+    {
+      "count": 43,
+      "mean_vpin": 0.1134265847069289,
+      "minutes_since_open": 214.0
+    },
+    {
+      "count": 48,
+      "mean_vpin": 0.08951747097181872,
+      "minutes_since_open": 215.0
+    },
+    {
+      "count": 35,
+      "mean_vpin": 0.07508469132788326,
+      "minutes_since_open": 216.0
+    },
+    {
+      "count": 32,
+      "mean_vpin": 0.08471837059661062,
+      "minutes_since_open": 217.0
+    },
+    {
+      "count": 32,
+      "mean_vpin": 0.08050517148748235,
+      "minutes_since_open": 218.0
+    },
+    {
+      "count": 54,
+      "mean_vpin": 0.08564755528122685,
+      "minutes_since_open": 219.0
+    },
+    {
+      "count": 36,
+      "mean_vpin": 0.07823555284288315,
+      "minutes_since_open": 220.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.084131439421028,
+      "minutes_since_open": 221.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.09356901381663028,
+      "minutes_since_open": 222.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.0804690597369528,
+      "minutes_since_open": 223.0
+    },
+    {
+      "count": 26,
+      "mean_vpin": 0.08575443234448933,
+      "minutes_since_open": 224.0
+    },
+    {
+      "count": 30,
+      "mean_vpin": 0.07159894166640618,
+      "minutes_since_open": 225.0
+    },
+    {
+      "count": 29,
+      "mean_vpin": 0.0679908051160664,
+      "minutes_since_open": 226.0
+    },
+    {
+      "count": 47,
+      "mean_vpin": 0.07478430111056553,
+      "minutes_since_open": 227.0
+    },
+    {
+      "count": 34,
+      "mean_vpin": 0.07817399840556555,
+      "minutes_since_open": 228.0
+    },
+    {
+      "count": 32,
+      "mean_vpin": 0.09350280223220131,
+      "minutes_since_open": 229.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.07121359216510308,
+      "minutes_since_open": 230.0
+    },
+    {
+      "count": 25,
+      "mean_vpin": 0.07534413706377241,
+      "minutes_since_open": 231.0
+    },
+    {
+      "count": 23,
+      "mean_vpin": 0.06561590342295626,
+      "minutes_since_open": 232.0
+    },
+    {
+      "count": 32,
+      "mean_vpin": 0.05599445282287501,
+      "minutes_since_open": 233.0
+    },
+    {
+      "count": 38,
+      "mean_vpin": 0.0714949262353539,
+      "minutes_since_open": 234.0
+    },
+    {
+      "count": 34,
+      "mean_vpin": 0.0895081666576475,
+      "minutes_since_open": 235.0
+    },
+    {
+      "count": 41,
+      "mean_vpin": 0.13282189749418333,
+      "minutes_since_open": 236.0
+    },
+    {
+      "count": 26,
+      "mean_vpin": 0.08070107234554648,
+      "minutes_since_open": 237.0
+    },
+    {
+      "count": 26,
+      "mean_vpin": 0.07722828882569152,
+      "minutes_since_open": 238.0
+    },
+    {
+      "count": 26,
+      "mean_vpin": 0.06704607801789786,
+      "minutes_since_open": 239.0
+    },
+    {
+      "count": 24,
+      "mean_vpin": 0.0598884048596215,
+      "minutes_since_open": 240.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.08158285685215047,
+      "minutes_since_open": 241.0
+    },
+    {
+      "count": 38,
+      "mean_vpin": 0.056132860786632266,
+      "minutes_since_open": 242.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.09722034752094814,
+      "minutes_since_open": 243.0
+    },
+    {
+      "count": 29,
+      "mean_vpin": 0.06510913140228028,
+      "minutes_since_open": 244.0
+    },
+    {
+      "count": 39,
+      "mean_vpin": 0.05920489720588474,
+      "minutes_since_open": 245.0
+    },
+    {
+      "count": 32,
+      "mean_vpin": 0.06070854845748325,
+      "minutes_since_open": 246.0
+    },
+    {
+      "count": 24,
+      "mean_vpin": 0.0840960772692935,
+      "minutes_since_open": 247.0
+    },
+    {
+      "count": 39,
+      "mean_vpin": 0.06827828813792468,
+      "minutes_since_open": 248.0
+    },
+    {
+      "count": 26,
+      "mean_vpin": 0.0658979813207941,
+      "minutes_since_open": 249.0
+    },
+    {
+      "count": 38,
+      "mean_vpin": 0.07732007969978329,
+      "minutes_since_open": 250.0
+    },
+    {
+      "count": 59,
+      "mean_vpin": 0.14599944826674416,
+      "minutes_since_open": 251.0
+    },
+    {
+      "count": 29,
+      "mean_vpin": 0.06989443524220619,
+      "minutes_since_open": 252.0
+    },
+    {
+      "count": 30,
+      "mean_vpin": 0.07119557254687403,
+      "minutes_since_open": 253.0
+    },
+    {
+      "count": 27,
+      "mean_vpin": 0.08050125408698035,
+      "minutes_since_open": 254.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.061782346023795266,
+      "minutes_since_open": 255.0
+    },
+    {
+      "count": 34,
+      "mean_vpin": 0.05872833825489292,
+      "minutes_since_open": 256.0
+    },
+    {
+      "count": 44,
+      "mean_vpin": 0.057133836678771734,
+      "minutes_since_open": 257.0
+    },
+    {
+      "count": 40,
+      "mean_vpin": 0.0664019532199119,
+      "minutes_since_open": 258.0
+    },
+    {
+      "count": 26,
+      "mean_vpin": 0.07526598093415164,
+      "minutes_since_open": 259.0
+    },
+    {
+      "count": 41,
+      "mean_vpin": 0.05079521525750425,
+      "minutes_since_open": 260.0
+    },
+    {
+      "count": 41,
+      "mean_vpin": 0.05890304040156727,
+      "minutes_since_open": 261.0
+    },
+    {
+      "count": 41,
+      "mean_vpin": 0.04311292901314607,
+      "minutes_since_open": 262.0
+    },
+    {
+      "count": 33,
+      "mean_vpin": 0.06748479162316363,
+      "minutes_since_open": 263.0
+    },
+    {
+      "count": 35,
+      "mean_vpin": 0.08013798638225839,
+      "minutes_since_open": 264.0
+    },
+    {
+      "count": 32,
+      "mean_vpin": 0.051649462350195685,
+      "minutes_since_open": 265.0
+    },
+    {
+      "count": 34,
+      "mean_vpin": 0.06660761692600589,
+      "minutes_since_open": 266.0
+    },
+    {
+      "count": 24,
+      "mean_vpin": 0.050356337794902464,
+      "minutes_since_open": 267.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.06804590459216929,
+      "minutes_since_open": 268.0
+    },
+    {
+      "count": 42,
+      "mean_vpin": 0.07412965097525755,
+      "minutes_since_open": 269.0
+    },
+    {
+      "count": 38,
+      "mean_vpin": 0.06248851188329285,
+      "minutes_since_open": 270.0
+    },
+    {
+      "count": 46,
+      "mean_vpin": 0.08229202093633195,
+      "minutes_since_open": 271.0
+    },
+    {
+      "count": 50,
+      "mean_vpin": 0.09026655733804916,
+      "minutes_since_open": 272.0
+    },
+    {
+      "count": 44,
+      "mean_vpin": 0.062094055740664324,
+      "minutes_since_open": 273.0
+    },
+    {
+      "count": 35,
+      "mean_vpin": 0.07012004251003966,
+      "minutes_since_open": 274.0
+    },
+    {
+      "count": 40,
+      "mean_vpin": 0.0718064462277177,
+      "minutes_since_open": 275.0
+    },
+    {
+      "count": 53,
+      "mean_vpin": 0.09404967317055808,
+      "minutes_since_open": 276.0
+    },
+    {
+      "count": 40,
+      "mean_vpin": 0.06989361588070794,
+      "minutes_since_open": 277.0
+    },
+    {
+      "count": 50,
+      "mean_vpin": 0.06652328654574835,
+      "minutes_since_open": 278.0
+    },
+    {
+      "count": 48,
+      "mean_vpin": 0.046445483544135524,
+      "minutes_since_open": 279.0
+    },
+    {
+      "count": 39,
+      "mean_vpin": 0.07222517057173333,
+      "minutes_since_open": 280.0
+    },
+    {
+      "count": 42,
+      "mean_vpin": 0.06820191729567425,
+      "minutes_since_open": 281.0
+    },
+    {
+      "count": 53,
+      "mean_vpin": 0.08405041156781834,
+      "minutes_since_open": 282.0
+    },
+    {
+      "count": 45,
+      "mean_vpin": 0.09208715293144938,
+      "minutes_since_open": 283.0
+    },
+    {
+      "count": 40,
+      "mean_vpin": 0.07022836037656456,
+      "minutes_since_open": 284.0
+    },
+    {
+      "count": 35,
+      "mean_vpin": 0.0600229384295135,
+      "minutes_since_open": 285.0
+    },
+    {
+      "count": 40,
+      "mean_vpin": 0.0675512794637888,
+      "minutes_since_open": 286.0
+    },
+    {
+      "count": 27,
+      "mean_vpin": 0.09403412485761314,
+      "minutes_since_open": 287.0
+    },
+    {
+      "count": 38,
+      "mean_vpin": 0.059834133886634944,
+      "minutes_since_open": 288.0
+    },
+    {
+      "count": 36,
+      "mean_vpin": 0.058840276229204305,
+      "minutes_since_open": 289.0
+    },
+    {
+      "count": 34,
+      "mean_vpin": 0.06277241712701549,
+      "minutes_since_open": 290.0
+    },
+    {
+      "count": 22,
+      "mean_vpin": 0.05581606137963556,
+      "minutes_since_open": 291.0
+    },
+    {
+      "count": 39,
+      "mean_vpin": 0.07861899138892015,
+      "minutes_since_open": 292.0
+    },
+    {
+      "count": 36,
+      "mean_vpin": 0.06424758631195832,
+      "minutes_since_open": 293.0
+    },
+    {
+      "count": 51,
+      "mean_vpin": 0.08128206628690686,
+      "minutes_since_open": 294.0
+    },
+    {
+      "count": 28,
+      "mean_vpin": 0.056697307915948805,
+      "minutes_since_open": 295.0
+    },
+    {
+      "count": 30,
+      "mean_vpin": 0.07762825294283046,
+      "minutes_since_open": 296.0
+    },
+    {
+      "count": 26,
+      "mean_vpin": 0.058367007002056916,
+      "minutes_since_open": 297.0
+    },
+    {
+      "count": 39,
+      "mean_vpin": 0.07505482474885791,
+      "minutes_since_open": 298.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.07595490799695004,
+      "minutes_since_open": 299.0
+    },
+    {
+      "count": 54,
+      "mean_vpin": 0.08805719624320052,
+      "minutes_since_open": 300.0
+    },
+    {
+      "count": 34,
+      "mean_vpin": 0.06169341628089189,
+      "minutes_since_open": 301.0
+    },
+    {
+      "count": 35,
+      "mean_vpin": 0.052165124981401495,
+      "minutes_since_open": 302.0
+    },
+    {
+      "count": 38,
+      "mean_vpin": 0.08045691627789511,
+      "minutes_since_open": 303.0
+    },
+    {
+      "count": 33,
+      "mean_vpin": 0.061833716357241414,
+      "minutes_since_open": 304.0
+    },
+    {
+      "count": 49,
+      "mean_vpin": 0.06798990719357396,
+      "minutes_since_open": 305.0
+    },
+    {
+      "count": 38,
+      "mean_vpin": 0.07093504312954135,
+      "minutes_since_open": 306.0
+    },
+    {
+      "count": 52,
+      "mean_vpin": 0.09155749228021205,
+      "minutes_since_open": 307.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.09397567215565533,
+      "minutes_since_open": 308.0
+    },
+    {
+      "count": 48,
+      "mean_vpin": 0.07345939935655359,
+      "minutes_since_open": 309.0
+    },
+    {
+      "count": 38,
+      "mean_vpin": 0.06951534997518599,
+      "minutes_since_open": 310.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.06799319741346552,
+      "minutes_since_open": 311.0
+    },
+    {
+      "count": 27,
+      "mean_vpin": 0.06869747090626793,
+      "minutes_since_open": 312.0
+    },
+    {
+      "count": 48,
+      "mean_vpin": 0.06489640517845036,
+      "minutes_since_open": 313.0
+    },
+    {
+      "count": 44,
+      "mean_vpin": 0.07596574079713958,
+      "minutes_since_open": 314.0
+    },
+    {
+      "count": 34,
+      "mean_vpin": 0.11631232900648802,
+      "minutes_since_open": 315.0
+    },
+    {
+      "count": 49,
+      "mean_vpin": 0.0839490839647235,
+      "minutes_since_open": 316.0
+    },
+    {
+      "count": 32,
+      "mean_vpin": 0.08513726139557966,
+      "minutes_since_open": 317.0
+    },
+    {
+      "count": 41,
+      "mean_vpin": 0.083938888337811,
+      "minutes_since_open": 318.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.0890911656181011,
+      "minutes_since_open": 319.0
+    },
+    {
+      "count": 43,
+      "mean_vpin": 0.04914473476001236,
+      "minutes_since_open": 320.0
+    },
+    {
+      "count": 44,
+      "mean_vpin": 0.06802695345117894,
+      "minutes_since_open": 321.0
+    },
+    {
+      "count": 36,
+      "mean_vpin": 0.056375139032196306,
+      "minutes_since_open": 322.0
+    },
+    {
+      "count": 32,
+      "mean_vpin": 0.06297645459301947,
+      "minutes_since_open": 323.0
+    },
+    {
+      "count": 38,
+      "mean_vpin": 0.05944541199293592,
+      "minutes_since_open": 324.0
+    },
+    {
+      "count": 49,
+      "mean_vpin": 0.06927373000587923,
+      "minutes_since_open": 325.0
+    },
+    {
+      "count": 51,
+      "mean_vpin": 0.05835178872326587,
+      "minutes_since_open": 326.0
+    },
+    {
+      "count": 47,
+      "mean_vpin": 0.07833713034959629,
+      "minutes_since_open": 327.0
+    },
+    {
+      "count": 41,
+      "mean_vpin": 0.0498244115361876,
+      "minutes_since_open": 328.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.07854992998341337,
+      "minutes_since_open": 329.0
+    },
+    {
+      "count": 58,
+      "mean_vpin": 0.04717864388585298,
+      "minutes_since_open": 330.0
+    },
+    {
+      "count": 52,
+      "mean_vpin": 0.07801312911028752,
+      "minutes_since_open": 331.0
+    },
+    {
+      "count": 42,
+      "mean_vpin": 0.06325865790304552,
+      "minutes_since_open": 332.0
+    },
+    {
+      "count": 43,
+      "mean_vpin": 0.07113487389532279,
+      "minutes_since_open": 333.0
+    },
+    {
+      "count": 31,
+      "mean_vpin": 0.06163964041752458,
+      "minutes_since_open": 334.0
+    },
+    {
+      "count": 37,
+      "mean_vpin": 0.06406876553262378,
+      "minutes_since_open": 335.0
+    },
+    {
+      "count": 56,
+      "mean_vpin": 0.06172484474861689,
+      "minutes_since_open": 336.0
+    },
+    {
+      "count": 39,
+      "mean_vpin": 0.08217234601381887,
+      "minutes_since_open": 337.0
+    },
+    {
+      "count": 51,
+      "mean_vpin": 0.059035992912693895,
+      "minutes_since_open": 338.0
+    },
+    {
+      "count": 41,
+      "mean_vpin": 0.050378325000097604,
+      "minutes_since_open": 339.0
+    },
+    {
+      "count": 56,
+      "mean_vpin": 0.05226433907855963,
+      "minutes_since_open": 340.0
+    },
+    {
+      "count": 77,
+      "mean_vpin": 0.12781229346541775,
+      "minutes_since_open": 341.0
+    },
+    {
+      "count": 43,
+      "mean_vpin": 0.049446966031565974,
+      "minutes_since_open": 342.0
+    },
+    {
+      "count": 51,
+      "mean_vpin": 0.05763782934264574,
+      "minutes_since_open": 343.0
+    },
+    {
+      "count": 56,
+      "mean_vpin": 0.056686791352105415,
+      "minutes_since_open": 344.0
+    },
+    {
+      "count": 53,
+      "mean_vpin": 0.0686053676826334,
+      "minutes_since_open": 345.0
+    },
+    {
+      "count": 43,
+      "mean_vpin": 0.04801446046363295,
+      "minutes_since_open": 346.0
+    },
+    {
+      "count": 45,
+      "mean_vpin": 0.07242279927187714,
+      "minutes_since_open": 347.0
+    },
+    {
+      "count": 53,
+      "mean_vpin": 0.056033041286504257,
+      "minutes_since_open": 348.0
+    },
+    {
+      "count": 45,
+      "mean_vpin": 0.06424046416050579,
+      "minutes_since_open": 349.0
+    },
+    {
+      "count": 40,
+      "mean_vpin": 0.05719105353597375,
+      "minutes_since_open": 350.0
+    },
+    {
+      "count": 50,
+      "mean_vpin": 0.060681919859247,
+      "minutes_since_open": 351.0
+    },
+    {
+      "count": 47,
+      "mean_vpin": 0.06745375333838259,
+      "minutes_since_open": 352.0
+    },
+    {
+      "count": 55,
+      "mean_vpin": 0.05217855412206988,
+      "minutes_since_open": 353.0
+    },
+    {
+      "count": 40,
+      "mean_vpin": 0.042050234836325945,
+      "minutes_since_open": 354.0
+    },
+    {
+      "count": 58,
+      "mean_vpin": 0.05765906656683353,
+      "minutes_since_open": 355.0
+    },
+    {
+      "count": 64,
+      "mean_vpin": 0.08000058697026238,
+      "minutes_since_open": 356.0
+    },
+    {
+      "count": 52,
+      "mean_vpin": 0.0670372611502171,
+      "minutes_since_open": 357.0
+    },
+    {
+      "count": 47,
+      "mean_vpin": 0.05513493602955908,
+      "minutes_since_open": 358.0
+    },
+    {
+      "count": 53,
+      "mean_vpin": 0.05326702634660976,
+      "minutes_since_open": 359.0
+    },
+    {
+      "count": 68,
+      "mean_vpin": 0.05592163422378118,
+      "minutes_since_open": 360.0
+    },
+    {
+      "count": 54,
+      "mean_vpin": 0.068378379707103,
+      "minutes_since_open": 361.0
+    },
+    {
+      "count": 59,
+      "mean_vpin": 0.05618101223484943,
+      "minutes_since_open": 362.0
+    },
+    {
+      "count": 73,
+      "mean_vpin": 0.052148040989701966,
+      "minutes_since_open": 363.0
+    },
+    {
+      "count": 68,
+      "mean_vpin": 0.04947839704215474,
+      "minutes_since_open": 364.0
+    },
+    {
+      "count": 58,
+      "mean_vpin": 0.06617746893719298,
+      "minutes_since_open": 365.0
+    },
+    {
+      "count": 65,
+      "mean_vpin": 0.05171041327768112,
+      "minutes_since_open": 366.0
+    },
+    {
+      "count": 71,
+      "mean_vpin": 0.06056232648200697,
+      "minutes_since_open": 367.0
+    },
+    {
+      "count": 60,
+      "mean_vpin": 0.06140423989597523,
+      "minutes_since_open": 368.0
+    },
+    {
+      "count": 60,
+      "mean_vpin": 0.06283080359557126,
+      "minutes_since_open": 369.0
+    },
+    {
+      "count": 103,
+      "mean_vpin": 0.04868499115281359,
+      "minutes_since_open": 370.0
+    },
+    {
+      "count": 69,
+      "mean_vpin": 0.056384919197839826,
+      "minutes_since_open": 371.0
+    },
+    {
+      "count": 75,
+      "mean_vpin": 0.04492386251743898,
+      "minutes_since_open": 372.0
+    },
+    {
+      "count": 77,
+      "mean_vpin": 0.050969424141791925,
+      "minutes_since_open": 373.0
+    },
+    {
+      "count": 76,
+      "mean_vpin": 0.05143028892808203,
+      "minutes_since_open": 374.0
+    },
+    {
+      "count": 78,
+      "mean_vpin": 0.039216028061824754,
+      "minutes_since_open": 375.0
+    },
+    {
+      "count": 109,
+      "mean_vpin": 0.04739527193140667,
+      "minutes_since_open": 376.0
+    },
+    {
+      "count": 100,
+      "mean_vpin": 0.04539912198736148,
+      "minutes_since_open": 377.0
+    },
+    {
+      "count": 77,
+      "mean_vpin": 0.04138123831432602,
+      "minutes_since_open": 378.0
+    },
+    {
+      "count": 100,
+      "mean_vpin": 0.04623849321005676,
+      "minutes_since_open": 379.0
+    },
+    {
+      "count": 221,
+      "mean_vpin": 0.04376137618027744,
+      "minutes_since_open": 380.0
+    },
+    {
+      "count": 139,
+      "mean_vpin": 0.04464402218382295,
+      "minutes_since_open": 381.0
+    },
+    {
+      "count": 178,
+      "mean_vpin": 0.04609985306599808,
+      "minutes_since_open": 382.0
+    },
+    {
+      "count": 183,
+      "mean_vpin": 0.043060870361345545,
+      "minutes_since_open": 383.0
+    },
+    {
+      "count": 275,
+      "mean_vpin": 0.04197759841152871,
+      "minutes_since_open": 384.0
+    },
+    {
+      "count": 401,
+      "mean_vpin": 0.041187445806422064,
+      "minutes_since_open": 385.0
+    },
+    {
+      "count": 409,
+      "mean_vpin": 0.04362899333654508,
+      "minutes_since_open": 386.0
+    },
+    {
+      "count": 553,
+      "mean_vpin": 0.04294789196943595,
+      "minutes_since_open": 387.0
+    },
+    {
+      "count": 959,
+      "mean_vpin": 0.04286692665158458,
+      "minutes_since_open": 388.0
+    },
+    {
+      "count": 1801,
+      "mean_vpin": 0.0518696512893746,
+      "minutes_since_open": 389.0
+    }
+  ],
+  "n_days": 134,
+  "n_volume_bars_total": 31794,
+  "regime_conditional_vpin": {},
+  "tracker": "VpinTracker",
+  "volume_bar_size": 5000,
+  "vpin_distribution": {
+    "count": 25228,
+    "kurtosis": 3.374933064298423,
+    "max": 1.0,
+    "mean": 0.1853788302934068,
+    "min": 0.010440866812310306,
+    "percentiles": {
+      "p1": 0.014754421333351468,
+      "p10": 0.02307971115377242,
+      "p25": 0.033022254545175295,
+      "p5": 0.019336758401092332,
+      "p50": 0.06890605443346307,
+      "p75": 0.2385678099379158,
+      "p90": 0.5300525330431669,
+      "p95": 0.9207108837688004,
+      "p99": 1.0
+    },
+    "skewness": 2.023681246039605,
+    "std": 0.24829068990888342
+  },
+  "vpin_spread_correlation": 0.04866298871413042,
+  "window_bars": 50
+}
