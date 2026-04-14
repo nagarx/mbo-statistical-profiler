@@ -2,7 +2,7 @@
 
 > **Version**: 0.1.0 (Phase B Complete — All 13 Trackers Implemented)
 > **Last Updated**: 2026-04-14
-> **Tests**: 120 passing (100 unit + 20 integration)
+> **Tests**: 124 passing (104 unit + 20 integration)
 > **Performance**: 854K–2.9M events/sec (13 trackers → 1 tracker)
 
 ---
@@ -121,28 +121,41 @@ LobReconstructor::process_message_into(msg, &mut state_buf)
 profiler::write_output()
     ├── 01_QualityTracker.json
     ├── 02_ReturnTracker.json
-    ├── ...
-    ├── 13_CrossScaleOfiTracker.json
-    └── provenance: { git_hash, config_path, timestamp, total_events, elapsed_secs }
+    ├── 03_OfiTracker.json
+    ├── 04_SpreadTracker.json
+    ├── 05_VolatilityTracker.json
+    ├── 06_JumpTracker.json
+    ├── 07_NoiseTracker.json
+    ├── 08_DepthTracker.json
+    ├── 09_TradeTracker.json
+    ├── 10_LifecycleTracker.json
+    ├── 11_LiquidityTracker.json
+    ├── 12_VpinTracker.json
+    └── 13_CrossScaleOfiTracker.json   (if enabled; disabled by default)
 ```
+
+The `{NN}` prefix follows the `TrackerConfig` tracker push order in `src/bin/profile_mbo.rs`. The numbering below in the Tracker Reference section is for readability and does NOT correspond to file-prefix numbers.
 
 ---
 
 ## Tracker Reference: Formulas & Statistics
 
-### 1. QualityTracker (`quality.rs`)
+### 1. QualityTracker (`quality.rs`) — file `01_QualityTracker.json`
 
 **Purpose:** Data integrity validation and dataset characterization.
 
-**Statistics:**
+**Statistics (actually emitted by `finalize()`):**
 
 | Statistic | Description | Units |
 |-----------|-------------|-------|
-| Total events | Count of all MBO events processed | count |
-| Action distribution | `count(action_i) / total * 100` for each of 7 actions (Add, Modify, Cancel, Trade, Fill, Clear, None) | % |
-| Book consistency | `count(state_i) / total * 100` for Valid, Empty, Locked, Crossed | % |
-| Time regime distribution | `count(regime_i) / total * 100` for 7 regimes (pre-market, open-auction, morning, midday, afternoon, close-auction, post-market) | % |
-| Per-day event counts | Event count for each trading day | count |
+| `total_events` | Count of all MBO events processed | count |
+| `n_days` | Number of days processed | count |
+| `mean_events_per_day` | `total_events / n_days` | events/day |
+| `action_distribution` | `count(action_i) / total * 100` and raw counts for each of 7 actions (Add, Modify, Cancel, Trade, Fill, Clear, None) | % + count |
+| `book_consistency` | `count(state_i) / total * 100` for Valid, Empty, Locked, Crossed | % |
+| `regime_distribution` | `count(regime_i) / total * 100` for 7 regimes (pre-market, open-auction, morning, midday, afternoon, close-auction, post-market) | % |
+
+**Internal-only (not emitted in JSON):** `per_day_counts: Vec<(day_index, event_count)>` is tracked in memory but not serialized; it exists to support `mean_events_per_day`.
 
 **Key validation:** Valid book states should exceed 99.99%. Crossed books indicate data quality issues.
 
@@ -175,7 +188,7 @@ OFI_t = (bid_size_t * I(bid_price_t >= bid_price_{t-1})
 | Regime intensity | `mean(|OFI|)` per time regime | shares | No |
 | Intraday OFI curve | 390-bin canonical grid (per-minute) | shares | No |
 | Intraday OFI-return r curve | Per-minute Pearson r (390 bins) | dimensionless | No |
-| Cumulative delta | `sum(trade_size * sign)` per day | shares | No |
+| End-of-day cumulative OFI (`daily_deltas`) | `sum(OFI_t)` over all events in the day | shares | No |
 | Aggressor ratio | `buyer_vol / (buyer_vol + seller_vol)` | ratio | No |
 | Spread-conditional OFI-return r | Pearson r within 4 tick-width buckets (1-tick, 2-tick, 3-4, 5+) | dimensionless | Yes |
 
@@ -410,7 +423,8 @@ OFI_t = (bid_size_t * I(bid_price_t >= bid_price_{t-1})
 | Daily jump fraction distribution | ratio [0, 1] |
 | BNS z-statistic distribution | dimensionless |
 | Significant jump day count | count |
-| Regime-conditional jump rate | ratio |
+
+**Note:** An empty `regime_jump_fraction` map is currently emitted in the JSON output (accumulator allocated but never populated). Regime-conditional jump attribution is deferred because daily jump fractions are day-level statistics and cannot be meaningfully assigned to a single intraday regime without per-regime sub-day jump contribution tracking (see comment in `jumps.rs` end_of_day).
 
 **References:**
 - Barndorff-Nielsen, O.E. & Shephard, N. (2004). "Power and bipower variation with stochastic volatility and jumps." *Journal of Financial Econometrics*, 2(1), 1-37.
@@ -435,7 +449,7 @@ OFI_t = (bid_size_t * I(bid_price_t >= bid_price_{t-1})
 | Signature plot (20 points) | dimensionless |
 | Noise variance estimate | dimensionless |
 | Signal-to-noise ratio | dimensionless |
-| Roll implied spread | dollars |
+| Roll implied spread | dimensionless (relative spread, log-return scale) |
 
 **References:**
 - Zhang, L., Mykland, P.A. & Aït-Sahalia, Y. (2005). "A tale of two time scales." *JASA*, 100(472), 1394-1411.
@@ -449,7 +463,7 @@ OFI_t = (bid_size_t * I(bid_price_t >= bid_price_{t-1})
 
 **Formulas:**
 - Volume bars: Aggregate trade events into bars of fixed volume `V_bar` (default: 5,000 shares). Each bar records: total_volume, buy_volume, sell_volume, vwap, close_price.
-- VPIN: `VPIN = (1/n) * sum_{i=t-n+1}^{t} |V_buy_i - V_sell_i| / V_bar` — rolling average of |order imbalance| over n volume bars (default n=50).
+- VPIN: `VPIN = (1/n) * sum_{i=t-n+1}^{t} |V_buy_i - V_sell_i| / (V_buy_i + V_sell_i)` — rolling average of per-bar normalized absolute imbalance over n volume bars (default n=50). Each bar is normalized by its own actual total volume rather than the nominal `V_bar` to handle overflow-split bars correctly (vpin.rs:170-173).
 - MBO convention: Side::Ask resting order hit by trade = buyer-initiated aggressor.
 
 **Statistics:**
@@ -578,7 +592,7 @@ Configuration is TOML-driven via `ProfilerConfig` (defined in `src/config.rs`).
 
 Each tracker produces a numbered JSON file: `{NN}_{TrackerName}.json`.
 
-**Provenance metadata** (emitted by `profiler.rs::write_output()`, appended as `_provenance` key to each tracker's JSON):
+**Provenance metadata** (emitted by `profiler.rs::write_output()`, appended as `_provenance` key to each tracker's JSON). Captures every runtime config field that affects output values, enabling end-to-end auditability:
 ```json
 {
   "profiler_version": "0.1.0",
@@ -589,7 +603,9 @@ Each tracker produces a numbered JSON file: `{NN}_{TrackerName}.json`.
   "runtime_secs": 3367.2,
   "throughput_events_per_sec": 853487.5,
   "timescales": [1.0, 5.0, 10.0, 30.0, 60.0, 300.0],
-  "reservoir_capacity": 10000
+  "reservoir_capacity": 10000,
+  "vpin_volume_bar_size": 5000,
+  "vpin_window_bars": 50
 }
 ```
 
@@ -638,12 +654,12 @@ Note: the `write_summaries` config field exists in `OutputConfig` but is current
 
 ## Test Inventory
 
-**Total: 120 tests** (100 unit + 20 integration)
+**Total: 124 tests** (104 unit + 20 integration)
 
-### Unit Tests (98, self-contained)
+### Unit Tests (104, self-contained)
 
-| Tracker | Tests | Key Validations |
-|---------|-------|-----------------|
+| Tracker / Module | Tests | Key Validations |
+|------------------|-------|-----------------|
 | OfiTracker | 15 | OFI on bid/ask changes, book filter, finalize, reset, spread-bucket classification, conditional correlations |
 | LifecycleTracker | 10 | Add-cancel, add-trade, partial fill, transition matrix, fill rate, CTA, duration |
 | ReturnTracker | 9 | Mid collection, scale labels, Hill index, log return, CVaR, zero-fraction, drawdown |
@@ -657,6 +673,7 @@ Note: the `write_summaries` config field exists in `OutputConfig` but is current
 | VpinTracker | 5 | Volume bar construction, range [0,1], all-buy=1, balanced≈0, finalize |
 | SpreadTracker | 5 | 1-tick spread, finalize, intraday curve, exact conversions, 3-tick classification |
 | QualityTracker | 4 | Event counting, day boundary, finalize JSON, book consistency |
+| **config (regression guards)** | **6** | All committed configs parse; `deny_unknown_fields` catches misplaced keys (under [trackers], [input], [output], top-level typo); semantic value propagation (CRSP→500) |
 
 ### Integration Tests (20, require real data)
 
@@ -703,7 +720,7 @@ The VPIN values in these multi-stock JSON outputs therefore reflect larger-volum
 
 ### Complete
 - Phase A: Foundation (AnalysisTracker trait, QualityTracker, CLI, statistical primitives)
-- Phase B: All 13 trackers implemented (120 tests)
+- Phase B: All 13 trackers implemented (124 tests)
 - Golden-value regression tests (20 integration tests vs Python analyzer)
 - Full 233-day XNAS + ARCX runs
 - Monthly signal stability analysis (12 months)

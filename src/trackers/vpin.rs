@@ -12,17 +12,23 @@
 //!
 //! ## Formulas
 //!
-//! **Volume bars**: Aggregate trade events into bars of fixed volume V_bar.
-//! Each bar has: total_volume, buy_volume, sell_volume, vwap, close_price.
+//! **Volume bars**: Aggregate trade events into bars of fixed volume `V_bar`
+//! (default 5000 shares). Each bar tracks: total_volume, buy_volume, sell_volume,
+//! vwap, close_price, timestamp.
 //!
-//! **Bulk Volume Classification (BVC)**:
-//! `V_buy = V * Phi(delta_P / sigma_P)`
-//! where Phi is the standard normal CDF, delta_P = P_close - P_open,
-//! sigma_P = std(returns) estimated from recent bars.
+//! **Trade-side classification (MBO convention)**:
+//! Trades are classified using the MBO `Side` field on the trade event. The
+//! resting-order side is the *passive* side, so a trade hitting an `Ask` resting
+//! order is buyer-initiated (aggressive buy → `buy_volume`), and vice versa for
+//! `Bid` resting orders. We do NOT use Bulk Volume Classification (BVC) — we have
+//! direct trade-direction signal in the MBO feed.
 //!
-//! **VPIN**:
-//! `VPIN = sum_{i=t-n+1}^{t} |V_buy_i - V_sell_i| / (n * V_bar)`
-//! Rolling average of |order imbalance| over n volume bars.
+//! **VPIN** (per-bar normalized to handle overflow-split bars):
+//! `VPIN_t = (1/n) * sum_{i=t-n+1}^{t} |V_buy_i - V_sell_i| / (V_buy_i + V_sell_i)`
+//! Rolling average of per-bar normalized absolute imbalance over `n` bars
+//! (default n=50). Each bar is normalized by its own actual total volume, not
+//! the nominal `V_bar`, because overflow splitting can produce bars with slightly
+//! less than `V_bar`.
 //!
 //! ## References
 //!

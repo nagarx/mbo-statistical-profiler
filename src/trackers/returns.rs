@@ -14,7 +14,7 @@
 //! | Mean, std, skewness, kurtosis | Standard moments from reservoir | dim. | Yes |
 //! | Percentiles (1,5,10,25,50,75,90,95,99) | From reservoir sample | dim. | Yes |
 //! | Intraday curve | Mean return per 1-min canonical bin | dim./min | No |
-//! | Tail index (Hill) | `H = (1/k) * sum(ln(X_i / X_k))` | dim. | Yes |
+//! | Tail exponent (Hill α = 1/H) | `H = (1/k) * sum(ln(X_{(i)} / X_{(k+1)}))`; emitted output is `α = 1/H`. Higher α = lighter tails. | dim. | Yes |
 //! | VaR (1%, 5%) | Quantile of return distribution | dim. | Yes |
 //! | CVaR (1%, 5%) | `E[r | r <= VaR]` | dim. | Yes |
 //! | ACF (lags 1-20) | `ACF(k) = cov(r_t, r_{t+k}) / var(r)` | dim. | Yes |

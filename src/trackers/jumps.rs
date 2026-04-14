@@ -4,7 +4,7 @@
 //!
 //! Detects and characterizes price jumps using the Barndorff-Nielsen & Shephard (2004)
 //! bipower variation (BPV) test. Quantifies the fraction of variance attributable to
-//! jumps vs continuous diffusion, and tracks regime-conditional jump rates.
+//! jumps vs continuous diffusion.
 //!
 //! ## Statistics Computed
 //!
@@ -15,16 +15,22 @@
 //! | Jump fraction | `J / RV` | ratio |
 //! | BNS z-statistic | `z = (RV - BV) / sqrt(var_est)` | dimensionless |
 //! | Daily jump fraction dist | Distribution of J/RV across days | ratio |
-//! | Regime-conditional jump rate | Mean jump fraction per regime | ratio |
+//!
+//! Note: an empty `regime_jump_fraction` map is emitted in the JSON output. The
+//! per-regime accumulator is allocated but intentionally never populated — daily
+//! jump fractions are day-level statistics that cannot be meaningfully assigned
+//! to a single intraday regime without per-regime sub-day jump contribution
+//! tracking. See the `end_of_day` comment for context.
 //!
 //! ## Formulas
 //!
 //! - Realized variance: `RV = sum(r_t^2)`
 //! - Bipower variation: `BV = (pi/2) * sum_{i=2}^{n} |r_i| * |r_{i-1}|`
-//! - Jump test statistic (BNS):
+//! - Jump test statistic (BNS 2006):
 //!   `z = (RV - BV) / sqrt((pi^2/4 + pi - 5) * max(TP, 0) / n)`
-//!   where `TP = n * (pi/4)^2 * sum_{i=3}^{n} |r_i|^{2/3} * |r_{i-1}|^{2/3} * |r_{i-2}|^{2/3}`
-//!   (tripower quarticity estimator)
+//!   Tripower quarticity (matches `tp` computation in `end_of_day`):
+//!   `TP = (n / (n-2)) * mu_{4/3}^{-3} * sum_{i=3}^{n} |r_i|^{4/3} * |r_{i-1}|^{4/3} * |r_{i-2}|^{4/3}`
+//!   where `mu_{4/3} = 2^{2/3} * Gamma(7/6) / Gamma(1/2)`.
 //!
 //! ## References
 //!

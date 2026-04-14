@@ -30,7 +30,13 @@ GOLDEN_DAY = "2025-02-03"
 
 def run_profiler(output_dir: Path) -> bool:
     """Run the profiler and return True if successful."""
+    # Runtime keys MUST be at the top-level (before any [section] header).
+    # With ProfilerConfig's `#[serde(deny_unknown_fields)]`, placing these under
+    # [trackers] causes a hard parse error instead of being silently dropped.
     config_content = f"""
+timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
+reservoir_capacity = 10000
+
 [input]
 hot_store_dir = "../data/hot_store"
 filename_pattern = "xnas-itch-{{date}}.mbo.dbn"
@@ -51,9 +57,6 @@ depth = true
 liquidity = true
 jumps = true
 noise = true
-
-timescales = [1.0, 5.0, 10.0, 30.0, 60.0, 300.0]
-reservoir_capacity = 10000
 
 [output]
 output_dir = "{output_dir}"

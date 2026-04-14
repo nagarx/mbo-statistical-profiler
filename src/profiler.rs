@@ -217,6 +217,11 @@ pub fn write_output(
     let output_dir = &config.output.output_dir;
     std::fs::create_dir_all(output_dir)?;
 
+    // Provenance: every runtime config field that affects output values is recorded
+    // so a JSON consumer can audit which parameters produced this dataset. The
+    // 2026-04 incident (multi-stock VPIN bar sizes silently using defaults due to
+    // a TOML schema misplacement) was hard to detect because vpin_volume_bar_size
+    // was not in provenance — fixed by including all runtime keys here.
     let provenance = serde_json::json!({
         "profiler_version": env!("CARGO_PKG_VERSION"),
         "symbol": config.input.symbol,
@@ -227,6 +232,8 @@ pub fn write_output(
         "throughput_events_per_sec": result.total_events as f64 / result.elapsed_secs.max(0.001),
         "timescales": config.timescales,
         "reservoir_capacity": config.reservoir_capacity,
+        "vpin_volume_bar_size": config.vpin_volume_bar_size,
+        "vpin_window_bars": config.vpin_window_bars,
     });
 
     for (i, (name, report)) in result.reports.iter().enumerate() {

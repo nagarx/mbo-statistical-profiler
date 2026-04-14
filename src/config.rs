@@ -242,4 +242,87 @@ timescales = [1.0, 5.0]
             "Expected parse error for misplaced key, but parse succeeded"
         );
     }
+
+    #[test]
+    fn deny_unknown_fields_catches_misplaced_runtime_key_under_input() {
+        // Regression: a runtime key (e.g., vpin_volume_bar_size) placed inside
+        // [input] should fail at parse time, not be silently ignored.
+        let bad_toml = r#"
+[input]
+filename_pattern = "test.dbn"
+vpin_volume_bar_size = 500
+
+[trackers]
+quality = true
+"#;
+        let result: Result<ProfilerConfig, _> = toml::from_str(bad_toml);
+        assert!(
+            result.is_err(),
+            "Expected parse error for misplaced runtime key under [input]"
+        );
+    }
+
+    #[test]
+    fn deny_unknown_fields_catches_misplaced_key_under_output() {
+        // Regression: any unknown key under [output] (typo or misplaced runtime
+        // key) should fail loudly at parse time.
+        let bad_toml = r#"
+[input]
+filename_pattern = "test.dbn"
+
+[trackers]
+quality = true
+
+[output]
+output_dir = "out"
+timescales = [1.0]
+"#;
+        let result: Result<ProfilerConfig, _> = toml::from_str(bad_toml);
+        assert!(
+            result.is_err(),
+            "Expected parse error for misplaced key under [output]"
+        );
+    }
+
+    #[test]
+    fn deny_unknown_fields_catches_top_level_typo() {
+        // Regression: a typo in a top-level key (e.g., "timescale" singular,
+        // or "vpin_volume_barsize") should fail at parse time. This is the
+        // class of error that originally caused multi-stock VPIN bar sizes
+        // to silently fall back to defaults.
+        let bad_toml = r#"
+timescale = [1.0]
+
+[input]
+filename_pattern = "test.dbn"
+
+[trackers]
+quality = true
+"#;
+        let result: Result<ProfilerConfig, _> = toml::from_str(bad_toml);
+        assert!(
+            result.is_err(),
+            "Expected parse error for top-level typo (timescale instead of timescales)"
+        );
+    }
+
+    #[test]
+    fn semantic_value_propagation_crsp_config() {
+        // Regression: parse the CRSP multi-stock config and assert the intended
+        // VPIN bar size of 500 actually loaded into the struct field. This catches
+        // the original bug class (silent default substitution) at the semantic
+        // level — even if `deny_unknown_fields` were accidentally removed, this
+        // test would still detect a runtime-key → struct-field disconnect.
+        let crsp_path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
+            .join("configs")
+            .join("xnas_crsp_134day.toml");
+        let cfg = ProfilerConfig::from_file(&crsp_path)
+            .expect("CRSP config must parse");
+        assert_eq!(
+            cfg.vpin_volume_bar_size, 500,
+            "CRSP intended vpin_volume_bar_size = 500 (thin book); \
+             got {} — runtime key was not propagated from TOML to struct",
+            cfg.vpin_volume_bar_size
+        );
+    }
 }
