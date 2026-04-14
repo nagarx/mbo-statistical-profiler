@@ -43,8 +43,7 @@ use crate::statistics::{
     RegimeAccumulator, StreamingDistribution, TransitionMatrix, WelfordAccumulator,
 };
 use crate::AnalysisTracker;
-
-const NS_PER_SECOND_F64: f64 = 1_000_000_000.0;
+use hft_statistics::time::NS_PER_SECOND_F64;
 
 /// Maximum tracked active orders before eviction.
 const MAX_ACTIVE_ORDERS: usize = 500_000;
@@ -176,13 +175,7 @@ impl Default for LifecycleTracker {
 }
 
 impl AnalysisTracker for LifecycleTracker {
-    fn process_event(
-        &mut self,
-        msg: &MboMessage,
-        _lob_state: &LobState,
-        regime: u8,
-        _day_epoch_ns: i64,
-    ) {
+    fn process_event(&mut self, msg: &MboMessage, _lob_state: &LobState, regime: u8) {
         let ts = match msg.timestamp {
             Some(t) => t,
             None => return,
@@ -216,7 +209,8 @@ impl AnalysisTracker for LifecycleTracker {
             }
             Action::Modify => {
                 if let Some(order) = self.active_orders.get_mut(&msg.order_id) {
-                    self.transition_matrix.record(order.last_action, STATE_MODIFY);
+                    self.transition_matrix
+                        .record(order.last_action, STATE_MODIFY);
                     order.last_action = STATE_MODIFY;
                     order.n_modifies += 1;
                     if msg.size > 0 {
@@ -228,14 +222,16 @@ impl AnalysisTracker for LifecycleTracker {
                 self.n_cancels += 1;
 
                 if let Some(order) = self.active_orders.remove(&msg.order_id) {
-                    self.transition_matrix.record(order.last_action, STATE_CANCEL);
+                    self.transition_matrix
+                        .record(order.last_action, STATE_CANCEL);
                     self.resolve_order(order, ts);
                     self.regime_fill_rate.add(regime, 0.0);
                 }
             }
             Action::Trade | Action::Fill => {
                 if let Some(order) = self.active_orders.get_mut(&msg.order_id) {
-                    self.transition_matrix.record(order.last_action, STATE_TRADE);
+                    self.transition_matrix
+                        .record(order.last_action, STATE_TRADE);
                     order.last_action = STATE_TRADE;
 
                     let trade_size = msg.size;
@@ -257,7 +253,7 @@ impl AnalysisTracker for LifecycleTracker {
         }
     }
 
-    fn end_of_day(&mut self, _day_index: u32) {
+    fn end_of_day(&mut self) {
         self.n_days += 1;
     }
 
@@ -284,7 +280,16 @@ impl AnalysisTracker for LifecycleTracker {
             0.0
         };
 
-        let duration_size_corr = compute_correlation(&self.duration_size_pairs);
+        // Two-pass numerically-stable Pearson r from hft_statistics (replaces
+        // local compute_correlation that returned 0.0 on degenerate variance).
+        // NaN on degenerate is wrapped as JSON null (serde_json cannot serialize NaN).
+        let duration_size_corr =
+            hft_statistics::statistics::pearson_r_pairs(&self.duration_size_pairs);
+        let duration_size_corr_json = if duration_size_corr.is_finite() {
+            json!(duration_size_corr)
+        } else {
+            json!(null)
+        };
 
         let state_labels = ["Add", "Modify", "Cancel", "Trade"];
 
@@ -308,7 +313,7 @@ impl AnalysisTracker for LifecycleTracker {
                 "counts": self.transition_matrix.count_matrix(),
                 "total_transitions": self.transition_matrix.total(),
             },
-            "duration_size_correlation": duration_size_corr,
+            "duration_size_correlation": duration_size_corr_json,
             "regime_lifetime": self.regime_lifetime.finalize(),
             "regime_fill_rate": self.regime_fill_rate.finalize(),
         })
@@ -319,47 +324,20 @@ impl AnalysisTracker for LifecycleTracker {
     }
 }
 
-/// Pearson correlation from (x, y) pairs.
-fn compute_correlation(pairs: &[(f64, f64)]) -> f64 {
-    let n = pairs.len();
-    if n < 3 {
-        return f64::NAN;
-    }
-    let n_f = n as f64;
-    let mean_x = pairs.iter().map(|p| p.0).sum::<f64>() / n_f;
-    let mean_y = pairs.iter().map(|p| p.1).sum::<f64>() / n_f;
-
-    let mut cov = 0.0f64;
-    let mut var_x = 0.0f64;
-    let mut var_y = 0.0f64;
-    for &(x, y) in pairs {
-        let dx = x - mean_x;
-        let dy = y - mean_y;
-        cov += dx * dy;
-        var_x += dx * dx;
-        var_y += dy * dy;
-    }
-
-    let denom = (var_x * var_y).sqrt();
-    if denom < 1e-15 {
-        0.0
-    } else {
-        cov / denom
-    }
-}
+// `compute_correlation` removed — replaced with `hft_statistics::statistics::pearson_r_pairs`
+// (two-pass, numerically stable). The local version returned 0.0 on degenerate variance,
+// while the shared version returns NaN — JSON embeds wrap with `is_finite()` guard.
 
 #[cfg(test)]
 mod tests {
     use super::*;
 
     fn make_add(order_id: u64, ts: i64, size: u32) -> MboMessage {
-        MboMessage::new(order_id, Action::Add, Side::Bid, 100_000_000_000, size)
-            .with_timestamp(ts)
+        MboMessage::new(order_id, Action::Add, Side::Bid, 100_000_000_000, size).with_timestamp(ts)
     }
 
     fn make_cancel(order_id: u64, ts: i64) -> MboMessage {
-        MboMessage::new(order_id, Action::Cancel, Side::Bid, 100_000_000_000, 0)
-            .with_timestamp(ts)
+        MboMessage::new(order_id, Action::Cancel, Side::Bid, 100_000_000_000, 0).with_timestamp(ts)
     }
 
     fn make_trade(order_id: u64, ts: i64, size: u32) -> MboMessage {
@@ -394,11 +372,11 @@ mod tests {
         let mut tracker = LifecycleTracker::new();
         let lob = make_lob();
 
-        tracker.process_event(&make_add(1, 10 * NS, 100), &lob, 3, 0);
+        tracker.process_event(&make_add(1, 10 * NS, 100), &lob, 3);
         assert_eq!(tracker.n_adds, 1);
         assert_eq!(tracker.active_orders.len(), 1);
 
-        tracker.process_event(&make_cancel(1, 15 * NS), &lob, 3, 0);
+        tracker.process_event(&make_cancel(1, 15 * NS), &lob, 3);
         assert_eq!(tracker.n_cancels, 1);
         assert_eq!(tracker.n_resolved, 1);
         assert_eq!(tracker.active_orders.len(), 0);
@@ -416,8 +394,8 @@ mod tests {
         let mut tracker = LifecycleTracker::new();
         let lob = make_lob();
 
-        tracker.process_event(&make_add(1, 10 * NS, 100), &lob, 3, 0);
-        tracker.process_event(&make_trade(1, 12 * NS, 100), &lob, 3, 0);
+        tracker.process_event(&make_add(1, 10 * NS, 100), &lob, 3);
+        tracker.process_event(&make_trade(1, 12 * NS, 100), &lob, 3);
 
         assert_eq!(tracker.n_fills, 1);
         assert_eq!(tracker.n_resolved, 1);
@@ -429,8 +407,8 @@ mod tests {
         let mut tracker = LifecycleTracker::new();
         let lob = make_lob();
 
-        tracker.process_event(&make_add(1, 10 * NS, 100), &lob, 3, 0);
-        tracker.process_event(&make_trade(1, 11 * NS, 30), &lob, 3, 0);
+        tracker.process_event(&make_add(1, 10 * NS, 100), &lob, 3);
+        tracker.process_event(&make_trade(1, 11 * NS, 30), &lob, 3);
 
         assert_eq!(tracker.n_partial_fills, 1);
         assert_eq!(tracker.active_orders.len(), 1);
@@ -440,7 +418,7 @@ mod tests {
         assert_eq!(order.n_partial_fills, 1);
 
         // Complete the fill
-        tracker.process_event(&make_trade(1, 12 * NS, 70), &lob, 3, 0);
+        tracker.process_event(&make_trade(1, 12 * NS, 70), &lob, 3);
         assert_eq!(tracker.n_fills, 1);
         assert_eq!(tracker.active_orders.len(), 0);
     }
@@ -451,9 +429,9 @@ mod tests {
         let lob = make_lob();
 
         // Add → Modify → Cancel
-        tracker.process_event(&make_add(1, 10 * NS, 100), &lob, 3, 0);
-        tracker.process_event(&make_modify(1, 11 * NS, 90), &lob, 3, 0);
-        tracker.process_event(&make_cancel(1, 12 * NS), &lob, 3, 0);
+        tracker.process_event(&make_add(1, 10 * NS, 100), &lob, 3);
+        tracker.process_event(&make_modify(1, 11 * NS, 90), &lob, 3);
+        tracker.process_event(&make_cancel(1, 12 * NS), &lob, 3);
 
         // Add → Modify transition
         assert_eq!(tracker.transition_matrix.count(STATE_ADD, STATE_MODIFY), 1);
@@ -470,11 +448,11 @@ mod tests {
         let lob = make_lob();
 
         // 2 orders: 1 filled, 1 cancelled
-        tracker.process_event(&make_add(1, 10 * NS, 100), &lob, 3, 0);
-        tracker.process_event(&make_trade(1, 11 * NS, 100), &lob, 3, 0);
+        tracker.process_event(&make_add(1, 10 * NS, 100), &lob, 3);
+        tracker.process_event(&make_trade(1, 11 * NS, 100), &lob, 3);
 
-        tracker.process_event(&make_add(2, 10 * NS, 100), &lob, 3, 0);
-        tracker.process_event(&make_cancel(2, 11 * NS), &lob, 3, 0);
+        tracker.process_event(&make_add(2, 10 * NS, 100), &lob, 3);
+        tracker.process_event(&make_cancel(2, 11 * NS), &lob, 3);
 
         let report = tracker.finalize();
         let fill_rate = report["fill_rate"].as_f64().unwrap();
@@ -504,7 +482,7 @@ mod tests {
         let mut tracker = LifecycleTracker::new();
         let lob = make_lob();
 
-        tracker.process_event(&make_add(1, 10 * NS, 100), &lob, 3, 0);
+        tracker.process_event(&make_add(1, 10 * NS, 100), &lob, 3);
         assert_eq!(tracker.active_orders.len(), 1);
 
         tracker.reset_day();
@@ -518,13 +496,13 @@ mod tests {
         let lob = make_lob();
 
         for i in 1..=10u64 {
-            tracker.process_event(&make_add(i, (10 + i as i64) * NS, 100), &lob, 3, 0);
+            tracker.process_event(&make_add(i, (10 + i as i64) * NS, 100), &lob, 3);
         }
         for i in 1..=3u64 {
-            tracker.process_event(&make_trade(i, (20 + i as i64) * NS, 100), &lob, 3, 0);
+            tracker.process_event(&make_trade(i, (20 + i as i64) * NS, 100), &lob, 3);
         }
         for i in 4..=10u64 {
-            tracker.process_event(&make_cancel(i, (20 + i as i64) * NS), &lob, 3, 0);
+            tracker.process_event(&make_cancel(i, (20 + i as i64) * NS), &lob, 3);
         }
 
         assert_eq!(tracker.n_fills, 3);
@@ -545,21 +523,17 @@ mod tests {
         let lob = make_lob();
 
         for i in 1..=10u64 {
-            tracker.process_event(&make_add(i, (10 + i as i64) * NS, 100), &lob, 3, 0);
+            tracker.process_event(&make_add(i, (10 + i as i64) * NS, 100), &lob, 3);
         }
         for i in 1..=9u64 {
-            tracker.process_event(&make_cancel(i, (20 + i as i64) * NS), &lob, 3, 0);
+            tracker.process_event(&make_cancel(i, (20 + i as i64) * NS), &lob, 3);
         }
 
         assert_eq!(tracker.n_adds, 10);
         assert_eq!(tracker.n_cancels, 9);
         let report = tracker.finalize();
         let cta = report["cancel_to_add_ratio"].as_f64().unwrap();
-        assert!(
-            (cta - 0.9).abs() < 1e-10,
-            "CTA = 9/10 = 0.9, got {}",
-            cta
-        );
+        assert!((cta - 0.9).abs() < 1e-10, "CTA = 9/10 = 0.9, got {}", cta);
     }
 
     #[test]
@@ -568,8 +542,8 @@ mod tests {
         let mut tracker = LifecycleTracker::new();
         let lob = make_lob();
 
-        tracker.process_event(&make_add(1, NS, 100), &lob, 3, 0);
-        tracker.process_event(&make_cancel(1, 2 * NS), &lob, 3, 0);
+        tracker.process_event(&make_add(1, NS, 100), &lob, 3);
+        tracker.process_event(&make_cancel(1, 2 * NS), &lob, 3);
 
         let lifetime = tracker.lifetime_dist.mean();
         assert!(

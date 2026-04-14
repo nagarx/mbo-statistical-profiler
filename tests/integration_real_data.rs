@@ -15,9 +15,7 @@ use std::collections::HashMap;
 use std::path::PathBuf;
 use std::sync::OnceLock;
 
-use mbo_statistical_profiler::config::{
-    InputConfig, OutputConfig, ProfilerConfig, TrackerConfig,
-};
+use mbo_statistical_profiler::config::{InputConfig, OutputConfig, ProfilerConfig, TrackerConfig};
 use mbo_statistical_profiler::profiler;
 use mbo_statistical_profiler::trackers::*;
 use mbo_statistical_profiler::AnalysisTracker;
@@ -60,8 +58,14 @@ fn get_reports() -> &'static HashMap<String, serde_json::Value> {
 
             let mut trackers: Vec<Box<dyn AnalysisTracker>> = vec![
                 Box::new(QualityTracker::new()),
-                Box::new(ReturnTracker::new(&config.timescales, config.reservoir_capacity)),
-                Box::new(OfiTracker::new(&config.timescales, config.reservoir_capacity)),
+                Box::new(ReturnTracker::new(
+                    &config.timescales,
+                    config.reservoir_capacity,
+                )),
+                Box::new(OfiTracker::new(
+                    &config.timescales,
+                    config.reservoir_capacity,
+                )),
                 Box::new(SpreadTracker::new(config.reservoir_capacity)),
                 Box::new(VolatilityTracker::new(&config.timescales)),
                 Box::new(JumpTracker::new(1.0, 2.0)),
@@ -70,11 +74,14 @@ fn get_reports() -> &'static HashMap<String, serde_json::Value> {
                 Box::new(TradeTracker::new()),
                 Box::new(LifecycleTracker::new()),
                 Box::new(LiquidityTracker::new()),
-                Box::new(VpinTracker::new(config.vpin_volume_bar_size, config.vpin_window_bars)),
+                Box::new(VpinTracker::new(
+                    config.vpin_volume_bar_size,
+                    config.vpin_window_bars,
+                )),
             ];
 
-            let result = profiler::run(&config, &mut trackers)
-                .expect("Profiler failed on real data");
+            let result =
+                profiler::run(&config, &mut trackers).expect("Profiler failed on real data");
 
             Some(result.reports.into_iter().collect())
         })
@@ -90,8 +97,11 @@ fn get_reports() -> &'static HashMap<String, serde_json::Value> {
 #[ignore]
 fn golden_quality_total_events() {
     let q = &get_reports()["QualityTracker"];
-    assert_eq!(q["total_events"].as_u64().unwrap(), 18_476_041,
-        "Golden: Python MBO-LOB-analyzer, 2025-02-03, n_mbo_rows = 18,476,041");
+    assert_eq!(
+        q["total_events"].as_u64().unwrap(),
+        18_476_041,
+        "Golden: Python MBO-LOB-analyzer, 2025-02-03, n_mbo_rows = 18,476,041"
+    );
 }
 
 #[test]
@@ -109,9 +119,17 @@ fn golden_quality_action_counts() {
 fn golden_quality_action_percentages() {
     let ad = &get_reports()["QualityTracker"]["action_distribution"];
     let add_pct = ad["add_pct"].as_f64().unwrap();
-    assert!((add_pct - 46.83).abs() < 0.1, "Add%: expected ~46.83, got {}", add_pct);
+    assert!(
+        (add_pct - 46.83).abs() < 0.1,
+        "Add%: expected ~46.83, got {}",
+        add_pct
+    );
     let cancel_pct = ad["cancel_pct"].as_f64().unwrap();
-    assert!((cancel_pct - 47.35).abs() < 0.1, "Cancel%: expected ~47.35, got {}", cancel_pct);
+    assert!(
+        (cancel_pct - 47.35).abs() < 0.1,
+        "Cancel%: expected ~47.35, got {}",
+        cancel_pct
+    );
 }
 
 #[test]
@@ -133,8 +151,11 @@ fn golden_spread_mean_usd() {
     let s = &get_reports()["SpreadTracker"];
     let mean = s["distribution_usd"]["mean"].as_f64().unwrap();
     // Golden: $0.02246 (Python), Rust actual: $0.02246
-    assert!((mean - 0.02246).abs() < 0.005,
-        "Spread mean: expected ~$0.02246, got ${:.6}", mean);
+    assert!(
+        (mean - 0.02246).abs() < 0.005,
+        "Spread mean: expected ~$0.02246, got ${:.6}",
+        mean
+    );
 }
 
 #[test]
@@ -142,8 +163,11 @@ fn golden_spread_mean_usd() {
 fn golden_spread_width_classification() {
     let wc = &get_reports()["SpreadTracker"]["width_classification"];
     let one_tick = wc["one_tick_pct"].as_f64().unwrap();
-    assert!(one_tick > 30.0 && one_tick < 80.0,
-        "1-tick% expected 30-80%, got {:.2}", one_tick);
+    assert!(
+        one_tick > 30.0 && one_tick < 80.0,
+        "1-tick% expected 30-80%, got {:.2}",
+        one_tick
+    );
 }
 
 // =============================================================================
@@ -155,7 +179,11 @@ fn golden_spread_width_classification() {
 fn golden_ofi_all_scales_populated() {
     let o = &get_reports()["OfiTracker"];
     for scale in &["1s", "5s", "10s", "30s", "1m", "5m"] {
-        assert!(o["per_scale"][scale].is_object(), "Missing OFI scale: {}", scale);
+        assert!(
+            o["per_scale"][scale].is_object(),
+            "Missing OFI scale: {}",
+            scale
+        );
     }
 }
 
@@ -166,8 +194,11 @@ fn golden_ofi_component_fractions_sum_to_one() {
     let sum = cf["add_fraction"].as_f64().unwrap()
         + cf["cancel_fraction"].as_f64().unwrap()
         + cf["trade_fraction"].as_f64().unwrap();
-    assert!((sum - 1.0).abs() < 0.01,
-        "Component fractions sum: expected ~1.0, got {:.4}", sum);
+    assert!(
+        (sum - 1.0).abs() < 0.01,
+        "Component fractions sum: expected ~1.0, got {:.4}",
+        sum
+    );
 }
 
 // =============================================================================
@@ -196,8 +227,11 @@ fn golden_volatility_rv_positive() {
     let v = &get_reports()["VolatilityTracker"];
     assert_eq!(v["n_days"].as_u64().unwrap(), 1);
     let ann = v["daily_annualized_vol"]["mean"].as_f64().unwrap();
-    assert!(ann > 10.0 && ann < 200.0,
-        "Annualized vol expected 10-200%, got {}%", ann);
+    assert!(
+        ann > 10.0 && ann < 200.0,
+        "Annualized vol expected 10-200%, got {}%",
+        ann
+    );
 }
 
 // =============================================================================
@@ -208,8 +242,11 @@ fn golden_volatility_rv_positive() {
 #[ignore]
 fn golden_trades_count() {
     let t = &get_reports()["TradeTracker"];
-    assert_eq!(t["total_trades"].as_u64().unwrap(), 1_074_702,
-        "Golden: Trade count must match Python exactly");
+    assert_eq!(
+        t["total_trades"].as_u64().unwrap(),
+        1_074_702,
+        "Golden: Trade count must match Python exactly"
+    );
 }
 
 // =============================================================================
@@ -221,11 +258,17 @@ fn golden_trades_count() {
 fn golden_lifecycle_fill_rate() {
     let l = &get_reports()["LifecycleTracker"];
     let fr = l["fill_rate"].as_f64().unwrap();
-    assert!(fr > 0.02 && fr < 0.10,
-        "Fill rate {} outside [0.02, 0.10]", fr);
+    assert!(
+        fr > 0.02 && fr < 0.10,
+        "Fill rate {} outside [0.02, 0.10]",
+        fr
+    );
     let cta = l["cancel_to_add_ratio"].as_f64().unwrap();
-    assert!(cta > 0.9 && cta < 1.2,
-        "Cancel-to-add {} outside [0.9, 1.2]", cta);
+    assert!(
+        cta > 0.9 && cta < 1.2,
+        "Cancel-to-add {} outside [0.9, 1.2]",
+        cta
+    );
 }
 
 // =============================================================================
@@ -239,7 +282,7 @@ fn golden_depth_profile() {
     assert_eq!(d["bid_depth_profile"].as_array().unwrap().len(), 10);
     assert_eq!(d["ask_depth_profile"].as_array().unwrap().len(), 10);
     let di = d["depth_imbalance"]["mean"].as_f64().unwrap();
-    assert!(di >= -1.0 && di <= 1.0, "DI mean {} outside [-1,1]", di);
+    assert!((-1.0..=1.0).contains(&di), "DI mean {} outside [-1,1]", di);
 }
 
 #[test]
@@ -247,8 +290,11 @@ fn golden_depth_profile() {
 fn golden_liquidity_effective_spread() {
     let l = &get_reports()["LiquidityTracker"];
     let es = l["effective_spread_bps"]["mean"].as_f64().unwrap();
-    assert!(es > 0.0 && es < 20.0,
-        "Effective spread {} bps outside [0, 20]", es);
+    assert!(
+        es > 0.0 && es < 20.0,
+        "Effective spread {} bps outside [0, 20]",
+        es
+    );
 }
 
 #[test]
@@ -266,7 +312,11 @@ fn golden_jumps_fraction_valid() {
     let j = &get_reports()["JumpTracker"];
     assert_eq!(j["n_days"].as_u64().unwrap(), 1);
     let jf = j["daily_jump_fraction"]["mean"].as_f64().unwrap();
-    assert!(jf >= 0.0 && jf <= 1.0, "Jump fraction {} outside [0,1]", jf);
+    assert!(
+        (0.0..=1.0).contains(&jf),
+        "Jump fraction {} outside [0,1]",
+        jf
+    );
 }
 
 // =============================================================================
@@ -278,12 +328,17 @@ fn golden_jumps_fraction_valid() {
 fn golden_vpin_in_valid_range() {
     let v = &get_reports()["VpinTracker"];
     assert_eq!(v["n_days"].as_u64().unwrap(), 1);
-    assert!(v["n_volume_bars_total"].as_u64().unwrap() > 100,
-        "Should have >100 volume bars for an active trading day");
+    assert!(
+        v["n_volume_bars_total"].as_u64().unwrap() > 100,
+        "Should have >100 volume bars for an active trading day"
+    );
 
     let vpin_mean = v["vpin_distribution"]["mean"].as_f64().unwrap();
-    assert!(vpin_mean > 0.0 && vpin_mean < 1.0,
-        "VPIN mean {} outside (0, 1)", vpin_mean);
+    assert!(
+        vpin_mean > 0.0 && vpin_mean < 1.0,
+        "VPIN mean {} outside (0, 1)",
+        vpin_mean
+    );
 }
 
 // =============================================================================
@@ -296,9 +351,17 @@ fn golden_ofi_spread_correlation_exists() {
     let o = &get_reports()["OfiTracker"];
     for scale in &["1s", "5s", "10s", "30s", "1m", "5m"] {
         let sc = &o["per_scale"][scale]["ofi_spread_correlation"];
-        assert!(sc.is_object(), "Missing ofi_spread_correlation at scale {}", scale);
+        assert!(
+            sc.is_object(),
+            "Missing ofi_spread_correlation at scale {}",
+            scale
+        );
         let lag0 = sc["lag_0"].as_f64().unwrap();
-        assert!(lag0.is_finite(), "OFI-spread correlation lag_0 at {} should be finite", scale);
+        assert!(
+            lag0.is_finite(),
+            "OFI-spread correlation lag_0 at {} should be finite",
+            scale
+        );
     }
 }
 
@@ -312,18 +375,30 @@ fn golden_trade_clustering_valid() {
     let t = &get_reports()["TradeTracker"];
 
     let cf = t["clustering"]["cluster_fraction"].as_f64().unwrap();
-    assert!(cf >= 0.0 && cf <= 1.0,
-        "Cluster fraction {} outside [0, 1]", cf);
+    assert!(
+        (0.0..=1.0).contains(&cf),
+        "Cluster fraction {} outside [0, 1]",
+        cf
+    );
 
-    assert!(t["clustering"]["total_clusters"].as_u64().unwrap() > 0,
-        "Active day should have trade clusters");
+    assert!(
+        t["clustering"]["total_clusters"].as_u64().unwrap() > 0,
+        "Active day should have trade clusters"
+    );
 
     let tt_pct = t["trade_through"]["pct"].as_f64().unwrap();
-    assert!(tt_pct >= 0.0 && tt_pct <= 100.0,
-        "Trade-through pct {} outside [0, 100]", tt_pct);
+    assert!(
+        (0.0..=100.0).contains(&tt_pct),
+        "Trade-through pct {} outside [0, 100]",
+        tt_pct
+    );
 
     let itt_mean = t["inter_trade_time"]["mean"].as_f64().unwrap();
-    assert!(itt_mean > 0.0, "Inter-trade time mean should be >0, got {}", itt_mean);
+    assert!(
+        itt_mean > 0.0,
+        "Inter-trade time mean should be >0, got {}",
+        itt_mean
+    );
 }
 
 // =============================================================================
@@ -336,9 +411,18 @@ fn golden_all_trackers_present() {
     let reports = get_reports();
     assert_eq!(reports.len(), 12, "Should have exactly 12 trackers");
     let expected = [
-        "QualityTracker", "ReturnTracker", "OfiTracker", "SpreadTracker",
-        "VolatilityTracker", "JumpTracker", "NoiseTracker", "DepthTracker",
-        "TradeTracker", "LifecycleTracker", "LiquidityTracker", "VpinTracker",
+        "QualityTracker",
+        "ReturnTracker",
+        "OfiTracker",
+        "SpreadTracker",
+        "VolatilityTracker",
+        "JumpTracker",
+        "NoiseTracker",
+        "DepthTracker",
+        "TradeTracker",
+        "LifecycleTracker",
+        "LiquidityTracker",
+        "VpinTracker",
     ];
     for name in &expected {
         assert!(reports.contains_key(*name), "Missing: {}", name);

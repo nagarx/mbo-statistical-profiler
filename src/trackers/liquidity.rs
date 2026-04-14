@@ -83,13 +83,7 @@ impl Default for LiquidityTracker {
 }
 
 impl AnalysisTracker for LiquidityTracker {
-    fn process_event(
-        &mut self,
-        msg: &MboMessage,
-        lob_state: &LobState,
-        _regime: u8,
-        _day_epoch_ns: i64,
-    ) {
+    fn process_event(&mut self, msg: &MboMessage, lob_state: &LobState, _regime: u8) {
         if lob_state.check_consistency() != BookConsistency::Valid {
             return;
         }
@@ -137,7 +131,7 @@ impl AnalysisTracker for LiquidityTracker {
         self.day_vw_vol_sum += size;
     }
 
-    fn end_of_day(&mut self, _day_index: u32) {
+    fn end_of_day(&mut self) {
         if self.day_vw_vol_sum > 0.0 {
             let daily_vwes = self.day_vw_spread_sum / self.day_vw_vol_sum;
             self.daily_vwes.update(daily_vwes);
@@ -192,8 +186,7 @@ mod tests {
     use mbo_lob_reconstructor::Side;
 
     fn make_trade_msg(price: i64, size: u32) -> MboMessage {
-        MboMessage::new(1, Action::Trade, Side::Bid, price, size)
-            .with_timestamp(1_000_000_000)
+        MboMessage::new(1, Action::Trade, Side::Bid, price, size).with_timestamp(1_000_000_000)
     }
 
     fn make_lob_with_mid_and_sizes(
@@ -218,7 +211,7 @@ mod tests {
         let half_spread = 5_000_000i64; // $0.005
         let lob = make_lob_with_mid_and_sizes(mid, half_spread, 100, 100);
 
-        tracker.process_event(&make_trade_msg(mid, 100), &lob, 3, 0);
+        tracker.process_event(&make_trade_msg(mid, 100), &lob, 3);
 
         let es = tracker.effective_spread_bps.mean();
         assert!(
@@ -236,7 +229,7 @@ mod tests {
         let ask_price = mid + half_spread; // $100.005
         let lob = make_lob_with_mid_and_sizes(mid, half_spread, 100, 100);
 
-        tracker.process_event(&make_trade_msg(ask_price, 100), &lob, 3, 0);
+        tracker.process_event(&make_trade_msg(ask_price, 100), &lob, 3);
 
         // ES = 2 * |ask - mid| / mid * 10000 = 2 * 0.005 / 100.0 * 10000 = 1.0 bps
         let es = tracker.effective_spread_bps.mean();
@@ -255,9 +248,9 @@ mod tests {
         // Equal sizes: microprice == mid, deviation == 0
         let lob = make_lob_with_mid_and_sizes(mid, half_spread, 100, 100);
 
-        let add_msg = MboMessage::new(1, Action::Add, Side::Bid, mid, 100)
-            .with_timestamp(1_000_000_000);
-        tracker.process_event(&add_msg, &lob, 3, 0);
+        let add_msg =
+            MboMessage::new(1, Action::Add, Side::Bid, mid, 100).with_timestamp(1_000_000_000);
+        tracker.process_event(&add_msg, &lob, 3);
 
         assert!(
             tracker.microprice_deviation_bps.mean() < 1e-6,
@@ -274,9 +267,9 @@ mod tests {
         // Asymmetric: more ask volume pushes microprice toward bid
         let lob = make_lob_with_mid_and_sizes(mid, half_spread, 100, 300);
 
-        let add_msg = MboMessage::new(1, Action::Add, Side::Bid, mid, 100)
-            .with_timestamp(1_000_000_000);
-        tracker.process_event(&add_msg, &lob, 3, 0);
+        let add_msg =
+            MboMessage::new(1, Action::Add, Side::Bid, mid, 100).with_timestamp(1_000_000_000);
+        tracker.process_event(&add_msg, &lob, 3);
 
         assert!(
             tracker.microprice_deviation_bps.mean() > 0.0,
@@ -292,9 +285,9 @@ mod tests {
         let lob = make_lob_with_mid_and_sizes(mid, half_spread, 100, 100);
 
         // Small trade at midpoint (ES=0)
-        tracker.process_event(&make_trade_msg(mid, 10), &lob, 3, 0);
+        tracker.process_event(&make_trade_msg(mid, 10), &lob, 3);
         // Large trade at ask (ES≈1bps)
-        tracker.process_event(&make_trade_msg(mid + half_spread, 90), &lob, 3, 0);
+        tracker.process_event(&make_trade_msg(mid + half_spread, 90), &lob, 3);
 
         // VWES should be weighted toward the ask trade
         let report = tracker.finalize();
@@ -327,9 +320,9 @@ mod tests {
         let half_spread = 5_000_000i64;
         let lob = make_lob_with_mid_and_sizes(mid, half_spread, 100, 100);
 
-        let add_msg = MboMessage::new(1, Action::Add, Side::Bid, mid, 100)
-            .with_timestamp(1_000_000_000);
-        tracker.process_event(&add_msg, &lob, 3, 0);
+        let add_msg =
+            MboMessage::new(1, Action::Add, Side::Bid, mid, 100).with_timestamp(1_000_000_000);
+        tracker.process_event(&add_msg, &lob, 3);
 
         assert_eq!(
             tracker.n_trade_events, 0,
@@ -349,7 +342,7 @@ mod tests {
         let bid_price = mid - half_spread; // 100_000_000_000 = $100.00
         let lob = make_lob_with_mid_and_sizes(mid, half_spread, 100, 100);
 
-        tracker.process_event(&make_trade_msg(bid_price, 100), &lob, 3, 0);
+        tracker.process_event(&make_trade_msg(bid_price, 100), &lob, 3);
 
         let es = tracker.effective_spread_bps.mean();
         let expected = 2.0 * 0.005 / 100.005 * 10000.0;

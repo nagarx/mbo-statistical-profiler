@@ -43,8 +43,7 @@ use crate::statistics::{
 };
 use crate::time::N_REGIMES;
 use crate::AnalysisTracker;
-
-const NS_PER_SECOND_F64: f64 = 1_000_000_000.0;
+use hft_statistics::time::NS_PER_SECOND_F64;
 
 /// Default cluster gap threshold (1 second).
 const DEFAULT_CLUSTER_GAP_NS: i64 = 1_000_000_000;
@@ -90,7 +89,11 @@ pub struct TradeTracker {
     large_trade_seller_count: u64,
 
     intraday_trade_rate_curve: IntradayCurveAccumulator,
-    day_trade_timestamps: Vec<i64>,
+
+    /// Cached at start of each day via `begin_day` so `intraday_trade_rate_curve.add`
+    /// can be called inline in `process_event` (eliminates the previous 16 MB
+    /// `day_trade_timestamps` replay buffer).
+    utc_offset: i32,
 
     n_days: u32,
 }
@@ -125,7 +128,7 @@ impl TradeTracker {
             large_trade_buyer_count: 0,
             large_trade_seller_count: 0,
             intraday_trade_rate_curve: IntradayCurveAccumulator::new_rth_1min(),
-            day_trade_timestamps: Vec::with_capacity(2_000_000),
+            utc_offset: -5, // EST default; overwritten by begin_day at start of each day
             n_days: 0,
         }
     }
@@ -150,13 +153,7 @@ impl Default for TradeTracker {
 }
 
 impl AnalysisTracker for TradeTracker {
-    fn process_event(
-        &mut self,
-        msg: &MboMessage,
-        lob_state: &LobState,
-        regime: u8,
-        _day_epoch_ns: i64,
-    ) {
+    fn process_event(&mut self, msg: &MboMessage, lob_state: &LobState, regime: u8) {
         let is_trade = matches!(msg.action, Action::Trade | Action::Fill);
         if !is_trade {
             return;
@@ -166,8 +163,11 @@ impl AnalysisTracker for TradeTracker {
         let ts = msg.timestamp.unwrap_or(0);
         self.total_trades += 1;
         self.total_volume += msg.size as u64;
+        // Inline intraday-trade-rate-curve population (was a replay loop in
+        // end_of_day before, requiring 16 MB day_trade_timestamps buffer).
+        // begin_day caches utc_offset; equivalent result without the buffer.
         if ts > 0 {
-            self.day_trade_timestamps.push(ts);
+            self.intraday_trade_rate_curve.add(ts, 1.0, self.utc_offset);
         }
 
         self.trade_size_dist.add(size);
@@ -244,7 +244,11 @@ impl AnalysisTracker for TradeTracker {
         self.prev_trade_ts = Some(ts);
     }
 
-    fn end_of_day(&mut self, _day_index: u32) {
+    fn begin_day(&mut self, _day_index: u32, utc_offset: i32, _day_epoch_ns: i64) {
+        self.utc_offset = utc_offset;
+    }
+
+    fn end_of_day(&mut self) {
         // Finalize last cluster of the day
         if self.current_cluster_size > 1 {
             self.cluster_sizes.update(self.current_cluster_size as f64);
@@ -263,21 +267,12 @@ impl AnalysisTracker for TradeTracker {
             }
         }
 
-        if !self.day_trade_timestamps.is_empty() {
-            let utc_offset =
-                crate::time::regime::infer_utc_offset(&self.day_trade_timestamps);
-            for &ts in &self.day_trade_timestamps {
-                self.intraday_trade_rate_curve.add(ts, 1.0, utc_offset);
-            }
-        }
-
         self.n_days += 1;
     }
 
     fn reset_day(&mut self) {
         self.prev_trade_ts = None;
         self.current_cluster_size = 0;
-        self.day_trade_timestamps.clear();
     }
 
     fn finalize(&self) -> serde_json::Value {
@@ -401,18 +396,8 @@ mod tests {
         let mut tracker = TradeTracker::new();
         let lob = make_lob();
 
-        tracker.process_event(
-            &make_trade_msg(Side::Bid, 100_000_000_000, 50),
-            &lob,
-            3,
-            0,
-        );
-        tracker.process_event(
-            &make_trade_msg(Side::Ask, 100_010_000_000, 100),
-            &lob,
-            3,
-            0,
-        );
+        tracker.process_event(&make_trade_msg(Side::Bid, 100_000_000_000, 50), &lob, 3);
+        tracker.process_event(&make_trade_msg(Side::Ask, 100_010_000_000, 100), &lob, 3);
 
         assert_eq!(tracker.total_trades, 2);
         assert_eq!(tracker.total_volume, 150);
@@ -422,11 +407,10 @@ mod tests {
     fn test_ignores_non_trades() {
         let mut tracker = TradeTracker::new();
         let lob = make_lob();
-        let add_msg =
-            MboMessage::new(1, Action::Add, Side::Bid, 100_000_000_000, 100)
-                .with_timestamp(1_000_000_000);
+        let add_msg = MboMessage::new(1, Action::Add, Side::Bid, 100_000_000_000, 100)
+            .with_timestamp(1_000_000_000);
 
-        tracker.process_event(&add_msg, &lob, 3, 0);
+        tracker.process_event(&add_msg, &lob, 3);
         assert_eq!(tracker.total_trades, 0);
     }
 
@@ -436,33 +420,13 @@ mod tests {
         let lob = make_lob(); // bid=100, ask=100.01
 
         // At bid
-        tracker.process_event(
-            &make_trade_msg(Side::Bid, 100_000_000_000, 10),
-            &lob,
-            3,
-            0,
-        );
+        tracker.process_event(&make_trade_msg(Side::Bid, 100_000_000_000, 10), &lob, 3);
         // At ask
-        tracker.process_event(
-            &make_trade_msg(Side::Ask, 100_010_000_000, 10),
-            &lob,
-            3,
-            0,
-        );
+        tracker.process_event(&make_trade_msg(Side::Ask, 100_010_000_000, 10), &lob, 3);
         // Inside
-        tracker.process_event(
-            &make_trade_msg(Side::None, 100_005_000_000, 10),
-            &lob,
-            3,
-            0,
-        );
+        tracker.process_event(&make_trade_msg(Side::None, 100_005_000_000, 10), &lob, 3);
         // Outside (below bid)
-        tracker.process_event(
-            &make_trade_msg(Side::Bid, 99_990_000_000, 10),
-            &lob,
-            3,
-            0,
-        );
+        tracker.process_event(&make_trade_msg(Side::Bid, 99_990_000_000, 10), &lob, 3);
 
         assert_eq!(tracker.at_bid_count, 1);
         assert_eq!(tracker.at_ask_count, 1);
@@ -475,18 +439,8 @@ mod tests {
         let mut tracker = TradeTracker::new();
         let lob = make_lob();
 
-        tracker.process_event(
-            &make_trade_msg(Side::Bid, 100_000_000_000, 50),
-            &lob,
-            3,
-            0,
-        );
-        tracker.process_event(
-            &make_trade_msg(Side::Ask, 100_010_000_000, 200),
-            &lob,
-            3,
-            0,
-        );
+        tracker.process_event(&make_trade_msg(Side::Bid, 100_000_000_000, 50), &lob, 3);
+        tracker.process_event(&make_trade_msg(Side::Ask, 100_010_000_000, 200), &lob, 3);
 
         assert_eq!(tracker.buyer_size_dist.count(), 1);
         assert_eq!(tracker.seller_size_dist.count(), 1);
@@ -498,13 +452,8 @@ mod tests {
     fn test_finalize_structure() {
         let mut tracker = TradeTracker::new();
         let lob = make_lob();
-        tracker.process_event(
-            &make_trade_msg(Side::Bid, 100_000_000_000, 100),
-            &lob,
-            3,
-            0,
-        );
-        tracker.end_of_day(0);
+        tracker.process_event(&make_trade_msg(Side::Bid, 100_000_000_000, 100), &lob, 3);
+        tracker.end_of_day();
 
         let report = tracker.finalize();
         assert_eq!(report["tracker"], "TradeTracker");
@@ -531,36 +480,16 @@ mod tests {
 
         // 2 trades at bid
         for _ in 0..2 {
-            tracker.process_event(
-                &make_trade_msg(Side::Bid, 100_000_000_000, 10),
-                &lob,
-                3,
-                0,
-            );
+            tracker.process_event(&make_trade_msg(Side::Bid, 100_000_000_000, 10), &lob, 3);
         }
         // 3 trades at ask
         for _ in 0..3 {
-            tracker.process_event(
-                &make_trade_msg(Side::Ask, 100_010_000_000, 10),
-                &lob,
-                3,
-                0,
-            );
+            tracker.process_event(&make_trade_msg(Side::Ask, 100_010_000_000, 10), &lob, 3);
         }
         // 1 inside spread
-        tracker.process_event(
-            &make_trade_msg(Side::None, 100_005_000_000, 10),
-            &lob,
-            3,
-            0,
-        );
+        tracker.process_event(&make_trade_msg(Side::None, 100_005_000_000, 10), &lob, 3);
         // 1 outside (above ask)
-        tracker.process_event(
-            &make_trade_msg(Side::Bid, 100_020_000_000, 10),
-            &lob,
-            3,
-            0,
-        );
+        tracker.process_event(&make_trade_msg(Side::Bid, 100_020_000_000, 10), &lob, 3);
 
         assert_eq!(tracker.at_bid_count, 2, "Expected 2 at-bid trades");
         assert_eq!(tracker.at_ask_count, 3, "Expected 3 at-ask trades");

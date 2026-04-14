@@ -48,8 +48,7 @@ use std::f64::consts::PI;
 use crate::statistics::{RegimeAccumulator, WelfordAccumulator};
 use crate::time::resampler::{resample_to_grid, AggMode};
 use crate::AnalysisTracker;
-
-const NS_PER_SECOND: i64 = 1_000_000_000;
+use hft_statistics::time::NS_PER_SECOND;
 
 /// `mu_1 = E[|Z|] = sqrt(2/pi)` for standard normal Z.
 /// Used in bipower variation scaling: `BV = mu_1^{-2} * sum(|r_t| * |r_{t-1}|)`
@@ -75,6 +74,11 @@ pub struct JumpTracker {
     n_days: u32,
     n_significant_jumps: u64,
     z_threshold: f64,
+
+    /// Cached at start of each day via `begin_day` (replaces the old
+    /// `infer_day_params(&self.day_*)` call which re-derived these from timestamps).
+    utc_offset: i32,
+    day_epoch_ns: i64,
 }
 
 impl JumpTracker {
@@ -99,6 +103,8 @@ impl JumpTracker {
             n_days: 0,
             n_significant_jumps: 0,
             z_threshold,
+            utc_offset: -5, // EST default; overwritten by begin_day at start of each day
+            day_epoch_ns: 0,
         }
     }
 
@@ -147,10 +153,7 @@ impl JumpTracker {
         let rv: f64 = returns.iter().map(|r| r * r).sum();
 
         // BV = (pi/2) * sum(|r_t| * |r_{t-1}|)
-        let bv_sum: f64 = returns
-            .windows(2)
-            .map(|w| w[0].abs() * w[1].abs())
-            .sum();
+        let bv_sum: f64 = returns.windows(2).map(|w| w[0].abs() * w[1].abs()).sum();
         let bv = (PI / 2.0) * bv_sum;
 
         // Jump component: J = max(RV - BV, 0)
@@ -209,13 +212,12 @@ fn gamma_ratio() -> f64 {
 }
 
 impl AnalysisTracker for JumpTracker {
-    fn process_event(
-        &mut self,
-        msg: &MboMessage,
-        lob_state: &LobState,
-        _regime: u8,
-        _day_epoch_ns: i64,
-    ) {
+    fn begin_day(&mut self, _day_index: u32, utc_offset: i32, day_epoch_ns: i64) {
+        self.utc_offset = utc_offset;
+        self.day_epoch_ns = day_epoch_ns;
+    }
+
+    fn process_event(&mut self, msg: &MboMessage, lob_state: &LobState, _regime: u8) {
         if lob_state.check_consistency() != BookConsistency::Valid {
             return;
         }
@@ -227,9 +229,10 @@ impl AnalysisTracker for JumpTracker {
         }
     }
 
-    fn end_of_day(&mut self, _day_index: u32) {
-        let (utc_offset, day_epoch_ns) =
-            crate::time::regime::infer_day_params(&self.day_timestamps);
+    fn end_of_day(&mut self) {
+        // Use cached values from begin_day (replaces infer_day_params)
+        let utc_offset = self.utc_offset;
+        let day_epoch_ns = self.day_epoch_ns;
         self.process_day_jumps(utc_offset, day_epoch_ns);
         self.n_days += 1;
     }
@@ -315,8 +318,8 @@ mod tests {
         let ts_base = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
         let lob = make_lob_with_mid(100_000_000_000);
 
-        tracker.process_event(&make_msg(ts_base), &lob, 3, 0);
-        tracker.process_event(&make_msg(ts_base + NS_PER_SECOND), &lob, 3, 0);
+        tracker.process_event(&make_msg(ts_base), &lob, 3);
+        tracker.process_event(&make_msg(ts_base + NS_PER_SECOND), &lob, 3);
 
         assert_eq!(tracker.day_mid_prices.len(), 2);
         assert_eq!(tracker.day_timestamps.len(), 2);
@@ -327,9 +330,9 @@ mod tests {
         let mut tracker = JumpTracker::new(5.0, 2.0);
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
         let lob = make_lob_with_mid(100_000_000_000);
-        tracker.process_event(&make_msg(ts), &lob, 3, 0);
+        tracker.process_event(&make_msg(ts), &lob, 3);
 
-        tracker.end_of_day(0);
+        tracker.end_of_day();
         tracker.reset_day();
 
         assert!(tracker.day_mid_prices.is_empty());
@@ -354,7 +357,7 @@ mod tests {
     fn test_bv_less_than_rv_for_jumpy_series() {
         // BV should be <= RV when jumps are present (by construction)
         // For constant returns (no jumps): RV ≈ BV
-        let returns = vec![0.001, 0.001, 0.001, 0.001, 0.001];
+        let returns = [0.001, 0.001, 0.001, 0.001, 0.001];
         let rv: f64 = returns.iter().map(|r| r * r).sum();
         let bv_sum: f64 = returns.windows(2).map(|w| w[0].abs() * w[1].abs()).sum();
         let bv = (PI / 2.0) * bv_sum;

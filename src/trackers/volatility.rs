@@ -38,8 +38,7 @@ use serde_json::json;
 use crate::statistics::{AcfComputer, IntradayCurveAccumulator, WelfordAccumulator};
 use crate::time::resampler::{resample_to_grid, AggMode};
 use crate::AnalysisTracker;
-
-const NS_PER_SECOND: i64 = 1_000_000_000;
+use hft_statistics::time::{format_scale_label, NS_PER_SECOND};
 
 /// Multi-scale realized volatility tracker.
 ///
@@ -60,6 +59,11 @@ pub struct VolatilityTracker {
     rv_acf: AcfComputer,
     spread_vol_pairs: Vec<(f64, f64)>,
     n_days: u32,
+
+    /// Cached at start of each day via `begin_day` (replaces the old
+    /// `infer_day_params(&self.day_*)` call which re-derived these from timestamps).
+    utc_offset: i32,
+    day_epoch_ns: i64,
 }
 
 struct ScaleVolState {
@@ -96,6 +100,8 @@ impl VolatilityTracker {
             rv_acf: AcfComputer::new(10_000, 20),
             spread_vol_pairs: Vec::new(),
             n_days: 0,
+            utc_offset: -5, // EST default; overwritten by begin_day at start of each day
+            day_epoch_ns: 0,
         }
     }
 
@@ -173,13 +179,12 @@ impl VolatilityTracker {
 }
 
 impl AnalysisTracker for VolatilityTracker {
-    fn process_event(
-        &mut self,
-        msg: &MboMessage,
-        lob_state: &LobState,
-        _regime: u8,
-        _day_epoch_ns: i64,
-    ) {
+    fn begin_day(&mut self, _day_index: u32, utc_offset: i32, day_epoch_ns: i64) {
+        self.utc_offset = utc_offset;
+        self.day_epoch_ns = day_epoch_ns;
+    }
+
+    fn process_event(&mut self, msg: &MboMessage, lob_state: &LobState, _regime: u8) {
         if lob_state.check_consistency() != BookConsistency::Valid {
             return;
         }
@@ -196,9 +201,10 @@ impl AnalysisTracker for VolatilityTracker {
         }
     }
 
-    fn end_of_day(&mut self, _day_index: u32) {
-        let (utc_offset, day_epoch_ns) =
-            crate::time::regime::infer_day_params(&self.day_timestamps);
+    fn end_of_day(&mut self) {
+        // Use cached values from begin_day (replaces infer_day_params)
+        let utc_offset = self.utc_offset;
+        let day_epoch_ns = self.day_epoch_ns;
         self.process_day_volatility(utc_offset, day_epoch_ns);
         self.n_days += 1;
     }
@@ -229,7 +235,14 @@ impl AnalysisTracker for VolatilityTracker {
 
         let rv_acf_vals = self.rv_acf.compute();
 
-        let spread_vol_corr = compute_correlation(&self.spread_vol_pairs);
+        // Two-pass numerically-stable Pearson r from hft_statistics (replaces
+        // local compute_correlation that returned 0.0 on degenerate variance).
+        let spread_vol_corr = hft_statistics::statistics::pearson_r_pairs(&self.spread_vol_pairs);
+        let spread_vol_corr_json = if spread_vol_corr.is_finite() {
+            json!(spread_vol_corr)
+        } else {
+            json!(null)
+        };
 
         let curve_data: Vec<serde_json::Value> = self
             .intraday_curve
@@ -266,7 +279,7 @@ impl AnalysisTracker for VolatilityTracker {
             },
             "vol_of_vol": self.daily_rv.std(),
             "rv_persistence_acf": rv_acf_vals,
-            "spread_vol_correlation": spread_vol_corr,
+            "spread_vol_correlation": spread_vol_corr_json,
             "intraday_volatility_curve": curve_data,
         })
     }
@@ -276,44 +289,9 @@ impl AnalysisTracker for VolatilityTracker {
     }
 }
 
-/// Pearson correlation from (x, y) pairs.
-fn compute_correlation(pairs: &[(f64, f64)]) -> f64 {
-    let n = pairs.len();
-    if n < 3 {
-        return f64::NAN;
-    }
-    let n_f = n as f64;
-    let mean_x = pairs.iter().map(|p| p.0).sum::<f64>() / n_f;
-    let mean_y = pairs.iter().map(|p| p.1).sum::<f64>() / n_f;
-
-    let mut cov = 0.0f64;
-    let mut var_x = 0.0f64;
-    let mut var_y = 0.0f64;
-    for &(x, y) in pairs {
-        let dx = x - mean_x;
-        let dy = y - mean_y;
-        cov += dx * dy;
-        var_x += dx * dx;
-        var_y += dy * dy;
-    }
-
-    let denom = (var_x * var_y).sqrt();
-    if denom < 1e-15 {
-        0.0
-    } else {
-        cov / denom
-    }
-}
-
-fn format_scale_label(seconds: f64) -> String {
-    if seconds < 1.0 {
-        format!("{}ms", (seconds * 1000.0) as u64)
-    } else if seconds < 60.0 {
-        format!("{}s", seconds as u64)
-    } else {
-        format!("{}m", (seconds / 60.0) as u64)
-    }
-}
+// Local `compute_correlation` and `format_scale_label` removed — replaced with
+// `hft_statistics::statistics::pearson_r_pairs` (two-pass) and
+// `hft_statistics::time::format_scale_label` (with ms branch).
 
 #[cfg(test)]
 mod tests {
@@ -321,8 +299,7 @@ mod tests {
     use mbo_lob_reconstructor::{Action, Side};
 
     fn make_msg(ts: i64) -> MboMessage {
-        MboMessage::new(1, Action::Add, Side::Bid, 100_000_000_000, 100)
-            .with_timestamp(ts)
+        MboMessage::new(1, Action::Add, Side::Bid, 100_000_000_000, 100).with_timestamp(ts)
     }
 
     fn make_lob_with_mid(mid_nanodollars: i64) -> LobState {
@@ -341,8 +318,8 @@ mod tests {
         let ts_base = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
         let lob = make_lob_with_mid(100_000_000_000);
 
-        tracker.process_event(&make_msg(ts_base), &lob, 3, 0);
-        tracker.process_event(&make_msg(ts_base + NS_PER_SECOND), &lob, 3, 0);
+        tracker.process_event(&make_msg(ts_base), &lob, 3);
+        tracker.process_event(&make_msg(ts_base + NS_PER_SECOND), &lob, 3);
 
         assert_eq!(tracker.day_mid_prices.len(), 2);
         assert_eq!(tracker.day_spreads.len(), 2);
@@ -353,9 +330,9 @@ mod tests {
         let mut tracker = VolatilityTracker::new(&[1.0]);
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
         let lob = make_lob_with_mid(100_000_000_000);
-        tracker.process_event(&make_msg(ts), &lob, 3, 0);
+        tracker.process_event(&make_msg(ts), &lob, 3);
 
-        tracker.end_of_day(0);
+        tracker.end_of_day();
         tracker.reset_day();
 
         assert!(tracker.day_mid_prices.is_empty());
@@ -379,14 +356,9 @@ mod tests {
 
     #[test]
     fn test_correlation_known_values() {
-        let pairs: Vec<(f64, f64)> = vec![
-            (1.0, 2.0),
-            (2.0, 4.0),
-            (3.0, 6.0),
-            (4.0, 8.0),
-            (5.0, 10.0),
-        ];
-        let corr = compute_correlation(&pairs);
+        let pairs: Vec<(f64, f64)> =
+            vec![(1.0, 2.0), (2.0, 4.0), (3.0, 6.0), (4.0, 8.0), (5.0, 10.0)];
+        let corr = hft_statistics::statistics::pearson_r_pairs(&pairs);
         assert!(
             (corr - 1.0).abs() < 1e-10,
             "Perfect positive correlation expected, got {}",
@@ -397,7 +369,7 @@ mod tests {
     #[test]
     fn test_correlation_insufficient_data() {
         let pairs = vec![(1.0, 2.0)];
-        assert!(compute_correlation(&pairs).is_nan());
+        assert!(hft_statistics::statistics::pearson_r_pairs(&pairs).is_nan());
     }
 
     #[test]

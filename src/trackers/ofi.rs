@@ -39,6 +39,15 @@
 //!   Journal of Financial Econometrics, 12(1), 47-88.
 //! - Kolm, P., Turiel, J. & Westray, N. (2023). "Deep Order Flow Imbalance."
 
+// TODO(plan/D6 + Step 5.8): Extract `compute_ofi` to shared `OfiPrevState::compute()`
+// in trackers/ofi_primitives.rs (deferred; character-identical to cross_scale_ofi.rs).
+//
+// TODO(plan/Step 5.5): Refactor inline Pearson r in process_day_ofi (lag correlation,
+// OFI-spread correlation, conditional OFI) to use `pearson_r_slices` from hft_statistics.
+// Deferred: the inline running-sums logic is intertwined with cross-day weighted-mean
+// aggregation. Allow needless_range_loop at file scope until refactored.
+#![allow(clippy::needless_range_loop)]
+
 use mbo_lob_reconstructor::{Action, BookConsistency, LobState, MboMessage, Side};
 use serde_json::json;
 
@@ -48,11 +57,12 @@ use crate::statistics::{
 };
 use crate::time::resampler::{resample_to_grid, AggMode};
 use crate::AnalysisTracker;
-
-const NS_PER_SECOND: i64 = 1_000_000_000;
+use hft_statistics::time::format_scale_label as format_label;
+use hft_statistics::time::NS_PER_SECOND;
 
 const N_SPREAD_BUCKETS: usize = 4;
-const SPREAD_BUCKET_LABELS: [&str; N_SPREAD_BUCKETS] = ["1_tick", "2_tick", "3_4_tick", "5_plus_tick"];
+const SPREAD_BUCKET_LABELS: [&str; N_SPREAD_BUCKETS] =
+    ["1_tick", "2_tick", "3_4_tick", "5_plus_tick"];
 const TICK_SIZE_USD: f64 = 0.01;
 
 fn spread_bucket(spread_usd: f64) -> Option<usize> {
@@ -154,6 +164,11 @@ pub struct OfiTracker {
     total_seller_vol: f64,
 
     n_days: u32,
+
+    /// Cached at start of each day via `begin_day` (replaces the old
+    /// `infer_day_params(&self.day_*)` call which re-derived these from timestamps).
+    utc_offset: i32,
+    day_epoch_ns: i64,
 }
 
 struct OfiScaleState {
@@ -211,6 +226,8 @@ impl OfiTracker {
             total_buyer_vol: 0.0,
             total_seller_vol: 0.0,
             n_days: 0,
+            utc_offset: -5, // EST default; overwritten by begin_day at start of each day
+            day_epoch_ns: 0,
         }
     }
 
@@ -272,7 +289,9 @@ impl OfiTracker {
                 .values
                 .iter()
                 .enumerate()
-                .filter(|(i, v)| v.is_finite() && *i < ofi_bins.counts.len() && ofi_bins.counts[*i] > 0)
+                .filter(|(i, v)| {
+                    v.is_finite() && *i < ofi_bins.counts.len() && ofi_bins.counts[*i] > 0
+                })
                 .map(|(i, &v)| (i, v))
                 .collect();
 
@@ -428,7 +447,9 @@ impl OfiTracker {
                 .values
                 .iter()
                 .enumerate()
-                .filter(|(i, v)| v.is_finite() && *i < ofi_bins.counts.len() && ofi_bins.counts[*i] > 0)
+                .filter(|(i, v)| {
+                    v.is_finite() && *i < ofi_bins.counts.len() && ofi_bins.counts[*i] > 0
+                })
                 .map(|(i, &v)| (i, v))
                 .collect();
 
@@ -518,8 +539,12 @@ impl OfiTracker {
                 let ret = (mid_1s.values[i] / mid_1s.values[i - 1]).ln();
                 if ret.is_finite() {
                     let bin_ts = ofi_1s.edges_ns[bin_i];
-                    self.intraday_ofi_return_r_curve
-                        .add(bin_ts, ofi_1s.values[bin_i], ret, utc_offset);
+                    self.intraday_ofi_return_r_curve.add(
+                        bin_ts,
+                        ofi_1s.values[bin_i],
+                        ret,
+                        utc_offset,
+                    );
                 }
             }
         }
@@ -534,13 +559,12 @@ impl OfiTracker {
 }
 
 impl AnalysisTracker for OfiTracker {
-    fn process_event(
-        &mut self,
-        msg: &MboMessage,
-        lob_state: &LobState,
-        regime: u8,
-        _day_epoch_ns: i64,
-    ) {
+    fn begin_day(&mut self, _day_index: u32, utc_offset: i32, day_epoch_ns: i64) {
+        self.utc_offset = utc_offset;
+        self.day_epoch_ns = day_epoch_ns;
+    }
+
+    fn process_event(&mut self, msg: &MboMessage, lob_state: &LobState, regime: u8) {
         if lob_state.check_consistency() != BookConsistency::Valid {
             return;
         }
@@ -591,14 +615,12 @@ impl AnalysisTracker for OfiTracker {
             self.regime_abs_ofi.add(regime, ofi.abs());
         }
 
-        if msg.action == Action::Trade || msg.action == Action::Fill {
-            if msg.side != Side::None {
-                let size = msg.size as f64;
-                if msg.side == Side::Bid {
-                    self.total_buyer_vol += size;
-                } else {
-                    self.total_seller_vol += size;
-                }
+        if (msg.action == Action::Trade || msg.action == Action::Fill) && msg.side != Side::None {
+            let size = msg.size as f64;
+            if msg.side == Side::Bid {
+                self.total_buyer_vol += size;
+            } else {
+                self.total_seller_vol += size;
             }
         }
 
@@ -608,9 +630,10 @@ impl AnalysisTracker for OfiTracker {
         self.prev_ask_size = lob_state.ask_sizes[0];
     }
 
-    fn end_of_day(&mut self, _day_index: u32) {
-        let (utc_offset, day_epoch_ns) =
-            crate::time::regime::infer_day_params(&self.day_ofi_ts);
+    fn end_of_day(&mut self) {
+        // Use cached values from begin_day (replaces infer_day_params)
+        let utc_offset = self.utc_offset;
+        let day_epoch_ns = self.day_epoch_ns;
 
         let eod_delta: f64 = self.day_ofi_vals.iter().sum();
         self.daily_deltas.update(eod_delta);
@@ -639,11 +662,7 @@ impl AnalysisTracker for OfiTracker {
             let cond_corrs = scale.conditional_ofi_return.correlations();
             let mut cond_map = serde_json::Map::new();
             for (i, (r, n)) in cond_corrs.iter().enumerate() {
-                let r_val = if r.is_finite() {
-                    json!(r)
-                } else {
-                    json!(null)
-                };
+                let r_val = if r.is_finite() { json!(r) } else { json!(null) };
                 cond_map.insert(
                     SPREAD_BUCKET_LABELS[i].to_string(),
                     json!({"r": r_val, "n": n}),
@@ -757,15 +776,8 @@ impl AnalysisTracker for OfiTracker {
         "OfiTracker"
     }
 }
-
-fn format_label(seconds: f64) -> String {
-    if seconds < 60.0 {
-        format!("{}s", seconds as u64)
-    } else {
-        format!("{}m", (seconds / 60.0) as u64)
-    }
-}
-
+// Local format function removed — replaced with hft_statistics::time::format_scale_label
+// (imported as `format_label` alias to preserve existing call sites)
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -792,19 +804,22 @@ mod tests {
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
 
         let lob1 = make_lob(100_000_000_000, 100_010_000_000, 100, 100);
-        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob1, 3, 0);
+        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob1, 3);
 
         let lob2 = make_lob(100_000_000_000, 100_010_000_000, 200, 100);
         tracker.process_event(
             &make_msg_ts(Action::Add, Side::Bid, ts + NS_PER_SECOND),
             &lob2,
             3,
-            0,
         );
 
         assert!(!tracker.day_ofi_vals.is_empty());
         let total: f64 = tracker.day_ofi_vals.iter().sum();
-        assert!(total > 0.0, "Bid size increase should produce positive OFI, got {}", total);
+        assert!(
+            total > 0.0,
+            "Bid size increase should produce positive OFI, got {}",
+            total
+        );
     }
 
     #[test]
@@ -813,7 +828,7 @@ mod tests {
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
 
         let empty_lob = LobState::new(10);
-        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &empty_lob, 3, 0);
+        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &empty_lob, 3);
 
         assert!(tracker.day_ofi_vals.is_empty());
     }
@@ -839,9 +854,9 @@ mod tests {
         let mut tracker = OfiTracker::new(&[1.0], 1000);
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
         let lob = make_lob(100_000_000_000, 100_010_000_000, 100, 100);
-        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob, 3, 0);
+        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob, 3);
 
-        tracker.end_of_day(0);
+        tracker.end_of_day();
         tracker.reset_day();
 
         assert!(tracker.day_ofi_vals.is_empty());
@@ -858,14 +873,13 @@ mod tests {
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
 
         let lob1 = make_lob(100_000_000_000, 100_010_000_000, 100, 100);
-        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob1, 3, 0);
+        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob1, 3);
 
         let lob2 = make_lob(100_000_000_000, 100_010_000_000, 150, 100);
         tracker.process_event(
             &make_msg_ts(Action::Add, Side::Bid, ts + NS_PER_SECOND),
             &lob2,
             3,
-            0,
         );
 
         assert_eq!(tracker.day_ofi_vals.len(), 1);
@@ -886,14 +900,13 @@ mod tests {
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
 
         let lob1 = make_lob(100_000_000_000, 100_010_000_000, 100, 100);
-        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob1, 3, 0);
+        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob1, 3);
 
         let lob2 = make_lob(99_990_000_000, 100_010_000_000, 100, 100);
         tracker.process_event(
             &make_msg_ts(Action::Trade, Side::Ask, ts + NS_PER_SECOND),
             &lob2,
             3,
-            0,
         );
 
         assert!(
@@ -914,14 +927,13 @@ mod tests {
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
 
         let lob1 = make_lob(100_000_000_000, 100_010_000_000, 100, 200);
-        tracker.process_event(&make_msg_ts(Action::Add, Side::Ask, ts), &lob1, 3, 0);
+        tracker.process_event(&make_msg_ts(Action::Add, Side::Ask, ts), &lob1, 3);
 
         let lob2 = make_lob(100_000_000_000, 100_005_000_000, 100, 200);
         tracker.process_event(
             &make_msg_ts(Action::Add, Side::Ask, ts + NS_PER_SECOND),
             &lob2,
             3,
-            0,
         );
 
         assert!(
@@ -941,14 +953,13 @@ mod tests {
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
 
         let lob1 = make_lob(100_000_000_000, 100_010_000_000, 100, 100);
-        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob1, 3, 0);
+        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob1, 3);
 
         let lob2 = make_lob(100_000_000_000, 100_010_000_000, 120, 130);
         tracker.process_event(
             &make_msg_ts(Action::Add, Side::Bid, ts + NS_PER_SECOND),
             &lob2,
             3,
-            0,
         );
 
         assert!(
@@ -960,17 +971,17 @@ mod tests {
 
     #[test]
     fn test_spread_bucket_classification() {
-        assert_eq!(spread_bucket(0.01), Some(0));    // exactly 1 tick
-        assert_eq!(spread_bucket(0.014), Some(0));   // < 1.5 ticks
-        assert_eq!(spread_bucket(0.02), Some(1));    // exactly 2 ticks
-        assert_eq!(spread_bucket(0.024), Some(1));   // < 2.5 ticks
-        assert_eq!(spread_bucket(0.03), Some(2));    // 3 ticks
-        assert_eq!(spread_bucket(0.04), Some(2));    // 4 ticks
-        assert_eq!(spread_bucket(0.05), Some(3));    // 5 ticks
-        assert_eq!(spread_bucket(0.10), Some(3));    // 10 ticks
-        assert_eq!(spread_bucket(0.0), None);        // zero spread
-        assert_eq!(spread_bucket(-0.01), None);      // negative
-        assert_eq!(spread_bucket(f64::NAN), None);   // NaN
+        assert_eq!(spread_bucket(0.01), Some(0)); // exactly 1 tick
+        assert_eq!(spread_bucket(0.014), Some(0)); // < 1.5 ticks
+        assert_eq!(spread_bucket(0.02), Some(1)); // exactly 2 ticks
+        assert_eq!(spread_bucket(0.024), Some(1)); // < 2.5 ticks
+        assert_eq!(spread_bucket(0.03), Some(2)); // 3 ticks
+        assert_eq!(spread_bucket(0.04), Some(2)); // 4 ticks
+        assert_eq!(spread_bucket(0.05), Some(3)); // 5 ticks
+        assert_eq!(spread_bucket(0.10), Some(3)); // 10 ticks
+        assert_eq!(spread_bucket(0.0), None); // zero spread
+        assert_eq!(spread_bucket(-0.01), None); // negative
+        assert_eq!(spread_bucket(f64::NAN), None); // NaN
         assert_eq!(spread_bucket(f64::INFINITY), None); // Inf
     }
 
@@ -1062,14 +1073,13 @@ mod tests {
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
 
         let lob1 = make_lob(100_000_000_000, 100_020_000_000, 100, 100);
-        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob1, 3, 0);
+        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob1, 3);
 
         let lob2 = make_lob(100_010_000_000, 100_015_000_000, 150, 200);
         tracker.process_event(
             &make_msg_ts(Action::Add, Side::Bid, ts + NS_PER_SECOND),
             &lob2,
             3,
-            0,
         );
 
         assert!(

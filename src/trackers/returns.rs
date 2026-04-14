@@ -42,8 +42,8 @@ use crate::statistics::{
 };
 use crate::time::resampler::{resample_to_grid, AggMode};
 use crate::AnalysisTracker;
-
-const NS_PER_SECOND: i64 = 1_000_000_000;
+use hft_statistics::time::format_scale_label;
+use hft_statistics::time::NS_PER_SECOND;
 
 /// Multi-scale return analysis tracker.
 pub struct ReturnTracker {
@@ -56,6 +56,11 @@ pub struct ReturnTracker {
     daily_drawdowns: WelfordAccumulator,
     daily_runups: WelfordAccumulator,
     n_days: u32,
+
+    /// Cached at start of each day via `begin_day` (replaces the old
+    /// `infer_day_params(&self.day_*)` call which re-derived these from timestamps).
+    utc_offset: i32,
+    day_epoch_ns: i64,
 }
 
 struct ScaleState {
@@ -95,6 +100,8 @@ impl ReturnTracker {
             daily_drawdowns: WelfordAccumulator::new(),
             daily_runups: WelfordAccumulator::new(),
             n_days: 0,
+            utc_offset: -5, // EST default; overwritten by begin_day at start of each day
+            day_epoch_ns: 0,
         }
     }
 
@@ -146,7 +153,8 @@ impl ReturnTracker {
                 if ret.is_finite() {
                     let ts = self.day_timestamps[i];
                     self.intraday_curve.add(ts, ret, utc_offset);
-                    self.intraday_abs_return_curve.add(ts, ret.abs(), utc_offset);
+                    self.intraday_abs_return_curve
+                        .add(ts, ret.abs(), utc_offset);
                 }
             }
         }
@@ -182,13 +190,12 @@ impl ReturnTracker {
 }
 
 impl AnalysisTracker for ReturnTracker {
-    fn process_event(
-        &mut self,
-        msg: &MboMessage,
-        lob_state: &LobState,
-        _regime: u8,
-        _day_epoch_ns: i64,
-    ) {
+    fn begin_day(&mut self, _day_index: u32, utc_offset: i32, day_epoch_ns: i64) {
+        self.utc_offset = utc_offset;
+        self.day_epoch_ns = day_epoch_ns;
+    }
+
+    fn process_event(&mut self, msg: &MboMessage, lob_state: &LobState, _regime: u8) {
         if lob_state.check_consistency() != BookConsistency::Valid {
             return;
         }
@@ -200,9 +207,10 @@ impl AnalysisTracker for ReturnTracker {
         }
     }
 
-    fn end_of_day(&mut self, _day_index: u32) {
-        let (utc_offset, day_epoch_ns) =
-            crate::time::regime::infer_day_params(&self.day_timestamps);
+    fn end_of_day(&mut self) {
+        // Use cached values from begin_day (replaces infer_day_params)
+        let utc_offset = self.utc_offset;
+        let day_epoch_ns = self.day_epoch_ns;
         self.process_day_returns(utc_offset, day_epoch_ns);
         self.n_days += 1;
     }
@@ -347,13 +355,14 @@ fn compute_hill_index(dist: &StreamingDistribution, left_tail: bool) -> f64 {
         return f64::NAN;
     }
 
-    let sum: f64 = abs_vals[..k]
-        .iter()
-        .map(|&x| (x / threshold).ln())
-        .sum();
+    let sum: f64 = abs_vals[..k].iter().map(|&x| (x / threshold).ln()).sum();
 
     let hill = sum / k as f64;
-    if hill > 1e-10 { 1.0 / hill } else { f64::NAN }
+    if hill > 1e-10 {
+        1.0 / hill
+    } else {
+        f64::NAN
+    }
 }
 
 /// Conditional VaR (CVaR / Expected Shortfall).
@@ -373,25 +382,15 @@ fn compute_cvar(dist: &StreamingDistribution, pct: f64) -> f64 {
         tail.iter().sum::<f64>() / tail.len() as f64
     }
 }
-
-fn format_scale_label(seconds: f64) -> String {
-    if seconds < 1.0 {
-        format!("{}ms", (seconds * 1000.0) as u64)
-    } else if seconds < 60.0 {
-        format!("{}s", seconds as u64)
-    } else {
-        format!("{}m", (seconds / 60.0) as u64)
-    }
-}
-
+// Local format function removed — replaced with hft_statistics::time::format_scale_label
+// (imported as `format_label` alias to preserve existing call sites)
 #[cfg(test)]
 mod tests {
     use super::*;
     use mbo_lob_reconstructor::{Action, Side};
 
     fn make_msg(ts: i64) -> MboMessage {
-        MboMessage::new(1, Action::Add, Side::Bid, 100_000_000_000, 100)
-            .with_timestamp(ts)
+        MboMessage::new(1, Action::Add, Side::Bid, 100_000_000_000, 100).with_timestamp(ts)
     }
 
     fn make_lob_with_mid(mid_nanodollars: i64) -> LobState {
@@ -410,10 +409,10 @@ mod tests {
         let ts_base = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
 
         let lob = make_lob_with_mid(100_000_000_000);
-        tracker.process_event(&make_msg(ts_base), &lob, 3, 0);
+        tracker.process_event(&make_msg(ts_base), &lob, 3);
 
         let lob2 = make_lob_with_mid(100_010_000_000);
-        tracker.process_event(&make_msg(ts_base + NS_PER_SECOND), &lob2, 3, 0);
+        tracker.process_event(&make_msg(ts_base + NS_PER_SECOND), &lob2, 3);
 
         assert_eq!(tracker.day_mid_prices.len(), 2);
     }
@@ -423,9 +422,9 @@ mod tests {
         let mut tracker = ReturnTracker::new(&[1.0], 1000);
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
         let lob = make_lob_with_mid(100_000_000_000);
-        tracker.process_event(&make_msg(ts), &lob, 3, 0);
+        tracker.process_event(&make_msg(ts), &lob, 3);
 
-        tracker.end_of_day(0);
+        tracker.end_of_day();
         tracker.reset_day();
         assert_eq!(tracker.day_mid_prices.len(), 0);
         assert_eq!(tracker.day_timestamps.len(), 0);
@@ -462,7 +461,10 @@ mod tests {
             dist.add(-(1.0 / i as f64));
         }
         let hill = compute_hill_index(&dist, true);
-        assert!(hill.is_finite(), "Hill index should be finite for power-law data");
+        assert!(
+            hill.is_finite(),
+            "Hill index should be finite for power-law data"
+        );
         assert!(hill > 0.0, "Hill index should be positive");
     }
 

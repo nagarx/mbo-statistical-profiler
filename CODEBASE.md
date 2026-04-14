@@ -54,8 +54,12 @@ All 13 trackers implement the `AnalysisTracker` trait defined in `src/lib.rs`:
 
 ```rust
 pub trait AnalysisTracker: Send {
-    fn process_event(&mut self, msg: &MboMessage, lob_state: &LobState, regime: u8, day_epoch_ns: i64);
-    fn end_of_day(&mut self, day_index: u32);
+    /// Called ONCE per day before any process_event calls. Default no-op.
+    fn begin_day(&mut self, day_index: u32, utc_offset: i32, day_epoch_ns: i64) {
+        let _ = (day_index, utc_offset, day_epoch_ns);
+    }
+    fn process_event(&mut self, msg: &MboMessage, lob_state: &LobState, regime: u8);
+    fn end_of_day(&mut self);
     fn reset_day(&mut self);
     fn finalize(&self) -> serde_json::Value;
     fn name(&self) -> &str;
@@ -65,20 +69,36 @@ pub trait AnalysisTracker: Send {
 **Lifecycle per day:**
 ```
 For each .dbn file (1 file = 1 day):
-  1. LobReconstructor processes every MBO event → produces LobState
-  2. time_regime(timestamp, utc_offset) → regime (0-6)
-  3. tracker.process_event(msg, lob_state, regime, day_epoch_ns)  — for ALL enabled trackers
-  4. tracker.end_of_day(day_index)  — at day boundary
-  5. tracker.reset_day()            — prepare for next day
+  1. profiler computes utc_offset = utc_offset_for_date(year, month, day)
+                       day_epoch  = midnight_utc_ns(year, month, day)
+  2. tracker.begin_day(day_index, utc_offset, day_epoch_ns)  — caches day context
+  3. LobReconstructor processes every MBO event → produces LobState
+  4. time_regime(timestamp, utc_offset) → regime (0-6)
+  5. tracker.process_event(msg, lob_state, regime)  — for ALL enabled trackers (HOT PATH)
+  6. tracker.end_of_day()  — at day boundary; trackers use cached context
+  7. tracker.reset_day()   — prepare for next day
 
 After all days:
-  6. tracker.finalize() → serde_json::Value
-  7. profiler::write_output() → numbered JSON files + provenance metadata
+  8. tracker.finalize() → serde_json::Value
+  9. profiler::write_output() → numbered JSON files + provenance metadata
 ```
+
+**Key design decision (introduced 2026-04-14)**: `utc_offset` and `day_epoch_ns`
+are passed via the `begin_day` lifecycle method (not via `process_event`'s hot
+path) and cached as fields on trackers that need them. This:
+- Eliminates 18M+ redundant arg passes per day per tracker
+- Replaces the previous `infer_day_params()` calls in 6 trackers (used to re-derive
+  the same values from per-day buffer timestamps)
+- Eliminates `day_timestamps`/`day_spreads` replay buffers in SpreadTracker (~320 MB)
+  and `day_trade_timestamps` in TradeTracker (~16 MB) — `intraday_curve.add()` is now
+  called inline in `process_event` using the cached `utc_offset`.
+- Fixes the schema drift bug where `profiler.rs` previously emitted
+  `day_epoch_ns(y,m,d,offset)` (midnight LOCAL as UTC ns) — incompatible with
+  `resample_to_grid`'s expected midnight UTC. Now uses `midnight_utc_ns(y,m,d)`.
 
 **Design principles:**
 - **Single pass**: All trackers process events simultaneously — no re-reads
-- **Bounded memory**: Streaming accumulators (Welford, reservoir sampling) — no full-dataset storage
+- **Bounded streaming accumulators**: Welford + reservoir sampling are O(1) memory. Some trackers retain per-day buffers (mid prices, OFI bins) that are needed for `resample_to_grid`-based per-scale analysis at end-of-day. Buffers are pre-allocated at `Vec::with_capacity(20_000_000)` per tracker; cleared by `reset_day()` between days. Spread/Trade trackers eliminated their replay buffers (2026-04-14 refactor) and now populate intraday curves inline in `process_event`.
 - **Composable**: Each tracker is independent, enable/disable via TOML config
 - **Deterministic**: Same input → same output (seeded RNG for reservoir sampling)
 - **Zero dependency on feature-extractor**: Uses `mbo-lob-reconstructor` library directly
@@ -526,8 +546,12 @@ The profiler re-exports statistical primitives from the [`hft-statistics`](https
 - `time_regime(timestamp_ns, utc_offset) → u8` — 7-regime intraday classification
 - `utc_offset_for_date(year, month, day) → i32` — DST-aware UTC offset (2nd Sunday March, 1st Sunday November)
 - `infer_utc_offset(timestamps) → i32` — infer UTC offset from first timestamp
-- `infer_day_params(timestamps) → (utc_offset: i32, day_epoch_ns: i64)` — infer both from timestamps
-- `day_epoch_ns(year, month, day, utc_offset) → i64` — midnight UTC in nanoseconds for a trading day
+- `infer_day_params(timestamps) → (utc_offset: i32, day_epoch_ns: i64)` — infer both from timestamps (used by tests; production code now uses `begin_day` lifecycle hook)
+- `midnight_utc_ns(year, month, day) → i64` — canonical midnight UTC for `resample_to_grid` and `IntradayCurveAccumulator::add` (preferred for new code)
+- `day_epoch_ns(year, month, day, _utc_offset) → i64` — **deprecated**; now delegates to `midnight_utc_ns` (the `_utc_offset` parameter is ignored)
+- `format_scale_label(seconds: f64) → String` — compact timescale label: `"100ms"`, `"5s"`, `"1m"`, `"1h"`
+- `pearson_r_pairs(&[(f64, f64)]) → f64` and `pearson_r_slices(&[f64], &[f64]) → f64` — two-pass numerically-stable Pearson correlation; returns NaN on `n<3` or degenerate variance (wrap with `.is_finite()` for JSON serialization)
+- Constants `NS_PER_{MICROSECOND, MILLISECOND, SECOND, MINUTE, HOUR, DAY}` and `NS_PER_SECOND_F64` — centralized timestamp constants (replaces 8+ local copies in this crate)
 - `resample_to_grid(timestamps_ns, values, bin_width_ns, day_epoch_ns, utc_offset_hours, mode) → ResampledBins` — canonical-grid resampling with 390-bin intraday support
 - `N_REGIMES = 7` — number of time regimes
 

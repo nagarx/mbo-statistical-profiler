@@ -24,15 +24,16 @@ fn main() {
     let config = match ProfilerConfig::from_file(&config_path) {
         Ok(c) => c,
         Err(e) => {
-            eprintln!("Failed to load config from {}: {}", config_path.display(), e);
+            eprintln!(
+                "Failed to load config from {}: {}",
+                config_path.display(),
+                e
+            );
             std::process::exit(1);
         }
     };
 
-    log::info!(
-        "MBO Statistical Profiler v{}",
-        env!("CARGO_PKG_VERSION")
-    );
+    log::info!("MBO Statistical Profiler v{}", env!("CARGO_PKG_VERSION"));
     log::info!(
         "Symbol: {}, Exchange: {}",
         config.input.symbol,

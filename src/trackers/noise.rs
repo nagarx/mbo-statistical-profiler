@@ -47,8 +47,7 @@ use serde_json::json;
 use crate::statistics::WelfordAccumulator;
 use crate::time::resampler::{resample_to_grid, AggMode};
 use crate::AnalysisTracker;
-
-const NS_PER_SECOND: i64 = 1_000_000_000;
+use hft_statistics::time::NS_PER_SECOND;
 
 /// Number of scales in the signature plot.
 const N_SIGNATURE_SCALES: usize = 20;
@@ -66,6 +65,11 @@ pub struct NoiseTracker {
     daily_roll_spread: WelfordAccumulator,
 
     n_days: u32,
+
+    /// Cached at start of each day via `begin_day` (replaces the old
+    /// `infer_day_params(&self.day_*)` call which re-derived these from timestamps).
+    utc_offset: i32,
+    day_epoch_ns: i64,
 }
 
 impl NoiseTracker {
@@ -85,6 +89,8 @@ impl NoiseTracker {
             daily_snr: WelfordAccumulator::new(),
             daily_roll_spread: WelfordAccumulator::new(),
             n_days: 0,
+            utc_offset: -5, // EST default; overwritten by begin_day at start of each day
+            day_epoch_ns: 0,
         }
     }
 
@@ -204,13 +210,12 @@ impl Default for NoiseTracker {
 }
 
 impl AnalysisTracker for NoiseTracker {
-    fn process_event(
-        &mut self,
-        msg: &MboMessage,
-        lob_state: &LobState,
-        _regime: u8,
-        _day_epoch_ns: i64,
-    ) {
+    fn begin_day(&mut self, _day_index: u32, utc_offset: i32, day_epoch_ns: i64) {
+        self.utc_offset = utc_offset;
+        self.day_epoch_ns = day_epoch_ns;
+    }
+
+    fn process_event(&mut self, msg: &MboMessage, lob_state: &LobState, _regime: u8) {
         if lob_state.check_consistency() != BookConsistency::Valid {
             return;
         }
@@ -222,9 +227,10 @@ impl AnalysisTracker for NoiseTracker {
         }
     }
 
-    fn end_of_day(&mut self, _day_index: u32) {
-        let (utc_offset, day_epoch_ns) =
-            crate::time::regime::infer_day_params(&self.day_timestamps);
+    fn end_of_day(&mut self) {
+        // Use cached values from begin_day (replaces infer_day_params)
+        let utc_offset = self.utc_offset;
+        let day_epoch_ns = self.day_epoch_ns;
         self.process_day_noise(utc_offset, day_epoch_ns);
         self.n_days += 1;
     }
@@ -333,8 +339,8 @@ mod tests {
         let ts_base = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
         let lob = make_lob_with_mid(100_000_000_000);
 
-        tracker.process_event(&make_msg(ts_base), &lob, 3, 0);
-        tracker.process_event(&make_msg(ts_base + NS_PER_SECOND), &lob, 3, 0);
+        tracker.process_event(&make_msg(ts_base), &lob, 3);
+        tracker.process_event(&make_msg(ts_base + NS_PER_SECOND), &lob, 3);
 
         assert_eq!(tracker.day_mid_prices.len(), 2);
     }
@@ -344,9 +350,9 @@ mod tests {
         let mut tracker = NoiseTracker::new();
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
         let lob = make_lob_with_mid(100_000_000_000);
-        tracker.process_event(&make_msg(ts), &lob, 3, 0);
+        tracker.process_event(&make_msg(ts), &lob, 3);
 
-        tracker.end_of_day(0);
+        tracker.end_of_day();
         tracker.reset_day();
 
         assert!(tracker.day_mid_prices.is_empty());
@@ -372,7 +378,7 @@ mod tests {
     fn test_roll_spread_negative_autocovariance() {
         // With bid-ask bounce, first-order autocovariance of returns should be negative.
         // gamma_1 < 0 → Roll spread is defined.
-        let returns = vec![0.01, -0.01, 0.01, -0.01, 0.01, -0.01];
+        let returns = [0.01, -0.01, 0.01, -0.01, 0.01, -0.01];
         let n = returns.len() as f64;
         let mean = returns.iter().sum::<f64>() / n;
         let gamma_1: f64 = returns

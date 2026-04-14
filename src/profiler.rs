@@ -12,7 +12,7 @@ use mbo_lob_reconstructor::{
 };
 
 use crate::config::ProfilerConfig;
-use crate::time::regime::{time_regime, utc_offset_for_date};
+use crate::time::regime::{midnight_utc_ns, time_regime, utc_offset_for_date};
 use crate::AnalysisTracker;
 
 /// Result of profiling a complete dataset.
@@ -58,7 +58,18 @@ pub fn run(
         let day: u32 = date_str[8..10].parse()?;
 
         let utc_offset = utc_offset_for_date(year, month, day);
-        let day_epoch = crate::time::regime::day_epoch_ns(year, month, day, utc_offset);
+        // CORRECTED semantics (was day_epoch_ns(y,m,d,offset) which produced
+        // midnight LOCAL as UTC ns — incompatible with resample_to_grid).
+        // midnight_utc_ns returns midnight UTC, matching resample_to_grid +
+        // IntradayCurveAccumulator + infer_day_params conventions.
+        let day_epoch = midnight_utc_ns(year, month, day);
+
+        // Notify trackers of new day: cache utc_offset + day_epoch_ns as fields
+        // for those that need them. Trackers that don't override begin_day get
+        // the default no-op.
+        for tracker in trackers.iter_mut() {
+            tracker.begin_day(day_index, utc_offset, day_epoch);
+        }
 
         let mut lob = LobReconstructor::new(10);
         let mut state_buf = LobState::new(10);
@@ -74,15 +85,16 @@ pub fn run(
                 .map(|ts| time_regime(ts, utc_offset))
                 .unwrap_or(0);
 
+            // Hot path: 3 args. Day-level context already cached via begin_day.
             for tracker in trackers.iter_mut() {
-                tracker.process_event(&msg, &state_buf, regime, day_epoch);
+                tracker.process_event(&msg, &state_buf, regime);
             }
 
             day_events += 1;
         }
 
         for tracker in trackers.iter_mut() {
-            tracker.end_of_day(day_index);
+            tracker.end_of_day();
         }
 
         total_events += day_events;

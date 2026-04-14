@@ -79,13 +79,7 @@ impl Default for DepthTracker {
 }
 
 impl AnalysisTracker for DepthTracker {
-    fn process_event(
-        &mut self,
-        _msg: &MboMessage,
-        lob_state: &LobState,
-        regime: u8,
-        _day_epoch_ns: i64,
-    ) {
+    fn process_event(&mut self, _msg: &MboMessage, lob_state: &LobState, regime: u8) {
         if !lob_state.is_valid() {
             return;
         }
@@ -117,7 +111,7 @@ impl AnalysisTracker for DepthTracker {
         self.regime_total_depth.add(regime, total_vol);
     }
 
-    fn end_of_day(&mut self, _day_index: u32) {
+    fn end_of_day(&mut self) {
         self.n_days += 1;
     }
 
@@ -231,7 +225,7 @@ mod tests {
         let mut tracker = DepthTracker::new();
         let lob = make_lob_symmetric();
 
-        tracker.process_event(&make_msg(), &lob, 3, 0);
+        tracker.process_event(&make_msg(), &lob, 3);
 
         assert_eq!(tracker.n_snapshots, 1);
         assert!(
@@ -246,7 +240,7 @@ mod tests {
         let mut tracker = DepthTracker::new();
         let lob = make_lob_imbalanced();
 
-        tracker.process_event(&make_msg(), &lob, 3, 0);
+        tracker.process_event(&make_msg(), &lob, 3);
 
         let imbalance = tracker.depth_imbalance_dist.mean();
         assert!(
@@ -267,7 +261,7 @@ mod tests {
         let mut tracker = DepthTracker::new();
         let lob = make_lob_symmetric();
 
-        tracker.process_event(&make_msg(), &lob, 3, 0);
+        tracker.process_event(&make_msg(), &lob, 3);
 
         // L1 = 200, Total = 2000, concentration = 0.1
         let l1_conc = tracker.l1_concentration.mean();
@@ -282,8 +276,8 @@ mod tests {
     fn test_finalize_structure() {
         let mut tracker = DepthTracker::new();
         let lob = make_lob_symmetric();
-        tracker.process_event(&make_msg(), &lob, 3, 0);
-        tracker.end_of_day(0);
+        tracker.process_event(&make_msg(), &lob, 3);
+        tracker.end_of_day();
 
         let report = tracker.finalize();
         assert_eq!(report["tracker"], "DepthTracker");
@@ -300,7 +294,7 @@ mod tests {
         let mut tracker = DepthTracker::new();
         let lob = LobState::new(10);
 
-        tracker.process_event(&make_msg(), &lob, 3, 0);
+        tracker.process_event(&make_msg(), &lob, 3);
         assert_eq!(tracker.n_snapshots, 0);
     }
 
@@ -319,7 +313,7 @@ mod tests {
             lob.ask_prices[i] = 100_010_000_000 + (i as i64 * 10_000_000);
         }
 
-        tracker.process_event(&make_msg(), &lob, 3, 0);
+        tracker.process_event(&make_msg(), &lob, 3);
 
         let imbalance = tracker.depth_imbalance_dist.mean();
         assert!(
@@ -347,7 +341,7 @@ mod tests {
             lob.ask_prices[i] = 100_010_000_000 + (i as i64 * 10_000_000);
         }
 
-        tracker.process_event(&make_msg(), &lob, 3, 0);
+        tracker.process_event(&make_msg(), &lob, 3);
 
         let l1_conc = tracker.l1_concentration.mean();
         assert!(

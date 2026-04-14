@@ -16,12 +16,13 @@ use crate::AnalysisTracker;
 /// Data quality analysis tracker.
 pub struct QualityTracker {
     total_events: u64,
-    action_counts: [u64; 7],  // Add, Modify, Cancel, Trade, Fill, Clear, None
-    book_consistency_counts: [u64; 4],  // Valid, Empty, Locked, Crossed
+    action_counts: [u64; 7], // Add, Modify, Cancel, Trade, Fill, Clear, None
+    book_consistency_counts: [u64; 4], // Valid, Empty, Locked, Crossed
     regime_counts: [u64; N_REGIMES],
     n_days: u32,
-    per_day_counts: Vec<(u32, u64)>,  // (day_index, event_count)
+    per_day_counts: Vec<(u32, u64)>, // (day_index, event_count)
     current_day_count: u64,
+    current_day_index: u32, // Set by begin_day; used in end_of_day.
 }
 
 impl QualityTracker {
@@ -34,6 +35,7 @@ impl QualityTracker {
             n_days: 0,
             per_day_counts: Vec::new(),
             current_day_count: 0,
+            current_day_index: 0,
         }
     }
 
@@ -60,13 +62,11 @@ impl QualityTracker {
 }
 
 impl AnalysisTracker for QualityTracker {
-    fn process_event(
-        &mut self,
-        msg: &MboMessage,
-        lob_state: &LobState,
-        regime: u8,
-        _day_epoch_ns: i64,
-    ) {
+    fn begin_day(&mut self, day_index: u32, _utc_offset: i32, _day_epoch_ns: i64) {
+        self.current_day_index = day_index;
+    }
+
+    fn process_event(&mut self, msg: &MboMessage, lob_state: &LobState, regime: u8) {
         self.total_events += 1;
         self.current_day_count += 1;
         self.action_counts[Self::action_index(msg.action)] += 1;
@@ -77,9 +77,9 @@ impl AnalysisTracker for QualityTracker {
         }
     }
 
-    fn end_of_day(&mut self, day_index: u32) {
+    fn end_of_day(&mut self) {
         self.per_day_counts
-            .push((day_index, self.current_day_count));
+            .push((self.current_day_index, self.current_day_count));
         self.n_days += 1;
     }
 
@@ -172,8 +172,14 @@ mod tests {
     use super::*;
 
     fn make_msg(action: Action) -> MboMessage {
-        MboMessage::new(1, action, mbo_lob_reconstructor::Side::Bid, 100_000_000_000, 100)
-            .with_timestamp(1_000_000_000)
+        MboMessage::new(
+            1,
+            action,
+            mbo_lob_reconstructor::Side::Bid,
+            100_000_000_000,
+            100,
+        )
+        .with_timestamp(1_000_000_000)
     }
 
     fn make_lob() -> LobState {
@@ -190,9 +196,9 @@ mod tests {
         let mut tracker = QualityTracker::new();
         let lob = make_lob();
 
-        tracker.process_event(&make_msg(Action::Add), &lob, 3, 0);
-        tracker.process_event(&make_msg(Action::Cancel), &lob, 3, 0);
-        tracker.process_event(&make_msg(Action::Trade), &lob, 3, 0);
+        tracker.process_event(&make_msg(Action::Add), &lob, 3);
+        tracker.process_event(&make_msg(Action::Cancel), &lob, 3);
+        tracker.process_event(&make_msg(Action::Trade), &lob, 3);
 
         assert_eq!(tracker.total_events, 3);
         assert_eq!(tracker.action_counts[0], 1); // Add
@@ -205,17 +211,17 @@ mod tests {
         let mut tracker = QualityTracker::new();
         let lob = make_lob();
 
-        tracker.process_event(&make_msg(Action::Add), &lob, 3, 0);
-        tracker.process_event(&make_msg(Action::Add), &lob, 3, 0);
-        tracker.end_of_day(0);
+        tracker.process_event(&make_msg(Action::Add), &lob, 3);
+        tracker.process_event(&make_msg(Action::Add), &lob, 3);
+        tracker.end_of_day();
 
         assert_eq!(tracker.n_days, 1);
         assert_eq!(tracker.per_day_counts.len(), 1);
         assert_eq!(tracker.per_day_counts[0], (0, 2));
 
         tracker.reset_day();
-        tracker.process_event(&make_msg(Action::Add), &lob, 3, 0);
-        tracker.end_of_day(1);
+        tracker.process_event(&make_msg(Action::Add), &lob, 3);
+        tracker.end_of_day();
 
         assert_eq!(tracker.n_days, 2);
         assert_eq!(tracker.total_events, 3);
@@ -227,9 +233,9 @@ mod tests {
         let lob = make_lob();
 
         for _ in 0..10 {
-            tracker.process_event(&make_msg(Action::Add), &lob, 3, 0);
+            tracker.process_event(&make_msg(Action::Add), &lob, 3);
         }
-        tracker.end_of_day(0);
+        tracker.end_of_day();
 
         let report = tracker.finalize();
         assert_eq!(report["total_events"], 10);
@@ -242,10 +248,10 @@ mod tests {
         let mut tracker = QualityTracker::new();
 
         let valid_lob = make_lob();
-        tracker.process_event(&make_msg(Action::Add), &valid_lob, 3, 0);
+        tracker.process_event(&make_msg(Action::Add), &valid_lob, 3);
 
         let empty_lob = LobState::new(10);
-        tracker.process_event(&make_msg(Action::Add), &empty_lob, 0, 0);
+        tracker.process_event(&make_msg(Action::Add), &empty_lob, 0);
 
         let report = tracker.finalize();
         assert!(report["book_consistency"]["valid_pct"].as_f64().unwrap() > 0.0);

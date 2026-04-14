@@ -37,8 +37,10 @@ pub struct SpreadTracker {
     total_events: u64,
     trade_conditional_spread: StreamingDistribution,
     n_days: u32,
-    day_timestamps: Vec<i64>,
-    day_spreads: Vec<f64>,
+    /// Cached at start of each day via `begin_day` so `intraday_curve.add` can
+    /// be called inline in `process_event` (eliminates the previous 320 MB
+    /// `day_timestamps` + `day_spreads` replay buffers).
+    utc_offset: i32,
 }
 
 impl SpreadTracker {
@@ -54,20 +56,17 @@ impl SpreadTracker {
             total_events: 0,
             trade_conditional_spread: StreamingDistribution::new(reservoir_capacity),
             n_days: 0,
-            day_timestamps: Vec::with_capacity(20_000_000),
-            day_spreads: Vec::with_capacity(20_000_000),
+            utc_offset: -5, // EST default; overwritten by begin_day at start of each day
         }
     }
 }
 
 impl AnalysisTracker for SpreadTracker {
-    fn process_event(
-        &mut self,
-        msg: &MboMessage,
-        lob: &LobState,
-        regime: u8,
-        _day_epoch_ns: i64,
-    ) {
+    fn begin_day(&mut self, _day_index: u32, utc_offset: i32, _day_epoch_ns: i64) {
+        self.utc_offset = utc_offset;
+    }
+
+    fn process_event(&mut self, msg: &MboMessage, lob: &LobState, regime: u8) {
         if lob.check_consistency() != BookConsistency::Valid {
             return;
         }
@@ -100,9 +99,11 @@ impl AnalysisTracker for SpreadTracker {
             _ => self.width_counts[3] += 1,
         }
 
+        // Inline intraday-curve population (was a replay loop in end_of_day
+        // before, requiring 320 MB of day_timestamps + day_spreads buffers).
+        // begin_day caches utc_offset; equivalent result without the buffers.
         if let Some(ts) = msg.timestamp {
-            self.day_timestamps.push(ts);
-            self.day_spreads.push(spread);
+            self.intraday_curve.add(ts, spread, self.utc_offset);
         }
 
         if lob.is_trade_event() {
@@ -110,20 +111,12 @@ impl AnalysisTracker for SpreadTracker {
         }
     }
 
-    fn end_of_day(&mut self, _day_index: u32) {
-        if !self.day_timestamps.is_empty() {
-            let utc_offset = crate::time::regime::infer_utc_offset(&self.day_timestamps);
-            for i in 0..self.day_timestamps.len() {
-                self.intraday_curve
-                    .add(self.day_timestamps[i], self.day_spreads[i], utc_offset);
-            }
-        }
+    fn end_of_day(&mut self) {
         self.n_days += 1;
     }
 
     fn reset_day(&mut self) {
-        self.day_timestamps.clear();
-        self.day_spreads.clear();
+        // No per-day state to reset (intraday_curve aggregates across days).
     }
 
     fn finalize(&self) -> serde_json::Value {
@@ -131,7 +124,13 @@ impl AnalysisTracker for SpreadTracker {
         let width_pcts: Vec<f64> = self
             .width_counts
             .iter()
-            .map(|&c| if total > 0.0 { c as f64 / total * 100.0 } else { 0.0 })
+            .map(|&c| {
+                if total > 0.0 {
+                    c as f64 / total * 100.0
+                } else {
+                    0.0
+                }
+            })
             .collect();
 
         let curve: Vec<serde_json::Value> = self
@@ -191,7 +190,7 @@ mod tests {
     fn test_one_tick_spread() {
         let mut tracker = SpreadTracker::new(1000);
         let lob = make_lob_spread(100_000_000_000, 100_010_000_000);
-        tracker.process_event(&make_msg(), &lob, 3, 0);
+        tracker.process_event(&make_msg(), &lob, 3);
 
         assert_eq!(tracker.total_events, 1);
         assert_eq!(tracker.width_counts[0], 1);
@@ -208,19 +207,30 @@ mod tests {
     }
 
     #[test]
-    fn test_buffers_for_intraday_curve() {
+    fn test_intraday_curve_populated_inline() {
+        // Replaces the previous test_buffers_for_intraday_curve test, which
+        // asserted the existence of day_timestamps + day_spreads replay buffers.
+        // Those buffers were eliminated; the intraday curve is now populated
+        // inline in process_event using utc_offset cached via begin_day.
         let mut tracker = SpreadTracker::new(1000);
         let lob = make_lob_spread(100_000_000_000, 100_010_000_000);
-        let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND; // 09:30 ET
-        let msg = MboMessage::new(1, Action::Add, Side::Bid, 100_000_000_000, 100)
-            .with_timestamp(ts);
-        tracker.process_event(&msg, &lob, 3, 0);
+        // 14:30 UTC = 09:30 ET (open) for offset=-5
+        let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
+        let msg =
+            MboMessage::new(1, Action::Add, Side::Bid, 100_000_000_000, 100).with_timestamp(ts);
 
-        assert_eq!(tracker.day_timestamps.len(), 1);
-        assert_eq!(tracker.day_spreads.len(), 1);
+        tracker.begin_day(0, -5, 0);
+        tracker.process_event(&msg, &lob, 3);
 
-        tracker.reset_day();
-        assert_eq!(tracker.day_timestamps.len(), 0);
+        // Verify intraday curve has 1 event in the open bin.
+        let bins: Vec<_> = tracker
+            .intraday_curve
+            .finalize()
+            .into_iter()
+            .filter(|b| b.count > 0)
+            .collect();
+        assert_eq!(bins.len(), 1, "Expected exactly 1 populated bin");
+        assert_eq!(bins[0].count, 1, "Bin should have 1 event");
     }
 
     #[test]
@@ -253,7 +263,7 @@ mod tests {
         let mut tracker = SpreadTracker::new(1000);
         // 3-tick spread: bid=$100.00, ask=$100.03
         let lob = make_lob_spread(100_000_000_000, 100_030_000_000);
-        tracker.process_event(&make_msg(), &lob, 3, 0);
+        tracker.process_event(&make_msg(), &lob, 3);
         assert_eq!(
             tracker.width_counts[2], 1,
             "3-tick spread should go to bucket [2] (3-4 tick)"

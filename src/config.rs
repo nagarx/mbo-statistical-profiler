@@ -217,11 +217,7 @@ mod tests {
             "Config parse failures (deny_unknown_fields catches misplaced keys):\n{}",
             failures.join("\n")
         );
-        assert!(
-            count >= 27,
-            "Expected at least 27 configs, found {}",
-            count
-        );
+        assert!(count >= 27, "Expected at least 27 configs, found {}", count);
     }
 
     #[test]
@@ -316,8 +312,7 @@ quality = true
         let crsp_path = std::path::Path::new(env!("CARGO_MANIFEST_DIR"))
             .join("configs")
             .join("xnas_crsp_134day.toml");
-        let cfg = ProfilerConfig::from_file(&crsp_path)
-            .expect("CRSP config must parse");
+        let cfg = ProfilerConfig::from_file(&crsp_path).expect("CRSP config must parse");
         assert_eq!(
             cfg.vpin_volume_bar_size, 500,
             "CRSP intended vpin_volume_bar_size = 500 (thin book); \

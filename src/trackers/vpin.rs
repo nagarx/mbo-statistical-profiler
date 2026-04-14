@@ -91,15 +91,32 @@ pub struct VpinTracker {
     n_days: u32,
     n_volume_bars_total: u64,
 
+    /// Kept as `Vec<(i64, f64)>` (NOT eliminated like Spread/Trade buffers): the
+    /// timestamps are essential for VPIN-spread temporal pairing in
+    /// `process_day_vpin` where each VPIN value's timestamp is matched with the
+    /// closest-in-time spread.
     day_spreads: Vec<(i64, f64)>,
     day_squared_returns: Vec<f64>,
+
+    /// Cached at start of each day via `begin_day` (replaces the old
+    /// `infer_utc_offset(&self.day_spreads.iter().map(...))` call which
+    /// allocated a throwaway Vec just to read timestamps[0]).
+    utc_offset: i32,
 }
 
 impl VpinTracker {
     pub fn new(volume_bar_size: u64, window_bars: usize) -> Self {
         Self {
-            volume_bar_size: if volume_bar_size > 0 { volume_bar_size } else { DEFAULT_VOLUME_BAR_SIZE },
-            window_bars: if window_bars > 0 { window_bars } else { DEFAULT_WINDOW_BARS },
+            volume_bar_size: if volume_bar_size > 0 {
+                volume_bar_size
+            } else {
+                DEFAULT_VOLUME_BAR_SIZE
+            },
+            window_bars: if window_bars > 0 {
+                window_bars
+            } else {
+                DEFAULT_WINDOW_BARS
+            },
             current_bar_volume: 0,
             current_bar_buy_vol: 0,
             current_bar_sell_vol: 0,
@@ -118,6 +135,7 @@ impl VpinTracker {
             n_volume_bars_total: 0,
             day_spreads: Vec::new(),
             day_squared_returns: Vec::new(),
+            utc_offset: -5, // EST default; overwritten by begin_day at start of each day
         }
     }
 
@@ -174,7 +192,9 @@ impl VpinTracker {
                 .iter()
                 .map(|b| {
                     let total = b.buy_volume + b.sell_volume;
-                    if total == 0 { return 0.0; }
+                    if total == 0 {
+                        return 0.0;
+                    }
                     (b.buy_volume as f64 - b.sell_volume as f64).abs() / total as f64
                 })
                 .sum();
@@ -222,13 +242,7 @@ impl VpinTracker {
 }
 
 impl AnalysisTracker for VpinTracker {
-    fn process_event(
-        &mut self,
-        msg: &MboMessage,
-        lob_state: &LobState,
-        regime: u8,
-        _day_epoch_ns: i64,
-    ) {
+    fn process_event(&mut self, msg: &MboMessage, lob_state: &LobState, regime: u8) {
         if lob_state.check_consistency() != BookConsistency::Valid {
             return;
         }
@@ -299,11 +313,14 @@ impl AnalysisTracker for VpinTracker {
         }
     }
 
-    fn end_of_day(&mut self, _day_index: u32) {
-        let utc_offset = crate::time::regime::infer_utc_offset(
-            &self.day_spreads.iter().map(|(ts, _)| *ts).collect::<Vec<_>>(),
-        );
-        self.process_day_vpin(utc_offset);
+    fn begin_day(&mut self, _day_index: u32, utc_offset: i32, _day_epoch_ns: i64) {
+        self.utc_offset = utc_offset;
+    }
+
+    fn end_of_day(&mut self) {
+        // Use cached utc_offset from begin_day (eliminates throwaway Vec
+        // allocation that was needed by the old infer_utc_offset call).
+        self.process_day_vpin(self.utc_offset);
         self.n_days += 1;
     }
 
@@ -330,7 +347,13 @@ impl AnalysisTracker for VpinTracker {
             })
             .collect();
 
-        let vpin_spread_corr = compute_correlation(&self.vpin_spread_pairs);
+        // Two-pass numerically-stable Pearson r from hft_statistics.
+        let vpin_spread_corr = hft_statistics::statistics::pearson_r_pairs(&self.vpin_spread_pairs);
+        let vpin_spread_corr_json = if vpin_spread_corr.is_finite() {
+            json!(vpin_spread_corr)
+        } else {
+            json!(null)
+        };
 
         json!({
             "tracker": "VpinTracker",
@@ -346,7 +369,7 @@ impl AnalysisTracker for VpinTracker {
                 "max": self.daily_mean_vpin.max(),
                 "count": self.daily_mean_vpin.count(),
             },
-            "vpin_spread_correlation": vpin_spread_corr,
+            "vpin_spread_correlation": vpin_spread_corr_json,
             "regime_conditional_vpin": self.regime_vpin.finalize(),
             "intraday_vpin_curve": curve,
         })
@@ -357,30 +380,8 @@ impl AnalysisTracker for VpinTracker {
     }
 }
 
-fn compute_correlation(pairs: &[(f64, f64)]) -> f64 {
-    let n = pairs.len();
-    if n < 3 {
-        return f64::NAN;
-    }
-    let nf = n as f64;
-    let (mut sx, mut sy, mut sxy, mut sx2, mut sy2) = (0.0, 0.0, 0.0, 0.0, 0.0);
-    for &(x, y) in pairs {
-        sx += x;
-        sy += y;
-        sxy += x * y;
-        sx2 += x * x;
-        sy2 += y * y;
-    }
-    let cov = sxy / nf - (sx / nf) * (sy / nf);
-    let var_x = sx2 / nf - (sx / nf).powi(2);
-    let var_y = sy2 / nf - (sy / nf).powi(2);
-    let denom = (var_x * var_y).sqrt();
-    if denom < 1e-15 {
-        f64::NAN
-    } else {
-        cov / denom
-    }
-}
+// Local one-pass `compute_correlation` removed — replaced with
+// `hft_statistics::statistics::pearson_r_pairs` (two-pass, numerically stable).
 
 #[cfg(test)]
 mod tests {
@@ -409,7 +410,7 @@ mod tests {
 
         for i in 0..10 {
             let msg = make_trade(100_000_000_000, 50, Side::Bid, ts + i * NS_PER_SECOND);
-            tracker.process_event(&msg, &lob, 3, 0);
+            tracker.process_event(&msg, &lob, 3);
         }
         // 10 trades * 50 shares = 500 shares / 100 per bar = 5 bars
         assert_eq!(tracker.completed_bars.len(), 5, "Should have 5 volume bars");
@@ -424,15 +425,12 @@ mod tests {
         for i in 0..20 {
             let side = if i % 3 == 0 { Side::Ask } else { Side::Bid };
             let msg = make_trade(100_000_000_000, 50, side, ts + i * NS_PER_SECOND);
-            tracker.process_event(&msg, &lob, 3, 0);
+            tracker.process_event(&msg, &lob, 3);
         }
-        tracker.end_of_day(0);
+        tracker.end_of_day();
 
         for &(_, vpin) in &tracker.vpin_values {
-            assert!(
-                vpin >= 0.0 && vpin <= 1.0,
-                "VPIN {} outside [0, 1]", vpin
-            );
+            assert!((0.0..=1.0).contains(&vpin), "VPIN {} outside [0, 1]", vpin);
         }
     }
 
@@ -446,15 +444,16 @@ mod tests {
 
         for i in 0..10 {
             let msg = make_trade(100_000_000_000, 100, Side::Ask, ts + i * NS_PER_SECOND);
-            tracker.process_event(&msg, &lob, 3, 0);
+            tracker.process_event(&msg, &lob, 3);
         }
-        tracker.end_of_day(0);
+        tracker.end_of_day();
 
         if !tracker.vpin_values.is_empty() {
             let last_vpin = tracker.vpin_values.last().unwrap().1;
             assert!(
                 (last_vpin - 1.0).abs() < 1e-10,
-                "All-buy VPIN should be 1.0, got {}", last_vpin
+                "All-buy VPIN should be 1.0, got {}",
+                last_vpin
             );
         }
     }
@@ -469,15 +468,16 @@ mod tests {
         for i in 0..20 {
             let side = if i % 2 == 0 { Side::Bid } else { Side::Ask };
             let msg = make_trade(100_000_000_000, 100, side, ts + i * NS_PER_SECOND);
-            tracker.process_event(&msg, &lob, 3, 0);
+            tracker.process_event(&msg, &lob, 3);
         }
-        tracker.end_of_day(0);
+        tracker.end_of_day();
 
         if !tracker.vpin_values.is_empty() {
             let last_vpin = tracker.vpin_values.last().unwrap().1;
             assert!(
                 last_vpin < 0.1,
-                "Balanced buy/sell VPIN should be near 0, got {}", last_vpin
+                "Balanced buy/sell VPIN should be near 0, got {}",
+                last_vpin
             );
         }
     }

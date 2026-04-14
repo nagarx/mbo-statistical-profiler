@@ -29,13 +29,23 @@
 //! - Cont, R., Kukanov, A. & Stoikov, S. (2014). "The Price Impact of Order
 //!   Book Events." Journal of Financial Econometrics, 12(1), 47-88.
 
+// TODO(plan/D6 + Step 5.8): Extract `compute_ofi` to shared `OfiPrevState::compute()`
+// in trackers/ofi_primitives.rs (deferred from this commit; logic is character-identical
+// to the copy in ofi.rs).
+//
+// TODO(plan/Step 5.5): The inline Pearson r computations in process_day_cross_scale
+// trigger clippy::needless_range_loop. Refactor to use
+// `hft_statistics::statistics::pearson_r_slices` deferred — extraction is invasive due
+// to cross-day weighted-mean aggregation logic. Allow lint at file scope until refactored.
+#![allow(clippy::needless_range_loop)]
+
 use mbo_lob_reconstructor::{BookConsistency, LobState, MboMessage};
 use serde_json::json;
 
 use crate::time::resampler::{resample_to_grid, AggMode};
 use crate::AnalysisTracker;
-
-const NS_PER_SECOND: i64 = 1_000_000_000;
+use hft_statistics::time::format_scale_label as format_label;
+use hft_statistics::time::NS_PER_SECOND;
 
 pub struct CrossScaleOfiTracker {
     prev_bid_price: i64,
@@ -57,6 +67,11 @@ pub struct CrossScaleOfiTracker {
     count_matrix: Vec<Vec<u64>>,
 
     n_days: u32,
+
+    /// Cached at start of each day via `begin_day` (replaces the old
+    /// `infer_day_params(&self.day_*)` call which re-derived these from timestamps).
+    utc_offset: i32,
+    day_epoch_ns: i64,
 }
 
 impl CrossScaleOfiTracker {
@@ -80,6 +95,8 @@ impl CrossScaleOfiTracker {
             correlation_matrix: vec![vec![0.0; n]; n],
             count_matrix: vec![vec![0; n]; n],
             n_days: 0,
+            utc_offset: -5, // EST default; overwritten by begin_day at start of each day
+            day_epoch_ns: 0,
         }
     }
 
@@ -255,13 +272,12 @@ impl CrossScaleOfiTracker {
 }
 
 impl AnalysisTracker for CrossScaleOfiTracker {
-    fn process_event(
-        &mut self,
-        msg: &MboMessage,
-        lob_state: &LobState,
-        _regime: u8,
-        _day_epoch_ns: i64,
-    ) {
+    fn begin_day(&mut self, _day_index: u32, utc_offset: i32, day_epoch_ns: i64) {
+        self.utc_offset = utc_offset;
+        self.day_epoch_ns = day_epoch_ns;
+    }
+
+    fn process_event(&mut self, msg: &MboMessage, lob_state: &LobState, _regime: u8) {
         if lob_state.check_consistency() != BookConsistency::Valid {
             return;
         }
@@ -301,9 +317,10 @@ impl AnalysisTracker for CrossScaleOfiTracker {
         self.prev_ask_size = lob_state.ask_sizes[0];
     }
 
-    fn end_of_day(&mut self, _day_index: u32) {
-        let (utc_offset, day_epoch_ns) =
-            crate::time::regime::infer_day_params(&self.day_ofi_ts);
+    fn end_of_day(&mut self) {
+        // Use cached values from begin_day (replaces infer_day_params)
+        let utc_offset = self.utc_offset;
+        let day_epoch_ns = self.day_epoch_ns;
         self.process_day_cross_scale(utc_offset, day_epoch_ns);
         self.n_days += 1;
     }
@@ -347,15 +364,8 @@ impl AnalysisTracker for CrossScaleOfiTracker {
         "CrossScaleOfiTracker"
     }
 }
-
-fn format_label(seconds: f64) -> String {
-    if seconds < 60.0 {
-        format!("{}s", seconds as u64)
-    } else {
-        format!("{}m", (seconds / 60.0) as u64)
-    }
-}
-
+// Local format function removed — replaced with hft_statistics::time::format_scale_label
+// (imported as `format_label` alias to preserve existing call sites)
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -392,7 +402,7 @@ mod tests {
         let mut tracker = CrossScaleOfiTracker::new(&[1.0]);
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
         let empty_lob = LobState::new(10);
-        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &empty_lob, 3, 0);
+        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &empty_lob, 3);
         assert!(tracker.day_ofi_vals.is_empty());
     }
 
@@ -402,14 +412,13 @@ mod tests {
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
 
         let lob1 = make_lob(100_000_000_000, 100_010_000_000, 100, 100);
-        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob1, 3, 0);
+        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob1, 3);
 
         let lob2 = make_lob(100_000_000_000, 100_010_000_000, 150, 100);
         tracker.process_event(
             &make_msg_ts(Action::Add, Side::Bid, ts + NS_PER_SECOND),
             &lob2,
             3,
-            0,
         );
 
         assert_eq!(tracker.day_ofi_vals.len(), 1);
@@ -421,9 +430,9 @@ mod tests {
         let mut tracker = CrossScaleOfiTracker::new(&[1.0]);
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
         let lob = make_lob(100_000_000_000, 100_010_000_000, 100, 100);
-        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob, 3, 0);
+        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob, 3);
 
-        tracker.end_of_day(0);
+        tracker.end_of_day();
         tracker.reset_day();
 
         assert!(tracker.day_ofi_vals.is_empty());
@@ -434,7 +443,7 @@ mod tests {
     #[test]
     fn test_empty_day_produces_no_correlations() {
         let mut tracker = CrossScaleOfiTracker::new(&[1.0, 5.0]);
-        tracker.end_of_day(0);
+        tracker.end_of_day();
         let report = tracker.finalize();
         assert_eq!(report["n_days"], 1);
         let matrix = report["correlation_matrix"].as_object().unwrap();
@@ -499,11 +508,17 @@ mod tests {
         let src_bin: usize = 4;
         let src_end = (src_bin as f64 + 1.0) * src_width;
         let tgt_bin = (src_end / tgt_width).ceil() as usize;
-        assert_eq!(tgt_bin, 1, "Source bin 4 (ends at 5s) should pair with target bin 1 (starts at 5s)");
+        assert_eq!(
+            tgt_bin, 1,
+            "Source bin 4 (ends at 5s) should pair with target bin 1 (starts at 5s)"
+        );
 
         let src_bin_0: usize = 0;
         let src_end_0 = (src_bin_0 as f64 + 1.0) * src_width;
         let tgt_bin_0 = (src_end_0 / tgt_width).ceil() as usize;
-        assert_eq!(tgt_bin_0, 1, "Source bin 0 (ends at 1s) should pair with target bin 1 (starts at 5s)");
+        assert_eq!(
+            tgt_bin_0, 1,
+            "Source bin 0 (ends at 1s) should pair with target bin 1 (starts at 5s)"
+        );
     }
 }
