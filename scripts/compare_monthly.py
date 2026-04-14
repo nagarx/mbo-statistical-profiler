@@ -16,6 +16,7 @@ Output:
 
 import argparse
 import json
+import math
 import os
 import sys
 from pathlib import Path
@@ -32,6 +33,24 @@ SCALES = ["1s", "5s", "10s", "30s", "1m", "5m"]
 def load_json(path: Path) -> dict:
     with open(path) as f:
         return json.load(f)
+
+
+def coerce_finite(v) -> float:
+    """Coerce a JSON value to a float, mapping null/missing to NaN.
+
+    Hardens against `json.load` yielding `None` for JSON `null` values — since
+    hft-statistics 0.2.0, the profiler emits `null` (not `0.0`) for correlations
+    on degenerate variance (e.g., duration_size_correlation when no data) and
+    `math.isfinite(None)` raises `TypeError: must be real number, not NoneType`.
+    This helper normalises everything to f64 at ingestion so downstream code
+    (filtering, format strings, arithmetic) can treat values uniformly.
+    """
+    if v is None:
+        return float("nan")
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return float("nan")
 
 
 def find_tracker_file(month_dir: Path, tracker_name: str) -> Path | None:
@@ -73,35 +92,41 @@ def extract_monthly_metrics(month_dir: Path) -> dict | None:
     for sc in SCALES:
         ps = o.get("per_scale", {}).get(sc, {})
         rc = ps.get("ofi_return_correlation", {})
-        r0 = rc.get("lag_0", float("nan"))
+        r0 = coerce_finite(rc.get("lag_0"))
         ofi_return_r[sc] = r0
+        # r0 * r0 is NaN iff r0 is NaN — math.isfinite guard later handles this.
         ofi_return_r2[sc] = r0 * r0
         acf = ps.get("acf", [])
-        ofi_acf1[sc] = acf[0] if acf else float("nan")
+        ofi_acf1[sc] = coerce_finite(acf[0]) if acf else float("nan")
 
     result["ofi_return_r"] = ofi_return_r
     result["ofi_return_r2"] = ofi_return_r2
     result["ofi_acf1"] = ofi_acf1
 
-    result["spread_mean_usd"] = s.get("distribution_usd", {}).get("mean", float("nan"))
+    result["spread_mean_usd"] = coerce_finite(s.get("distribution_usd", {}).get("mean"))
     wc = s.get("width_classification", {})
-    result["spread_1tick_pct"] = wc.get("one_tick_pct", float("nan"))
+    result["spread_1tick_pct"] = coerce_finite(wc.get("one_tick_pct"))
 
-    result["annualized_vol_mean"] = v.get("daily_annualized_vol", {}).get("mean", float("nan"))
-    result["rv_mean"] = v.get("daily_rv", {}).get("mean", float("nan"))
+    result["annualized_vol_mean"] = coerce_finite(
+        v.get("daily_annualized_vol", {}).get("mean")
+    )
+    result["rv_mean"] = coerce_finite(v.get("daily_rv", {}).get("mean"))
 
-    result["vpin_mean"] = vp.get("daily_mean_vpin", {}).get("mean", float("nan"))
-    result["vpin_spread_corr"] = vp.get("vpin_spread_correlation", float("nan"))
+    result["vpin_mean"] = coerce_finite(vp.get("daily_mean_vpin", {}).get("mean"))
+    # Critical: vpin_spread_correlation can be JSON null (since 0.2.0) when
+    # input variance is degenerate. coerce_finite maps that to NaN.
+    result["vpin_spread_corr"] = coerce_finite(vp.get("vpin_spread_correlation"))
 
     return result
 
 
 def compute_stability(monthly_data: list[dict]) -> dict:
     """Compute mean and std of each metric across months."""
-    import math
 
     def mean_std(values):
-        finite = [v for v in values if math.isfinite(v)]
+        # Belt-and-suspenders: even though coerce_finite normalised ingestion,
+        # guard against any None that may slip through future refactors.
+        finite = [v for v in values if v is not None and math.isfinite(v)]
         if not finite:
             return float("nan"), float("nan"), 0
         m = sum(finite) / len(finite)

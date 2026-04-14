@@ -117,6 +117,21 @@ path) and cached as fields on trackers that need them. This:
         └── discover_files() → sorted by date pattern
     │
     ▼
+For each .dbn file (= one trading day):
+    │
+    ▼
+utc_offset = utc_offset_for_date(year, month, day)     (DST-aware)
+day_epoch  = midnight_utc_ns(year, month, day)         (canonical midnight UTC)
+    │
+    ▼
+┌─────────────────────────────────────────────────────────────┐
+│ for tracker in enabled_trackers:                            │
+│     tracker.begin_day(day_index, utc_offset, day_epoch)     │
+│       (default no-op; trackers needing day context cache    │
+│        utc_offset + day_epoch_ns as fields)                 │
+└─────────────────────────────────────────────────────────────┘
+    │
+    ▼
 DbnLoader (from mbo-lob-reconstructor)
     │ iterates MboMessage records
     ▼
@@ -131,7 +146,7 @@ LobReconstructor::process_message_into(msg, &mut state_buf)
 └─────────────────────────────────────────────────┘
     │
     ▼ (at day boundary)
-    tracker.end_of_day(day_index)
+    tracker.end_of_day()
     tracker.reset_day()
     │
     ▼ (after all days)
@@ -546,7 +561,7 @@ The profiler re-exports statistical primitives from the [`hft-statistics`](https
 - `time_regime(timestamp_ns, utc_offset) → u8` — 7-regime intraday classification
 - `utc_offset_for_date(year, month, day) → i32` — DST-aware UTC offset (2nd Sunday March, 1st Sunday November)
 - `infer_utc_offset(timestamps) → i32` — infer UTC offset from first timestamp
-- `infer_day_params(timestamps) → (utc_offset: i32, day_epoch_ns: i64)` — infer both from timestamps (used by tests; production code now uses `begin_day` lifecycle hook)
+- `infer_day_params(timestamps) → (utc_offset: i32, day_epoch_ns: i64)` — infer both from timestamps (tested within hft-statistics; **not called by any production or test code in this crate** — production code uses the `begin_day` lifecycle hook instead)
 - `midnight_utc_ns(year, month, day) → i64` — canonical midnight UTC for `resample_to_grid` and `IntradayCurveAccumulator::add` (preferred for new code)
 - `day_epoch_ns(year, month, day, _utc_offset) → i64` — **deprecated**; now delegates to `midnight_utc_ns` (the `_utc_offset` parameter is ignored)
 - `format_scale_label(seconds: f64) → String` — compact timescale label: `"100ms"`, `"5s"`, `"1m"`, `"1h"`

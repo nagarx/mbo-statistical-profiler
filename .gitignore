@@ -2,7 +2,13 @@
 /target/
 
 # Local development overrides (breaks fresh clones)
-.cargo/config.toml
+# Pattern `config.toml*` also catches `.dev-aside` etc. used during cross-repo
+# refactors that temporarily move the config aside.
+.cargo/config.toml*
+
+# Python bytecode (produced by scripts/compare_monthly.py and friends)
+__pycache__/
+*.pyc
 
 # OS files
 .DS_Store

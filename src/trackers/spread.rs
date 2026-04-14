@@ -207,22 +207,35 @@ mod tests {
     }
 
     #[test]
-    fn test_intraday_curve_populated_inline() {
-        // Replaces the previous test_buffers_for_intraday_curve test, which
-        // asserted the existence of day_timestamps + day_spreads replay buffers.
-        // Those buffers were eliminated; the intraday curve is now populated
-        // inline in process_event using utc_offset cached via begin_day.
+    fn test_intraday_curve_uses_begin_day_utc_offset() {
+        // Replaces the previous test_buffers_for_intraday_curve test (which
+        // asserted existence of day_timestamps + day_spreads replay buffers
+        // that were eliminated in the 2026-04-14 refactor).
+        //
+        // This test validates two coupled invariants:
+        //   1. `begin_day` CACHES `utc_offset` into the tracker struct.
+        //   2. `process_event` USES the cached value for `intraday_curve.add`.
+        //
+        // We pass `-4` (EDT) — a non-default value (SpreadTracker::new defaults
+        // to `-5` EST). With the timestamp 14:30 UTC:
+        //   - utc_offset=-5 (EST):   local = 09:30 → bin 0   (minutes_since_open = 0)
+        //   - utc_offset=-4 (EDT):   local = 10:30 → bin 60  (minutes_since_open = 60)
+        //
+        // A positive assertion on `minutes_since_open == 60` proves begin_day
+        // actually wrote the value and process_event actually read it. If
+        // `begin_day` were a silent no-op (regression), the default `-5` would
+        // kick in and we'd see bin 0 → test fails loudly.
         let mut tracker = SpreadTracker::new(1000);
         let lob = make_lob_spread(100_000_000_000, 100_010_000_000);
-        // 14:30 UTC = 09:30 ET (open) for offset=-5
-        let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
+        let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND; // 14:30 UTC
+
         let msg =
             MboMessage::new(1, Action::Add, Side::Bid, 100_000_000_000, 100).with_timestamp(ts);
 
-        tracker.begin_day(0, -5, 0);
+        // Pass EDT (non-default) via begin_day.
+        tracker.begin_day(0, -4, 0);
         tracker.process_event(&msg, &lob, 3);
 
-        // Verify intraday curve has 1 event in the open bin.
         let bins: Vec<_> = tracker
             .intraday_curve
             .finalize()
@@ -231,6 +244,12 @@ mod tests {
             .collect();
         assert_eq!(bins.len(), 1, "Expected exactly 1 populated bin");
         assert_eq!(bins[0].count, 1, "Bin should have 1 event");
+        assert_eq!(
+            bins[0].minutes_since_open as i64, 60,
+            "With EDT offset (-4), 14:30 UTC = 10:30 EDT = bin 60. \
+             If minutes_since_open == 0, begin_day's utc_offset was NOT \
+             cached (silent regression)."
+        );
     }
 
     #[test]

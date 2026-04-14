@@ -469,6 +469,49 @@ mod tests {
     }
 
     #[test]
+    fn test_intraday_trade_rate_uses_begin_day_utc_offset() {
+        // Parallel to SpreadTracker::test_intraday_curve_uses_begin_day_utc_offset.
+        //
+        // Validates that TradeTracker's replay-buffer-eliminated hot path correctly
+        // uses the `utc_offset` cached via `begin_day`. We pass `-4` (EDT, non-default)
+        // and verify the intraday_trade_rate_curve bins the event at EDT-local 10:30
+        // (bin 60), NOT at the default EST-local 09:30 (bin 0).
+        //
+        // Timestamp 14:30 UTC:
+        //   - utc_offset=-5 (EST default):  local = 09:30 → bin 0
+        //   - utc_offset=-4 (EDT passed):   local = 10:30 → bin 60
+        //
+        // If begin_day were a silent no-op or process_event ignored self.utc_offset,
+        // we'd see bin 0 instead of bin 60 → test fails loudly.
+        let mut tracker = TradeTracker::new();
+        let lob = make_lob();
+
+        const NS_PER_SECOND_T: i64 = 1_000_000_000;
+        let ts = 14 * 3600 * NS_PER_SECOND_T + 30 * 60 * NS_PER_SECOND_T; // 14:30 UTC
+        let msg =
+            MboMessage::new(1, Action::Trade, Side::Bid, 100_000_000_000, 100).with_timestamp(ts);
+
+        tracker.begin_day(0, -4, 0);
+        tracker.process_event(&msg, &lob, 3);
+        tracker.end_of_day(); // Drains any pending state (trade cluster finalization)
+
+        let bins: Vec<_> = tracker
+            .intraday_trade_rate_curve
+            .finalize()
+            .into_iter()
+            .filter(|b| b.count > 0)
+            .collect();
+        assert_eq!(bins.len(), 1, "Expected exactly 1 populated bin");
+        assert_eq!(bins[0].count, 1, "Bin should have 1 trade event");
+        assert_eq!(
+            bins[0].minutes_since_open as i64, 60,
+            "With EDT offset (-4), 14:30 UTC = 10:30 EDT = bin 60. \
+             If minutes_since_open == 0, begin_day's utc_offset was NOT \
+             cached (silent regression in TradeTracker hot path)."
+        );
+    }
+
+    #[test]
     fn test_price_classification_counts_exact() {
         // bid=$100.00 (100_000_000_000), ask=$100.01 (100_010_000_000)
         // 2 at bid, 3 at ask, 1 inside, 1 outside

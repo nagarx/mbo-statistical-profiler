@@ -29,8 +29,13 @@ High-performance Rust crate for MBO (Market-by-Order) / LOB (Limit Order Book) m
 Each tracker implements the `AnalysisTracker` trait:
 ```rust
 pub trait AnalysisTracker: Send {
-    fn process_event(&mut self, msg: &MboMessage, lob_state: &LobState, regime: u8, day_epoch_ns: i64);
-    fn end_of_day(&mut self, day_index: u32);
+    /// Called ONCE per day, before any process_event. Default no-op.
+    /// Trackers needing day context cache utc_offset / day_epoch_ns as fields.
+    fn begin_day(&mut self, day_index: u32, utc_offset: i32, day_epoch_ns: i64) {
+        let _ = (day_index, utc_offset, day_epoch_ns);
+    }
+    fn process_event(&mut self, msg: &MboMessage, lob_state: &LobState, regime: u8);
+    fn end_of_day(&mut self);
     fn reset_day(&mut self);
     fn finalize(&self) -> serde_json::Value;
     fn name(&self) -> &str;

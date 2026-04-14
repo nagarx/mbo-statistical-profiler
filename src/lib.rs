@@ -72,8 +72,10 @@ pub trait AnalysisTracker: Send {
     ///   computed by the profiler from the trading date via
     ///   `hft_statistics::time::utc_offset_for_date`.
     /// * `day_epoch_ns` — Midnight UTC of the trading date, in nanoseconds since
-    ///   Unix epoch. Suitable for use with `resample_to_grid` and
-    ///   `IntradayCurveAccumulator::add`. Computed by the profiler via
+    ///   Unix epoch. Consumed by `resample_to_grid` to anchor per-scale bin edges.
+    ///   (Note: `IntradayCurveAccumulator::add` takes `utc_offset_hours`, NOT
+    ///   `day_epoch_ns` — it derives its bin index from the event timestamp +
+    ///   offset directly.) Computed by the profiler via
     ///   `hft_statistics::time::midnight_utc_ns`.
     fn begin_day(&mut self, day_index: u32, utc_offset: i32, day_epoch_ns: i64) {
         let _ = (day_index, utc_offset, day_epoch_ns);

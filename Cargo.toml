@@ -20,7 +20,7 @@ databento = ["mbo-lob-reconstructor/databento"]
 
 [dependencies]
 mbo-lob-reconstructor = { git = "https://github.com/nagarx/MBO-LOB-reconstructor.git", branch = "main" }
-hft-statistics = { git = "https://github.com/nagarx/hft-statistics.git", rev = "01399b97804ca366f8cf3dc0c08ef2507de2137b" }
+hft-statistics = { git = "https://github.com/nagarx/hft-statistics.git", rev = "737ba31f72ad472c5056df87472c3635ec4dd66c" }
 
 ahash = "0.8"
 serde = { version = "1.0", features = ["derive"] }
