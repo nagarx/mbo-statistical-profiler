@@ -2,7 +2,7 @@
 
 > **Version**: 0.1.0 (Phase B Complete — All 13 Trackers Implemented)
 > **Last Updated**: 2026-04-14
-> **Tests**: 124 passing (104 unit + 20 integration)
+> **Tests**: 125 passing (105 unit + 20 integration)
 > **Performance**: 854K–2.9M events/sec (13 trackers → 1 tracker)
 
 ---
@@ -693,9 +693,9 @@ Note: the `write_summaries` config field exists in `OutputConfig` but is current
 
 ## Test Inventory
 
-**Total: 124 tests** (104 unit + 20 integration)
+**Total: 125 tests** (105 unit + 20 integration)
 
-### Unit Tests (104, self-contained)
+### Unit Tests (105, self-contained)
 
 | Tracker / Module | Tests | Key Validations |
 |------------------|-------|-----------------|
@@ -707,7 +707,7 @@ Note: the `write_summaries` config field exists in `OutputConfig` but is current
 | LiquidityTracker | 8 | Effective spread at mid/ask/bid, microprice deviation, VWES, non-trade filtering |
 | JumpTracker | 7 | BV < RV for jumps, BV exact for constant, jump fraction, gamma ratio |
 | DepthTracker | 7 | Symmetric/imbalanced book, L1 concentration, empty book, exact values |
-| TradeTracker | 6 | Count, filter, price classification, directional size, finalize |
+| TradeTracker | 7 | Count, filter, price classification, directional size, finalize, intraday_trade_rate_uses_begin_day_utc_offset (validates begin_day caching in the replay-buffer-eliminated hot path) |
 | NoiseTracker | 6 | Log-spaced scales, collection, Roll spread (negative autocovariance, alternating returns) |
 | VpinTracker | 5 | Volume bar construction, range [0,1], all-buy=1, balanced≈0, finalize |
 | SpreadTracker | 5 | 1-tick spread, finalize, intraday curve, exact conversions, 3-tick classification |
@@ -759,7 +759,7 @@ The VPIN values in these multi-stock JSON outputs therefore reflect larger-volum
 
 ### Complete
 - Phase A: Foundation (AnalysisTracker trait, QualityTracker, CLI, statistical primitives)
-- Phase B: All 13 trackers implemented (124 tests)
+- Phase B: All 13 trackers implemented (125 tests)
 - Golden-value regression tests (20 integration tests vs Python analyzer)
 - Full 233-day XNAS + ARCX runs
 - Monthly signal stability analysis (12 months)

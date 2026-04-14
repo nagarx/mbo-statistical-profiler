@@ -10,7 +10,7 @@ High-performance Rust crate for MBO (Market-by-Order) / LOB (Limit Order Book) m
 - **Single-pass processing** — all trackers receive every event simultaneously
 - **Bounded memory** — streaming accumulators (Welford, reservoir sampling), no full-dataset storage
 - **TOML-driven configuration** — enable/disable trackers, set timescales, tune parameters
-- **124 tests** — 104 self-contained unit tests (including 6 config schema regression guards) + 20 golden-value integration tests
+- **125 tests** — 105 self-contained unit tests (including 6 config schema regression guards + 2 `begin_day` lifecycle regression guards in Spread/Trade trackers) + 20 golden-value integration tests
 
 ## Architecture
 
@@ -79,7 +79,7 @@ cargo run --release --bin profile_mbo -- --config configs/default.toml
 ### Test
 
 ```bash
-# Unit tests (104 tests, self-contained — no external data needed)
+# Unit tests (105 tests, self-contained — no external data needed)
 cargo test
 
 # Integration tests (20 tests, require real .dbn data at ../data/hot_store/)

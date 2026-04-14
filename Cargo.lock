@@ -183,7 +183,7 @@ checksum = "fc0fef456e4baa96da950455cd02c081ca953b141298e41db3fc7e36b1da849c"
 [[package]]
 name = "hft-statistics"
 version = "0.2.0"
-source = "git+https://github.com/nagarx/hft-statistics.git?rev=737ba31f72ad472c5056df87472c3635ec4dd66c#737ba31f72ad472c5056df87472c3635ec4dd66c"
+source = "git+https://github.com/nagarx/hft-statistics.git?rev=6146b914991db33a63c9f435aadb7e3bed30653e#6146b914991db33a63c9f435aadb7e3bed30653e"
 dependencies = [
  "chrono",
  "rand",
