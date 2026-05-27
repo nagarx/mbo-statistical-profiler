@@ -231,6 +231,9 @@ OFI_t = (bid_size_t * I(bid_price_t >= bid_price_{t-1})
 - Cont, R., Kukanov, A. & Stoikov, S. (2014). "The Price Impact of Order Book Events." *Journal of Financial Econometrics*, 12(1), 47-88.
 - Kolm, P., Turiel, J. & Westray, N. (2023). "Deep Order Flow Imbalance." *Mathematical Finance*.
 
+<!-- hft-wiki back-link Cycle 11 2026-05-27 (GAP-I closure) -->
+> **Theoretical reference**: `theory:order_flow_imbalance_family` in hft-wiki — multi-paper consolidation (Cont-Kukanov-Stoikov 2014 + Xu et al. 2019 MLOFI + Kolm-Turiel-Westray 2023 DOFI). Pipeline anchors: lag-0 OFI-return r = 0.577 (XNAS 1s) / 0.688 (ARCX 1s) per CLAUDE.md Validated Findings. CRITICAL Validated Finding: OFI is **contemporaneous** (predictive IC ≈ 0); only viable prediction mechanism is OFI persistence ACF(1). Query: `hft-wiki show theory:order_flow_imbalance_family`.
+
 ---
 
 ### 3. SpreadTracker (`spread.rs`)
@@ -515,6 +518,9 @@ OFI_t = (bid_size_t * I(bid_price_t >= bid_price_{t-1})
 **References:**
 - Easley, D., Lopez de Prado, M., O'Hara, M. & Zhang, Z. (2019). "Microstructure in the Machine Age." *Review of Financial Studies*.
 - Easley, D., Lopez de Prado, M. & O'Hara, M. (2012). "Flow Toxicity and Liquidity in a High-Frequency World." *Review of Financial Studies*, 25(5), 1457-1493.
+
+<!-- hft-wiki back-link Cycle 11 2026-05-27 (GAP-I closure) -->
+> **Theoretical reference**: `theory:vpin_easley_toxicity` in hft-wiki — verbatim equations from Easley et al. 2012 PIN Eqs 1-6 + Andersen-Bondarenko 2013 TR-VPIN Eq 4. Documents this MBO-Side classification scheme AND the BVC scheme in `hft-statistics::VpinComputer` as ARCHITECTURALLY INTENTIONAL divergence (operator may choose per-experiment). Pipeline VPIN means: XNAS=0.298 / ARCX=0.079 per CLAUDE.md. Andersen-Bondarenko 2013 counter-findings included as operator calibration. Query: `hft-wiki show theory:vpin_easley_toxicity`.
 
 ---
 
