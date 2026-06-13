@@ -206,9 +206,14 @@ impl JumpTracker {
 }
 
 /// Gamma(7/6) / Gamma(1/2) ratio used in tripower quarticity.
-/// Gamma(7/6) ≈ 0.9407, Gamma(1/2) = sqrt(pi) ≈ 1.7725
+/// Gamma(7/6) = 0.9277193336300394 (Gamma(1/2) = sqrt(pi) ≈ 1.7724538509).
+/// CORRECTED 2026-06-13: the prior hardcode 0.9407354897187262 was a WRONG value
+/// for Gamma(7/6) (true value 0.9277…); being too large it REDUCED mu_{4/3}^{-3}
+/// from 1.7435 to 1.6721, shrinking tripower quarticity ~4.1% and inflating the
+/// jump-test Z ~2.1%.
+/// See the regime_detection wiki node's VALIDATION CORRECTION ADDENDUM.
 fn gamma_ratio() -> f64 {
-    0.9407354897187262 / PI.sqrt()
+    0.9277193336300394 / PI.sqrt()
 }
 
 impl AnalysisTracker for JumpTracker {
@@ -432,11 +437,11 @@ mod tests {
     #[test]
     fn test_gamma_ratio_value() {
         // gamma_ratio = Gamma(7/6) / sqrt(pi)
-        // Gamma(7/6) ≈ 0.9407354897187262
+        // Gamma(7/6) = 0.9277193336300394  (CORRECTED 2026-06-13; was a wrong 0.9407… hardcode)
         // sqrt(pi) ≈ 1.7724538509055159
-        // ratio ≈ 0.53075
+        // ratio ≈ 0.52341
         let expected = gamma_ratio();
-        let manual = 0.9407354897187262_f64 / PI.sqrt();
+        let manual = 0.9277193336300394_f64 / PI.sqrt();
         assert!(
             (expected - manual).abs() < 1e-12,
             "gamma_ratio expected {}, got {}",
@@ -444,9 +449,23 @@ mod tests {
             expected
         );
         assert!(
-            (expected - 0.53075).abs() < 0.001,
-            "gamma_ratio expected ~0.53075, got {}",
+            (expected - 0.52341).abs() < 0.001,
+            "gamma_ratio expected ~0.52341, got {}",
             expected
+        );
+        // Guard the load-bearing tripower constant against future drift:
+        // mu_{4/3} = 2^{2/3} * Gamma(7/6)/sqrt(pi) ≈ 0.8308609250295592,
+        // mu_{4/3}^{-3} ≈ 1.7434720745319836 (was 1.6721 under the wrong hardcode).
+        let mu_43 = 2.0f64.powf(2.0 / 3.0) * gamma_ratio();
+        assert!(
+            (mu_43 - 0.8308609250295592).abs() < 1e-9,
+            "mu_43 expected ~0.83086, got {}",
+            mu_43
+        );
+        assert!(
+            (mu_43.powi(-3) - 1.7434720745319836).abs() < 1e-6,
+            "mu_43^-3 expected ~1.74347, got {}",
+            mu_43.powi(-3)
         );
     }
 }
