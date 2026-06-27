@@ -790,3 +790,11 @@ dependencies = [
  "cc",
  "pkg-config",
 ]
+
+[[patch.unused]]
+name = "hft-statistics"
+version = "0.3.0-dev"
+
+[[patch.unused]]
+name = "mbo-lob-reconstructor"
+version = "0.2.1"

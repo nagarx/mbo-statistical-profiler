@@ -1,5 +1,7 @@
 # MBO Statistical Profiler: Codebase Reference
 
+> **Pipeline scope (2026-06-02).** This module is part of an **intraday trading research pipeline** — an experiment-first platform for discovering and validating *any* profitable **intraday** trading edge (no overnight positions), across approach classes (microstructure/HFT, scalping, intraday momentum, intraday statistical arbitrage, …) and instruments (equities, futures, same-day options). The pipeline *originated* as a high-frequency NVDA MBO/LOB microstructure system — that origin explains the "HFT" / "LOB" / "MBO" naming here — and that microstructure-direction program is now one (largely-closed) track among many. **Names are historical; the mission is general.** This module's role: a Rust MBO statistical profiler — 13 trackers / 50+ metrics (854K evt/s) for offline microstructure characterization of order-flow data. For the full mission + approach taxonomy + capability-readiness boundary, see root `CLAUDE.md` §Research Scope & Charter (+ `CROSS_ASSET_OFI_FINDINGS_AND_ISSUES_2026_06_01.md` §9).
+
 > **Version**: 0.1.0 (Phase B Complete — All 13 Trackers Implemented)
 > **Last Updated**: 2026-04-14
 > **Tests**: 125 passing (105 unit + 20 integration)
