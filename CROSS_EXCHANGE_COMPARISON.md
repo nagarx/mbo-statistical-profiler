@@ -1,5 +1,7 @@
 # NVDA Cross-Exchange Comparison: XNAS vs ARCX
 
+> **FROZEN — historical analysis record (2026-03 era).** Side-by-side descriptive statistics from the 233-day production runs; key rows are mirrored in root `CLAUDE.md` §Cross-Exchange Properties (XNAS vs ARCX). The measurements stand; the microstructure-direction program they informed is now largely closed (root `CLAUDE.md` §Validated Findings + §Research Scope & Charter). Retained as the original comparison record.
+
 **Instrument**: NVDA (NVIDIA Corporation)
 **Period**: 2025-02-03 to 2026-01-06 (233 trading days)
 **Source**: mbo-statistical-profiler v0.1.0

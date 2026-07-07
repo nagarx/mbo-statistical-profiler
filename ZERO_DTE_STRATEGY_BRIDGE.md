@@ -1,5 +1,7 @@
 # 0DTE ATM Options Strategy Bridge
 
+> **⚠️ FROZEN — historical planning artifact (2026-03 era).** This bridge fed the Phase-1 0DTE microstructure-direction program, which was subsequently tested and closed pipeline-wide (all 0DTE backtest rounds negative; E8 label-execution root cause; predictive OFI ≈ 0 — see root `CLAUDE.md` §Validated Findings + §Research Scope & Charter). The equity-microstructure statistics cited below remain valid measurements; the strategy framing is NOT current research direction. Retained for historical reference.
+
 **Mapping NVDA Equity Microstructure Findings to 0DTE ATM Options Execution**
 
 Data basis: 233 trading days (2025-02-03 to 2026-01-06), XNAS ITCH MBO feed, ~2.87 billion events.

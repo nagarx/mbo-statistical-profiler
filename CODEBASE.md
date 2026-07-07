@@ -3,9 +3,9 @@
 > **Pipeline scope (2026-06-02).** This module is part of an **intraday trading research pipeline** — an experiment-first platform for discovering and validating *any* profitable **intraday** trading edge (no overnight positions), across approach classes (microstructure/HFT, scalping, intraday momentum, intraday statistical arbitrage, …) and instruments (equities, futures, same-day options). The pipeline *originated* as a high-frequency NVDA MBO/LOB microstructure system — that origin explains the "HFT" / "LOB" / "MBO" naming here — and that microstructure-direction program is now one (largely-closed) track among many. **Names are historical; the mission is general.** This module's role: a Rust MBO statistical profiler — 13 trackers / 50+ metrics (854K evt/s) for offline microstructure characterization of order-flow data. For the full mission + approach taxonomy + capability-readiness boundary, see root `CLAUDE.md` §Research Scope & Charter (+ `CROSS_ASSET_OFI_FINDINGS_AND_ISSUES_2026_06_01.md` §9).
 
 > **Version**: 0.1.0 (Phase B Complete — All 13 Trackers Implemented)
-> **Last Updated**: 2026-04-14
-> **Tests**: 125 passing (105 unit + 20 integration)
-> **Performance**: 854K–2.9M events/sec (13 trackers → 1 tracker)
+> **Last Updated**: 2026-07-07
+> **Tests**: run `cargo test` (unit) + `cargo test -- --ignored` (integration, requires real data) for live counts
+> **Performance**: 854K–2.9M events/sec (13 trackers → 1 tracker; dated single-day benchmark — the committed full runs measured faster, see §Performance)
 
 ---
 
@@ -38,9 +38,9 @@ src/
 **Supporting files:**
 ```
 tests/
-└── integration_real_data.rs   # 20 golden-value regression tests (require real data)
+└── integration_real_data.rs   # Golden-value regression tests (require real data)
 
-configs/                       # 27 TOML configs (default, full runs, monthly, multi-stock)
+configs/                       # TOML run configs (default, full runs, monthly, multi-stock)
 scripts/
 ├── compare_monthly.py         # Monthly signal stability comparison
 └── cross_validate.py          # Cross-validation against Python analyzer
@@ -198,7 +198,7 @@ The `{NN}` prefix follows the `TrackerConfig` tracker push order in `src/bin/pro
 
 ---
 
-### 2. OfiTracker (`ofi.rs`, 1081 lines)
+### 2. OfiTracker (`ofi.rs`)
 
 **Purpose:** Order Flow Imbalance at multiple timescales, the most predictive short-term microstructure signal (r = 0.702 at 5m for NVDA).
 
@@ -453,7 +453,7 @@ OFI_t = (bid_size_t * I(bid_price_t >= bid_price_{t-1})
   - `var_est = (π²/4 + π - 5) * max(TP, 0) / n`
   - Tripower quarticity (BNS 2006): `TP = (n / (n-2)) * μ_{4/3}^{-3} * sum_{i=3}^{n} |r_i|^{4/3} * |r_{i-1}|^{4/3} * |r_{i-2}|^{4/3}`
   - Scaling constant: `μ_{4/3} = 2^{2/3} * Γ(7/6) / Γ(1/2)`
-- Significant jump: `z > z_threshold` (configurable, default from normal quantile)
+- Significant jump: `z > z_threshold` (constructor parameter on `JumpTracker::new`; the CLI hardcodes `2.0` in `src/bin/profile_mbo.rs` — there is no TOML field yet; TOML configurability is Pending, see Roadmap)
 
 **Statistics:**
 
@@ -664,8 +664,8 @@ Note: the `write_summaries` config field exists in `OutputConfig` but is current
 
 | Crate | Source | Purpose |
 |-------|--------|---------|
-| [`mbo-lob-reconstructor`](https://github.com/nagarx/MBO-LOB-reconstructor) | git (main) | `LobState`, `MboMessage`, `Action`, `Side`, `BookConsistency`, `DbnLoader`, `HotStoreManager` |
-| [`hft-statistics`](https://github.com/nagarx/hft-statistics) | git (main) | Statistical primitives (Welford, reservoir, ACF, regime, resampler, transition matrix) |
+| [`mbo-lob-reconstructor`](https://github.com/nagarx/MBO-LOB-reconstructor) | git (branch `main`, floating) | `LobState`, `MboMessage`, `Action`, `Side`, `BookConsistency`, `DbnLoader`, `HotStoreManager` |
+| [`hft-statistics`](https://github.com/nagarx/hft-statistics) | git (tag `v0.2.1`) | Statistical primitives (Welford, reservoir, ACF, regime, resampler, transition matrix) |
 | `ahash` 0.8 | crates.io | Fast hashmap for LifecycleTracker order tracking |
 | `serde` 1.0 | crates.io | Serialization (derive) |
 | `serde_json` 1.0 | crates.io | JSON output |
@@ -688,12 +688,7 @@ Note: the `write_summaries` config field exists in `OutputConfig` but is current
 | All 12 default trackers | 854K evt/s | 21.6s |
 | Python MBO-LOB-analyzer (equivalent) | 72K evt/s | ~25 hours |
 
-**Full dataset runs** (233 trading days, all 13 trackers):
-
-| Dataset | Events | Wall Time | Throughput |
-|---------|--------|-----------|------------|
-| NVDA XNAS | 2.87B | ~56 min | ~854K evt/s |
-| NVDA ARCX | 1.37B | ~30 min | ~760K evt/s |
+**Full dataset runs** (233 trading days, all 13 trackers): measured wall time and throughput are recorded in the committed run artifacts — read the `_provenance` block (`runtime_secs`, `throughput_events_per_sec`, `total_events`) in `output_xnas_full/01_QualityTracker.json` and `output_arcx_full/01_QualityTracker.json` rather than any hand-typed figure here. (The committed full runs measured materially faster than the single-day benchmark above.)
 
 **Build profile** (release): `opt-level = 3`, `lto = "fat"`, `codegen-units = 1`, `strip = true`.
 
@@ -701,31 +696,31 @@ Note: the `write_summaries` config field exists in `OutputConfig` but is current
 
 ## Test Inventory
 
-**Total: 125 tests** (105 unit + 20 integration)
+Per-module test counts are deliberately not hand-maintained here (hft-rules §11) — run `cargo test` for the live unit count and `cargo test -- --ignored` for the integration count (requires real data).
 
-### Unit Tests (105, self-contained)
+### Unit Tests (self-contained)
 
-| Tracker / Module | Tests | Key Validations |
-|------------------|-------|-----------------|
-| OfiTracker | 15 | OFI on bid/ask changes, book filter, finalize, reset, spread-bucket classification, conditional correlations |
-| LifecycleTracker | 10 | Add-cancel, add-trade, partial fill, transition matrix, fill rate, CTA, duration |
-| ReturnTracker | 9 | Mid collection, scale labels, Hill index, log return, CVaR, zero-fraction, drawdown |
-| CrossScaleOfiTracker | 8 | Matrix creation, book filter, OFI+mid collection, finalize, contemporaneous/predictive alignment |
-| VolatilityTracker | 8 | Collection, Pearson r, insufficient data, exact RV, annualized vol, constant prices |
-| LiquidityTracker | 8 | Effective spread at mid/ask/bid, microprice deviation, VWES, non-trade filtering |
-| JumpTracker | 7 | BV < RV for jumps, BV exact for constant, jump fraction, gamma ratio |
-| DepthTracker | 7 | Symmetric/imbalanced book, L1 concentration, empty book, exact values |
-| TradeTracker | 7 | Count, filter, price classification, directional size, finalize, intraday_trade_rate_uses_begin_day_utc_offset (validates begin_day caching in the replay-buffer-eliminated hot path) |
-| NoiseTracker | 6 | Log-spaced scales, collection, Roll spread (negative autocovariance, alternating returns) |
-| VpinTracker | 5 | Volume bar construction, range [0,1], all-buy=1, balanced≈0, finalize |
-| SpreadTracker | 5 | 1-tick spread, finalize, intraday curve, exact conversions, 3-tick classification |
-| QualityTracker | 4 | Event counting, day boundary, finalize JSON, book consistency |
-| **config (regression guards)** | **6** | All committed configs parse; `deny_unknown_fields` catches misplaced keys (under [trackers], [input], [output], top-level typo); semantic value propagation (CRSP→500) |
+| Tracker / Module | Key Validations |
+|------------------|-----------------|
+| OfiTracker | OFI on bid/ask changes, book filter, finalize, reset, spread-bucket classification, conditional correlations |
+| LifecycleTracker | Add-cancel, add-trade, partial fill, transition matrix, fill rate, CTA, duration |
+| ReturnTracker | Mid collection, scale labels, Hill index, log return, CVaR, zero-fraction, drawdown |
+| CrossScaleOfiTracker | Matrix creation, book filter, OFI+mid collection, finalize, contemporaneous/predictive alignment |
+| VolatilityTracker | Collection, Pearson r, insufficient data, exact RV, annualized vol, constant prices |
+| LiquidityTracker | Effective spread at mid/ask/bid, microprice deviation, VWES, non-trade filtering |
+| JumpTracker | BV < RV for jumps, BV exact for constant, jump fraction, gamma ratio |
+| DepthTracker | Symmetric/imbalanced book, L1 concentration, empty book, exact values |
+| TradeTracker | Count, filter, price classification, directional size, finalize, intraday_trade_rate_uses_begin_day_utc_offset (validates begin_day caching in the replay-buffer-eliminated hot path) |
+| NoiseTracker | Log-spaced scales, collection, Roll spread (negative autocovariance, alternating returns) |
+| VpinTracker | Volume bar construction, range [0,1], all-buy=1, balanced≈0, finalize |
+| SpreadTracker | 1-tick spread, finalize, intraday curve, exact conversions, 3-tick classification |
+| QualityTracker | Event counting, day boundary, finalize JSON, book consistency |
+| **config (regression guards)** | All committed configs parse; `deny_unknown_fields` catches misplaced keys (under [trackers], [input], [output], top-level typo); semantic value propagation (CRSP→500) |
 
-### Integration Tests (20, require real data)
+### Integration Tests (require real data)
 
 File: `tests/integration_real_data.rs` — all marked `#[ignore]`.
-Uses `OnceLock` singleton to run profiler once across all 20 tests. Validates against golden values from Python `MBO-LOB-analyzer` for 2025-02-03 NVDA (18.5M events).
+Uses `OnceLock` singleton to run profiler once across all integration tests. Validates against golden values from Python `MBO-LOB-analyzer` for 2025-02-03 NVDA (18.5M events).
 
 Tests: exact integer counts (events, actions, trades), float tolerances (spread mean, vol), structural completeness (all trackers present, expected JSON fields), range checks (fill rate, VPIN, jump fraction).
 
@@ -789,8 +784,8 @@ The VPIN values in these multi-stock JSON outputs therefore reflect larger-volum
 
 ### Complete
 - Phase A: Foundation (AnalysisTracker trait, QualityTracker, CLI, statistical primitives)
-- Phase B: All 13 trackers implemented (125 tests)
-- Golden-value regression tests (20 integration tests vs Python analyzer)
+- Phase B: All 13 trackers implemented
+- Golden-value regression tests (integration suite vs Python analyzer)
 - Full 233-day XNAS + ARCX runs
 - Monthly signal stability analysis (12 months)
 - Multi-stock universality study (CRSP + 10 individual symbols)

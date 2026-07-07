@@ -1,5 +1,7 @@
 # Tier 1 Analysis Findings: Cross-Scale OFI and Conditional Correlations
 
+> **FROZEN — historical analysis record (2026-03-12).** The measurements below stand and are absorbed into root `CLAUDE.md` §Validated Findings (cross-scale OFI predictive r ≈ 0; spread-conditional OFI-return correlations — cited there as "TIER1 analysis"). The microstructure-direction program these findings informed is now largely closed (root `CLAUDE.md` §Research Scope & Charter). Retained as the original analysis record.
+
 **Date**: 2026-03-12
 **Instrument**: NVDA | **Exchanges**: XNAS + ARCX | **Period**: 233 days (2025-02-03 to 2026-01-06)
 **Profiler**: v0.1.0 with CrossScaleOfiTracker + conditional OFI spread-bucket extension
