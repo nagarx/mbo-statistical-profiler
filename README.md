@@ -159,6 +159,7 @@ Release build: `opt-level = 3`, `lto = "fat"`, `codegen-units = 1`.
 |----------|-------------|
 | [CODEBASE.md](CODEBASE.md) | Complete technical reference: all formulas, statistics, configuration, architecture |
 | [NVDA_UNIFIED_ANALYSIS_CONCLUSION.md](NVDA_UNIFIED_ANALYSIS_CONCLUSION.md) | Definitive 233-day cross-exchange (XNAS + ARCX) analysis findings |
+| [XNAS ITCH Dataset Analysis Conclusion.md](XNAS%20ITCH%20Dataset%20Analysis%20Conclusion.md) | XNAS-only (Nasdaq ITCH) 233-day analysis conclusion — historical precursor to the unified cross-exchange doc above; retained for reference |
 | [CROSS_EXCHANGE_COMPARISON.md](CROSS_EXCHANGE_COMPARISON.md) | XNAS vs ARCX side-by-side comparison (10 sections) |
 | [TIER1_ANALYSIS_FINDINGS.md](TIER1_ANALYSIS_FINDINGS.md) | Cross-scale OFI predictability and conditional OFI-return correlation |
 | [ZERO_DTE_STRATEGY_BRIDGE.md](ZERO_DTE_STRATEGY_BRIDGE.md) | Bridge from equity microstructure to 0DTE options strategy |

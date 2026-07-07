@@ -731,6 +731,28 @@ Tests: exact integer counts (events, actions, trades), float tolerances (spread 
 
 ---
 
+## Auxiliary Tooling (`scripts/`)
+
+Two Python helpers support validation and stability analysis of the profiler's output. Neither is on the profiling hot path; both are run manually as research / CI utilities.
+
+### `cross_validate.py` — evaluation-tool validation gate (hft-rules §13)
+
+The runnable Python counterpart to the golden-value integration tests above: runs the release binary (`target/release/profile_mbo`) on a single fixed golden day (2025-02-03 NVDA XNAS) and cross-checks its per-tracker JSON against the Python `MBO-LOB-analyzer`'s golden values, holding the Rust and Python implementations to the same ground truth.
+
+- **Inputs**: the built release binary; hot-store `.dbn` data at `../data/hot_store/`; the Python analyzer's per-day golden JSON under `../MBO-LOB-analyzer/full_234day_output/` (reads `01_DataQualityAnalyzer.json`, selecting the golden date from `day_stats`). It generates a single-day config inline and writes tracker output to a temp dir.
+- **Checks**: a representative subset of trackers — QualityTracker (event + action counts, exact), SpreadTracker (mean spread, relative tolerance), LifecycleTracker (fill-rate / cancel-to-add ranges), TradeTracker (trade count, exact).
+- **Output / contract**: prints a per-tracker PASS/FAIL tally to stdout and exits non-zero on any mismatch → usable as a CI gate. (Per the Roadmap, cross-validation currently covers one day.)
+
+### `compare_monthly.py` — monthly signal-stability harness
+
+Reads the per-month profiler output subdirectories and reports how key metrics vary month-to-month — principally whether the OFI-return correlation is stable across the run.
+
+- **Inputs**: the monthly output dirs (default base `output_xnas_monthly/`, one subdir per calendar month), locating each tracker JSON by name with the numeric prefix ignored; extracts metrics from the Quality / Ofi / Spread / Volatility / Vpin trackers per month.
+- **Computation**: cross-month mean/std per metric, with a per-scale STABLE / MARGINAL / UNSTABLE verdict on the OFI-return correlation's std. Tolerates degenerate-variance correlations serialized as JSON `null` by coercing them to NaN before aggregation.
+- **Output / contract**: prints a summary table to stdout and writes `monthly_stability_report.json` into the output dir. Flag: `--output-dir` (default `output_xnas_monthly`).
+
+---
+
 ## Analysis Results
 
 The `output_*/` directories contain profiler output from production runs:
