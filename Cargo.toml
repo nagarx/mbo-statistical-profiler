@@ -19,8 +19,46 @@ default = ["databento"]
 databento = ["mbo-lob-reconstructor/databento"]
 
 [dependencies]
-mbo-lob-reconstructor = { git = "https://github.com/nagarx/MBO-LOB-reconstructor.git", branch = "main" }
-hft-statistics = { git = "https://github.com/nagarx/hft-statistics.git", tag = "v0.2.1" }
+# R3 (VERSIONING.md): pinned by TAG, never by branch.
+#
+# This was `branch = "main"` until 2026-08-01 — a floating pin that changed
+# underneath results with no commit, no diff and no record. It was not
+# hypothetical: the committed Cargo.lock had it locked at package **0.1.0**
+# (`9bded6a3`, 2026-04-06), i.e. this profiler was compiling a reconstructor
+# **32 commits / +3,429 -672 lines of src/** behind the tree everyone edits.
+#
+# ⚠️ THIS REPOINT IS NOT BYTE-IDENTICAL, and is deliberately not claimed to be.
+# 0.1.0 -> 0.3.0 crosses the Phase O Cycle 1 B.2a `Action::Clear` exemption
+# (reconstructor 90b0966), which makes the book actually RESET on session-
+# boundary Clear messages. Under 0.1.0 it did not: stale orders persisted across
+# session breaks and `LobStats::book_clears` was shadowed at zero. Statistics
+# this profiler published while pinned at 0.1.0 (the OFI / VPIN / spread figures
+# quoted in root CLAUDE.md §Validated Findings) were computed on that stale-book
+# behaviour and are NOT reproduced by this pin. Re-running them is a separate,
+# owed act — it is not silently absorbed here.
+mbo-lob-reconstructor = { git = "https://github.com/nagarx/MBO-LOB-reconstructor.git", tag = "v0.3.0" }
+# DELIBERATELY HELD AT v0.2.1 — a recorded R4 deviation (VERSIONING.md), not an
+# oversight. This crate calls `pearson_r_pairs` AND `pearson_r_slices`, and that
+# is exactly where 0.2.1 -> 0.3.0 is NOT byte-identical: v0.2.1 gates on the
+# COMBINED denominator (`sqrt(var_x*var_y) < 1e-15 -> NaN`) while 0.3.0 gates
+# each variance independently (`var_x < TOL || var_y < TOL -> NaN`). With
+# var_x ~ 1e-20 and var_y large, v0.2.1 returns a FINITE r and 0.3.0 returns NaN
+# (locked by hft-statistics' own test `or_gate_catches_near_constant_x`). This
+# crate is the published source of the OFI-return correlations in root
+# CLAUDE.md, so moving this pin is a research act requiring a differential
+# re-run, not a versioning chore. `utc_offset_for_date` also changed.
+#
+# `version = "=0.2.1"` is LOAD-BEARING, not decoration. Without it the untracked
+# `.cargo/config.toml` [patch] silently substitutes the local 0.3.0 checkout: a
+# git dep carries an implicit `*` requirement, and `*` refuses PRE-RELEASE
+# versions but accepts release ones — so while the local crate read `0.3.0-dev`
+# the patch was inert, and the moment it was finalized to `0.3.0` (2026-08-01)
+# the patch began applying and silently overrode this pin. The explicit `=0.2.1`
+# makes the patch fail to match, restoring "what is declared is what is built".
+# The resulting `patch ... was not used in the crate graph` warning is EXPECTED
+# and CORRECT here — it is the loud signal that the local checkout is
+# deliberately not in this graph. Do NOT "fix" it by relaxing the guard.
+hft-statistics = { git = "https://github.com/nagarx/hft-statistics.git", tag = "v0.2.1", version = "=0.2.1" }
 
 ahash = "0.8"
 serde = { version = "1.0", features = ["derive"] }
