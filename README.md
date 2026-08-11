@@ -1,8 +1,29 @@
 # MBO Statistical Profiler
 
-High-performance Rust crate for MBO (Market-by-Order) / LOB (Limit Order Book) market microstructure statistical profiling. Processes raw `.dbn` files in a single pass through LOB reconstruction and 13 composable analysis trackers, producing JSON statistical profiles with 200+ metrics.
+High-performance Rust crate for MBO (Market-by-Order) / LOB (Limit Order Book) market microstructure statistical profiling. It decodes `.dbn` inputs once, narrows each successfully converted record to the reconstructor's `MboMessage`/`LobState`, and runs 13 composable analysis trackers. Tracker inputs are not the complete wire record.
 
 > **Pipeline scope (2026-06-02).** This module is part of an **intraday trading research pipeline** — an experiment-first platform for discovering and validating *any* profitable **intraday** trading edge (no overnight positions), across approach classes (microstructure/HFT, scalping, intraday momentum, intraday statistical arbitrage, …) and instruments (equities, futures, same-day options). The pipeline *originated* as a high-frequency NVDA MBO/LOB microstructure system — that origin explains the "HFT" / "LOB" / "MBO" naming here — and that microstructure-direction program is now one (largely-closed) track among many. **Names are historical; the mission is general.** This module's role: a Rust MBO statistical profiler — 13 trackers / 50+ metrics (854K evt/s) for offline microstructure characterization of order-flow data. For the full mission + approach taxonomy + capability-readiness boundary, see root `CLAUDE.md` §Research Scope & Charter (+ `CROSS_ASSET_OFI_FINDINGS_AND_ISSUES_2026_06_01.md` §9).
+
+> **Current Databento decode boundary (2026-08-02).** This checkout pins
+> `mbo-lob-reconstructor` `v0.3.0` and inherited `dbn` `v0.64.0` at commit
+> `64e5416f53b8ebecc9f1799d715dec8baa4c17eb`, using `AsIs` upgrade policy.
+> The profiler still calls the legacy `iter_messages()` surface, not the typed
+> iterator/finalization contract used by the feature extractor. The current
+> bridge stores `ts_event` internally (dropping MBO-primary `ts_recv`) and maps
+> both wire `T` (aggressor side) and wire `F` (resting side) to internal
+> `Action::Trade`. Consequently direct profiler trade-side metrics are
+> sign-annihilated, `fill_count` is structurally zero, and trade counts combine
+> two wire populations. Preserve committed JSON as historical output, but do
+> not use its signed Trade/Fill, aggressor, fill/lifecycle, VPIN, or
+> trade-conditional conclusions as corrected-DBN evidence. See FINDING-122 and
+> the SSD Databento release before any rerun or comparison.
+
+> **Output provenance limitation.** Each tracker JSON records bounded
+> run/config summary fields, but not the discovered file list, compressed
+> hashes, catalog release identity, decoder/git commit, or complete enabled
+> tracker/input-selection configuration. A JSON file alone cannot reproduce or
+> identify its source population; bind it to an external run receipt and the
+> immutable Databento catalog release.
 
 ## Key Capabilities
 

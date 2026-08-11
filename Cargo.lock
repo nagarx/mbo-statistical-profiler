@@ -284,6 +284,7 @@ checksum = "5e5032e24019045c762d3c0f28f5b6b8bbf38563a65908389bf7978758920897"
 [[package]]
 name = "mbo-lob-reconstructor"
 version = "0.3.0"
+source = "git+https://github.com/nagarx/MBO-LOB-reconstructor.git?tag=v0.3.0#c1d1f147d9b1cae544d676083efe08feb1c96d93"
 dependencies = [
  "ahash",
  "dbn",
@@ -871,7 +872,3 @@ dependencies = [
  "cc",
  "pkg-config",
 ]
-
-[[patch.unused]]
-name = "hft-statistics"
-version = "0.3.0"

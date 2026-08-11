@@ -9,6 +9,20 @@
 
 ---
 
+> **Databento correctness boundary (2026-08-02).** Live dependency resolution is
+> reconstructor tag `v0.3.0` with inherited `dbn` tag `v0.64.0`, commit
+> `64e5416f53b8ebecc9f1799d715dec8baa4c17eb`, and `AsIs` version handling.
+> This profiler consumes `iter_messages()`, not `iter_messages_typed()`, and
+> therefore does not inherit the feature extractor's typed boundary/finalize
+> guarantees. The bridge stores `ts_event` rather than MBO-primary `ts_recv`
+> and merges wire `T` and `F` into `Action::Trade`. Because trackers receive
+> both populations, their signed Trade/Fill direction is annihilated rather
+> than accidentally corrected by the feature-extractor filter. `fill_count =
+> 0` and near-0.5 aggressor ratios in committed profiles are structural
+> artifacts. Treat Trade/Fill direction, fill/lifecycle, VPIN, and
+> trade-conditional metrics as historical/uncorrected until a coupled decoder
+> and consumer repair is rerun. FINDING-122 is the current evidence boundary.
+
 ## Architecture
 
 ```
@@ -138,7 +152,8 @@ DbnLoader (from mbo-lob-reconstructor)
     │ iterates MboMessage records
     ▼
 LobReconstructor::process_message_into(msg, &mut state_buf)
-    │ fills LobState into caller-provided buffer (560B stack-allocated, zero-alloc)
+    │ fills LobState into caller-provided buffer (576B on the audited target;
+    │ repr(Rust) layout is not an ABI-stable size; zero allocation)
     ▼
 ┌─────────────────────────────────────────────────┐
 │ For each (MboMessage, LobState) pair:           │
@@ -639,7 +654,13 @@ Configuration is TOML-driven via `ProfilerConfig` (defined in `src/config.rs`).
 
 Each tracker produces a numbered JSON file: `{NN}_{TrackerName}.json`.
 
-**Provenance metadata** (emitted by `profiler.rs::write_output()`, appended as `_provenance` key to each tracker's JSON). Captures every runtime config field that affects output values, enabling end-to-end auditability:
+**Bounded run metadata** (emitted by `profiler.rs::write_output()`, appended as
+`_provenance` to each tracker JSON). Despite the historical key name, it does
+not capture every output-affecting input. It omits the discovered path list,
+compressed hashes/release identity, input dirs/pattern/date filters, full
+tracker-enable configuration, decoder pin, and source git commit. Treat the
+fields below as a run summary, not end-to-end provenance; exact reproduction
+requires an external receipt bound to the SSD catalog release:
 ```json
 {
   "profiler_version": "0.1.0",
@@ -664,7 +685,7 @@ Note: the `write_summaries` config field exists in `OutputConfig` but is current
 
 | Crate | Source | Purpose |
 |-------|--------|---------|
-| [`mbo-lob-reconstructor`](https://github.com/nagarx/MBO-LOB-reconstructor) | git (branch `main`, floating) | `LobState`, `MboMessage`, `Action`, `Side`, `BookConsistency`, `DbnLoader`, `HotStoreManager` |
+| [`mbo-lob-reconstructor`](https://github.com/nagarx/MBO-LOB-reconstructor) | tag `v0.3.0` (lock inherits `dbn` `v0.64.0`, commit `64e5416f53b8ebecc9f1799d715dec8baa4c17eb`) | `LobState`, `MboMessage`, `Action`, `Side`, `BookConsistency`, `DbnLoader`, `HotStoreManager` |
 | [`hft-statistics`](https://github.com/nagarx/hft-statistics) | git (tag `v0.2.1`) | Statistical primitives (Welford, reservoir, ACF, regime, resampler, transition matrix) |
 | `ahash` 0.8 | crates.io | Fast hashmap for LifecycleTracker order tracking |
 | `serde` 1.0 | crates.io | Serialization (derive) |
