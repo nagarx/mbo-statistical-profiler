@@ -41,6 +41,11 @@ impl QualityTracker {
 
     /// Histogram bucket for an action.
     ///
+    /// ⚠ SIXTH-FORM CARRIER DISPATCH — see `lifecycle.rs::action_state` for the
+    /// full note. The call site is `self.action_counts[Self::action_index(
+    /// msg.action)] += 1`, which names no carrier and matches nothing, so an
+    /// `Action::`-keyed census finds this definition and misses that use.
+    ///
     /// ⚠ BUCKET 3 AND BUCKET 4 ARE NOW BOTH LIVE, AND BUCKET 3's PUBLISHED
     /// KEY CHANGED MEANING WITHOUT CHANGING NAME.
     ///
@@ -48,7 +53,8 @@ impl QualityTracker {
     /// bucket 3 held BOTH carriers and bucket 4 was PROVABLY DEAD — measured
     /// `fill_count = 0` across all three corpora (233 + 233 + 134 = 600
     /// tracker-days). Post-split bucket 3 holds only the aggressor print `T`
-    /// and narrows by the `F` population (−44.05% of executions on XNAS), while
+    /// and narrows by the `F` population — ⚠ a PER-DAY ratio, not a constant:
+    /// −44.05% of executions on XNAS 2025-02-03, −45.02% on 2025-07-01 — while
     /// bucket 4 goes live for the first time.
     ///
     /// The emitted JSON key for bucket 3 is still `trade_count`. It now means

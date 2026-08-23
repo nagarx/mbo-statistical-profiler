@@ -116,6 +116,21 @@ impl LifecycleTracker {
 
     /// Lifecycle state for an action — `Fill` ONLY for the execution state.
     ///
+    /// ⚠ THIS HELPER IS A SIXTH SYNTACTIC FORM OF CARRIER DISPATCH, AND EVERY
+    /// CENSUS IN THIS PROGRAMME MISSES ITS USE SITE. The five forms previously
+    /// catalogued are: a match-arm pipe, `matches!`, `==`/`!=` with `||`/`&&`,
+    /// a SIDE-read that matches on `Side` rather than `Action`, and a METHOD
+    /// CALL on the state object. This is the sixth: INDIRECT DISPATCH THROUGH A
+    /// HELPER. The call site reads
+    ///     `match Self::action_state(msg.action) { Some(s) => s, None => return }`
+    /// and contains no carrier name, no `Action::`, no `matches!`, no `==` and
+    /// no `Side` read — yet it is where the behavioural change actually LANDS,
+    /// because a `TradeAggregate` now returns `None` and exits `process_event`
+    /// BEFORE the `match msg.action` below. The binding is `_`-discarded, so the
+    /// line exists purely as a filter. An `Action::`-keyed census finds this
+    /// DEFINITION and misses that USE. `quality.rs::action_index` has the same
+    /// shape.
+    ///
     /// The subject of an order lifecycle is the RESTING order, and `Fill` is the
     /// only carrier keyed to it (`order_id` identifies the resting order;
     /// `side` is the resting order's). `TradeAggregate` is the aggressor-side
@@ -239,10 +254,35 @@ impl AnalysisTracker for LifecycleTracker {
             }
             // `Fill` ONLY — and this is a FORMALISATION, not a change of value.
             //
-            // The arm was already `F`-only IN EFFECT: every `TradeAggregate`
-            // carries `order_id == 0` on XNAS, so `active_orders.get_mut` never
-            // matched one. Measured exactly: `n_fills + n_partial_fills =
-            // 75,232,609 == transition_matrix.counts[STATE_ADD][STATE_TRADE]`.
+            // The arm was already `F`-only IN EFFECT, but ⚠ THE EVIDENCE AN
+            // EARLIER VERSION OF THIS COMMENT CITED WAS A TAUTOLOGY AND WAS ALSO
+            // WRONG ON ARCX.
+            //
+            // It cited `n_fills + n_partial_fills == counts[STATE_ADD][STATE_TRADE]`.
+            // That identity has ZERO discriminating power: every path that
+            // increments `n_fills`/`n_partial_fills` sits inside the `if let
+            // Some(order)` block below, whose FIRST statement records a
+            // `-> STATE_TRADE` transition, and that is the only `STATE_TRADE`
+            // destination in this file. So `n_fills + n_partial_fills ==
+            // Σ_s counts[s][STATE_TRADE]` holds BY CONSTRUCTION — whether or not
+            // any `T` record ever matched. And the specific `[STATE_ADD]` form
+            // cited is false on ARCX, which has 3,241,320 Modify->Trade
+            // transitions:
+            //     XNAS  75,232,609 == counts[Add][Trade] 75,232,609   (agrees only
+            //                        because its Modify row is all-zero)
+            //     ARCX  42,160,105 vs counts[Add][Trade] 38,918,785   MISMATCH
+            //                        (== Σ_s counts[s][Trade] 42,160,105)
+            //
+            // ⭐ THE EVIDENCE THAT ACTUALLY DISCRIMINATES, measured against the
+            // raw tape by simulating `active_orders`:
+            //     XNAS  0 of 375,643 `T` carry order_id != 0; 0 matched.
+            //     ARCX  88,024 of 444,141 `T` (19.82%) carry order_id != 0
+            //           — and 0 of those 88,024 matched an entry, because those
+            //           ids are TRADE identifiers referencing no order the book
+            //           ever held.
+            // So the arm is F-only in effect on BOTH venues, and naming the
+            // carrier makes the compiler enforce what only a venue property was
+            // guaranteeing.
             // Naming the carrier makes the compiler enforce what the data
             // already guaranteed, and stops the guarantee from depending on a
             // venue property that ARCX does not share.

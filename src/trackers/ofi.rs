@@ -653,9 +653,16 @@ impl AnalysisTracker for OfiTracker {
             //
             // The split is EXACT, not a heuristic: every `F` is immediately
             // followed by a `C` with the same `order_id` and the same size,
-            // measured 1,808,570 / 1,808,570 over 6 days across two venues,
-            // including inside both auction crosses. A one-record lookback is
-            // therefore sufficient AND complete.
+            // ⚠ CITATION CORRECTED 2026-08-23. The "1,808,570 / 1,808,570 over 6
+            // days" figure comes from `reconstructor.rs`, where it is labelled
+            // "VENDOR EVIDENCE (ARCX MBP-10)" — it is ONE venue, not two, and an
+            // earlier version of this comment inflated its scope. The XNAS half
+            // was re-measured independently for this migration and DOES hold:
+            //     XNAS 2025-02-03   473,410 / 473,410   next record is C, same id, same size
+            //     XNAS 2025-07-01   307,584 / 307,584   idem
+            //     ARCX 2025-02-03   356,515 / 356,515   idem
+            // Zero unpaired F on any of the three. A one-record lookback is
+            // therefore sufficient AND complete — on the evidence actually held.
             let action = lob_state.triggering_action.unwrap_or(Action::None);
             match action {
                 Action::Add => self.day_ofi_add.push(ofi),
@@ -688,12 +695,24 @@ impl AnalysisTracker for OfiTracker {
         // (Contrast `vpin.rs`, whose mapping was written for the RESTING
         // convention and had to be flipped.)
         //
-        // ⚠ THE MEASURED CONSEQUENCE IS THE POINT. Under `T ∪ F` this ratio was
-        // pinned at EXACTLY 0.5000000000 — not "close to a half", exactly one —
+        // ⚠ THE MEASURED CONSEQUENCE IS THE POINT. Under `T ∪ F` this ratio is
+        // pinned at ONE HALF BY A DECODE IDENTITY rather than by the market,
         // because `T|A ≡ F|B` makes every execution contribute to both buckets.
-        // `aggressor_ratio` was a DECODE IDENTITY, not a market measurement.
-        // Under `TradeAggregate` alone it reads 0.5042058217. Same annihilation
-        // mechanism as `FINDING-170`.
+        //
+        // ⚠ CORRECTED 2026-08-23 — "EXACTLY 0.5000000000, not close to a half,
+        // exactly one" IS TRUE ON EXACTLY ONE DAY AND FALSE ON THE DAY THIS FILE
+        // CITES ELSEWHERE. Measured:
+        //     XNAS 2025-02-03   0.5000000000000000   <- exact; the mirror closes
+        //     XNAS 2025-07-01   0.4999977573799832   <- NOT exact
+        //     234-day corpus    0.4998947474006272   (output_xnas_full/03_OfiTracker.json)
+        //     0 of 15 committed corpora give exactly 0.5
+        // The residual is the anti-diagonal being exact on ONE diagonal only:
+        // `T|A == F|B` at 160,209 / 13,982,947 exactly, while `T|B` 147,371 vs
+        // `F|A` 147,375 differ by 4 records / 248 shares (orphan `F`s whose
+        // paired `T` sits in the previous day's file). Say "pinned at one half by
+        // a decode identity" — the MECHANISM is unchanged and still damning; only
+        // the claim of bit-exactness was wrong, and a reviewer who opened the
+        // artifact would have caught it.
         //
         // `side != Side::None` is retained: `T|N` discloses no aggressor, so it
         // belongs in neither signed bucket nor in this denominator.
@@ -735,6 +754,12 @@ impl AnalysisTracker for OfiTracker {
         self.day_spreads.clear();
         self.day_spread_ts.clear();
         self.initialized = false;
+        // ⚠ The F->C lookback must not survive a day boundary. Harmless today —
+        // the stale value is read on day N+1's first record, which always exits
+        // early at the empty-BBO or `!initialized` guard, both BEFORE the
+        // classification — but that is an accident of the current guard order,
+        // not a property anyone declared. Reset it explicitly.
+        self.prev_record = (Action::None, 0);
     }
 
     fn finalize(&self) -> serde_json::Value {
@@ -1069,8 +1094,10 @@ mod tests {
     fn test_signed_volume_admits_only_the_aggressor_print() {
         // ⚠ CLOSES A MEASURED COVERAGE GAP. Swapping this site to `Fill` left
         // all 105 tests green — and that swap is exactly the annihilation
-        // `FINDING-170` describes: under `T ∪ F` the ratio was pinned at
-        // EXACTLY 0.5000000000 by the decode identity rather than by the market.
+        // `FINDING-170` describes: under `T ∪ F` the ratio is pinned at one half
+        // by the decode identity rather than by the market (exactly 0.5 on
+        // 2025-02-03; 0.4998947474 on the 234-day corpus — see the production
+        // site for why the two differ).
         let mut tracker = OfiTracker::new(&[1.0], 1000);
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
         let lob = make_lob(100_000_000_000, 100_010_000_000, 100, 100);

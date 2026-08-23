@@ -107,8 +107,13 @@ impl AnalysisTracker for LiquidityTracker {
         // counts every physical execution twice, under two OPPOSITE side
         // conventions.
         //
-        // Population effect, measured: `n_trade_events` 193,879,007 -> −44.05%
-        // on XNAS. That drop is the double-count leaving, not signal.
+        // Population effect: `n_trade_events` 193,879,007 is a 234-day corpus total;
+        // it narrows by the F population, and that drop is the double-count leaving,
+        // not signal.
+        // ⚠ THE RATIO IS PER-DAY, NOT A CONSTANT, and an earlier version of
+        // this comment applied a single day's value to a 234-day corpus total.
+        // Measured on the record basis: −44.05% on 2025-02-03, −45.02% on
+        // 2025-07-01. Quote the day with the ratio, or quote neither.
         let is_trade = matches!(msg.action, Action::TradeAggregate);
         if !is_trade {
             return;

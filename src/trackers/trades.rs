@@ -174,7 +174,12 @@ impl AnalysisTracker for TradeTracker {
         // conventions, which is why `buyerN 86,584,115` and `sellerN
         // 86,590,732` sat 0.0076% apart: the two carriers were cancelling.
         // Under `T` alone they genuinely separate — 215,055 vs 258,355 on
-        // 2025-02-03. Population: `total_trades` 193,879,475 -> −44.05%.
+        // 2025-02-03. Population: `total_trades` 193,879,475 is a 234-day corpus
+        // total that narrows by the F population.
+        // ⚠ THE RATIO IS PER-DAY, NOT A CONSTANT, and an earlier version of
+        // this comment applied a single day's value to a 234-day corpus total.
+        // Measured on the record basis: −44.05% on 2025-02-03, −45.02% on
+        // 2025-07-01. Quote the day with the ratio, or quote neither.
         let is_trade = matches!(msg.action, Action::TradeAggregate);
         if !is_trade {
             return;

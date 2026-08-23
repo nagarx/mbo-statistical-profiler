@@ -16,12 +16,24 @@
 //! (default 5000 shares). Each bar tracks: total_volume, buy_volume, sell_volume,
 //! vwap, close_price, timestamp.
 //!
-//! **Trade-side classification (MBO convention)**:
-//! Trades are classified using the MBO `Side` field on the trade event. The
-//! resting-order side is the *passive* side, so a trade hitting an `Ask` resting
-//! order is buyer-initiated (aggressive buy → `buy_volume`), and vice versa for
-//! `Bid` resting orders. We do NOT use Bulk Volume Classification (BVC) — we have
-//! direct trade-direction signal in the MBO feed.
+//! **Trade-side classification — AGGRESSOR convention (corrected 2026-08-23)**:
+//! This tracker admits `Action::TradeAggregate` (vendor `b'T'`) ONLY, and on a
+//! `T` the `Side` field is the **AGGRESSOR's own** side:
+//!   * `Side::Bid` → the aggressor BOUGHT (lifted the ask) → `buy_volume`
+//!   * `Side::Ask` → the aggressor SOLD  (hit the bid)     → `sell_volume`
+//!
+//! ⚠ THIS HEADER PREVIOUSLY STATED THE OPPOSITE — the RESTING convention
+//! ("a trade hitting an `Ask` resting order is buyer-initiated"). That was
+//! correct while the file was fed `Action::Fill`, whose `Side` IS the resting
+//! order's, and it survived the carrier migration by ~280 lines, contradicting
+//! the code it describes. A reader reaches this header long before the arm.
+//! (hft-rules §11: docs must reflect current behaviour exactly.)
+//!
+//! We do NOT use Bulk Volume Classification (BVC) — we have a direct
+//! trade-direction signal in the MBO feed for the side-determinate population.
+//! ⚠ `Side::None` (no disclosed aggressor) is split evenly, which is BVC
+//! evaluated at Δp = 0. See the note at that arm for why that is a placeholder
+//! rather than a decision.
 //!
 //! **VPIN** (per-bar normalized to handle overflow-split bars):
 //! `VPIN_t = (1/n) * sum_{i=t-n+1}^{t} |V_buy_i - V_sell_i| / (V_buy_i + V_sell_i)`
@@ -269,7 +281,15 @@ impl AnalysisTracker for VpinTracker {
         // series was structurally near-zero rather than uninformative-by-market.
         // Same mechanism as `FINDING-170`, in a different consumer.
         //
-        // Bar population drops −44.05%: that is the double-count leaving.
+        // ⚠ THE BAR-POPULATION DROP IS VOLUME-DRIVEN, NOT RECORD-DRIVEN, AND AN
+        // EARLIER VERSION OF THIS COMMENT USED THE WRONG BASIS. These are
+        // 5,000-SHARE volume bars (`complete_bar`), so bar count tracks admitted
+        // VOLUME. Measured both ways:
+        //     2025-02-03  records −44.05%   VOLUME −33.19%   bars 23,303 -> 15,569
+        //     2025-07-01  records −45.02%   VOLUME −36.88%   bars 14,990 ->  9,461
+        // The record ratio (−44.05%) is right for 2025-02-03 and is what the
+        // disposition table quotes, but applying it to a volume-bar count
+        // overstates the drop by ~11 percentage points.
         if msg.action != Action::TradeAggregate {
             return;
         }
@@ -297,8 +317,21 @@ impl AnalysisTracker for VpinTracker {
         // comment stated the resting rule and was correct FOR THAT CARRIER;
         // keeping it after the admission change would have inverted every bar.
         //
-        // ⚠ THE ADMISSION CHANGE AND THIS FLIP ARE ONE EDIT. Doing either alone
-        // ships a silently inverted VPIN — no panic, no NaN, a plausible series.
+        // ⚠ CORRECTED 2026-08-23 — "DOING EITHER ALONE SHIPS A SILENTLY INVERTED
+        // VPIN" IS FALSE, AND THE TRUTH IS SHARPER. `finalize()` publishes only
+        // functions of `vpin_values`, computed as `|buy − sell| / total`, which
+        // is INVARIANT under a buy/sell relabel — and `completed_bars`, the only
+        // place the two survive separately, is never emitted. So THE FLIP ALONE
+        // CHANGES NOTHING OBSERVABLE IN THE JSON.
+        //
+        // The flip is still required: the internal state would otherwise be
+        // wrong, and any future consumer of the per-bar split (or of
+        // `regime_conditional_vpin` extended to signed flow) would inherit an
+        // inversion. But it means the ONLY instrument that can see this edit is
+        // the direction-sensitive assertion in
+        // `test_vpin_all_buy_equals_one` — which is therefore load-bearing, not
+        // belt-and-braces. The ADMISSION change, by contrast, is observable
+        // everywhere.
         if msg.side == Side::Bid {
             self.current_bar_buy_vol += size;
         } else if msg.side == Side::Ask {

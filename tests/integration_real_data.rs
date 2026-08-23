@@ -110,7 +110,21 @@ fn golden_quality_action_counts() {
     let ad = &get_reports()["QualityTracker"]["action_distribution"];
     assert_eq!(ad["add_count"].as_u64().unwrap(), 8_652_416);
     assert_eq!(ad["cancel_count"].as_u64().unwrap(), 8_748_922);
-    assert_eq!(ad["trade_count"].as_u64().unwrap(), 1_074_702);
+    // ⚠ 1_074_702 IS THE PRE-SPLIT MERGED POPULATION (T + F), so it can no
+    // longer equal `trade_count` alone — that bucket is now `TradeAggregate`
+    // only. Asserting the PARTITION is strictly stronger than the original
+    // equality: it proves the split preserves the population exactly, which the
+    // old single-bucket check could not see.
+    assert_eq!(
+        ad["trade_count"].as_u64().unwrap() + ad["fill_count"].as_u64().unwrap(),
+        1_074_702,
+        "the carrier split must PARTITION the merged golden, losing and inventing nothing"
+    );
+    assert!(
+        ad["fill_count"].as_u64().unwrap() > 0,
+        "bucket 4 was provably dead pre-split (fill_count = 0 across 600 tracker-days); \
+         it must be live now, or the split did not happen"
+    );
     assert_eq!(ad["clear_count"].as_u64().unwrap(), 1);
 }
 
@@ -191,9 +205,14 @@ fn golden_ofi_all_scales_populated() {
 #[ignore]
 fn golden_ofi_component_fractions_sum_to_one() {
     let cf = &get_reports()["OfiTracker"]["component_fractions"];
+    // ⚠ `execution_fraction`, NOT `trade_fraction`. The carrier migration
+    // renamed this key deliberately and loudly (see `ofi.rs`). serde_json's
+    // `Index` returns `Value::Null` for a missing key rather than erroring, so
+    // the old name here produced `None.unwrap()` — a PANIC, not a failed
+    // assertion, and invisible because every test in this file is `#[ignore]`d.
     let sum = cf["add_fraction"].as_f64().unwrap()
         + cf["cancel_fraction"].as_f64().unwrap()
-        + cf["trade_fraction"].as_f64().unwrap();
+        + cf["execution_fraction"].as_f64().unwrap();
     assert!(
         (sum - 1.0).abs() < 0.01,
         "Component fractions sum: expected ~1.0, got {:.4}",
@@ -241,11 +260,24 @@ fn golden_volatility_rv_positive() {
 #[test]
 #[ignore]
 fn golden_trades_count() {
-    let t = &get_reports()["TradeTracker"];
+    let reports = get_reports();
+    let t = &reports["TradeTracker"];
+    let ad = &reports["QualityTracker"]["action_distribution"];
+    // ⚠ `total_trades` is now the AGGRESSOR PRINT only, so it cannot equal the
+    // merged golden 1_074_702. Rather than hard-code a new constant, assert the
+    // two invariants that actually constrain it:
+    //   (a) cross-tracker agreement — both trackers admit the same carrier;
+    //   (b) the partition against the merged golden.
+    // (a) is a check the original did not have at all.
     assert_eq!(
         t["total_trades"].as_u64().unwrap(),
+        ad["trade_count"].as_u64().unwrap(),
+        "TradeTracker and QualityTracker must admit the SAME carrier"
+    );
+    assert_eq!(
+        t["total_trades"].as_u64().unwrap() + ad["fill_count"].as_u64().unwrap(),
         1_074_702,
-        "Golden: Trade count must match Python exactly"
+        "Golden: the two carriers must PARTITION the pre-split merged count"
     );
 }
 

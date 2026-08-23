@@ -269,14 +269,37 @@ def main():
         total_check += c
         print(f"  {p}/{c} PASS")
 
+        # ⚠ THE SAME DEFECT AS `validate_quality` ABOVE, 100 LINES BELOW IT —
+        # and it was left unrepaired when that one was fixed. `total_trades` is
+        # now the AGGRESSOR PRINT only, while the golden's "Trade" is the
+        # PRE-SPLIT MERGED population, so a direct equality reds on a CORRECT
+        # number and `sys.exit(1)` fails the whole gate. Measured: merged
+        # 1,074,702 vs T-only 601,292.
+        #
+        # ⭐ THE LESSON, RECORDED HERE BECAUSE IT KEEPS RECURRING IN THIS REPO: a
+        # fix indexed by the SITE it was found at does not reach its siblings.
+        # Same shape as `check_decode_acceptance` (one of three gates missing the
+        # shared normaliser) and the `CLAUDE_TOOL_INPUT` hooks (one file fixed,
+        # three left dead). Repair the PROPERTY, then grep for every site that
+        # shares it.
+        #
+        # Repaired to the partition, which is stronger: it asserts the split
+        # loses and invents nothing. `fill_count` comes from QualityTracker
+        # because TradeTracker has no fill counterpart by design.
         print("\n--- TradeTracker ---")
         total_check += 1
         trades = rust_data.get("TradeTracker", {}).get("total_trades")
-        if trades == golden["action_counts"].get("Trade"):
+        fills = (rust_data.get("QualityTracker", {})
+                 .get("action_distribution", {}).get("fill_count"))
+        carrier_total = None if (trades is None or fills is None) else trades + fills
+        if carrier_total == golden["action_counts"].get("Trade"):
             total_pass += 1
-            print(f"  1/1 PASS (total_trades={trades})")
+            print(f"  1/1 PASS (total_trades={trades} + fill_count={fills}"
+                  f" = {carrier_total})")
         else:
-            print(f"  FAIL: total_trades expected {golden['action_counts'].get('Trade')}, got {trades}")
+            print(f"  FAIL: total_trades+fill_count expected "
+                  f"{golden['action_counts'].get('Trade')}, got {carrier_total}"
+                  f" (total_trades={trades}, fill_count={fills})")
 
         print(f"\n{'=' * 60}")
         print(f"TOTAL: {total_pass}/{total_check} checks PASSED")
