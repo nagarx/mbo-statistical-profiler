@@ -134,10 +134,22 @@ impl LifecycleTracker {
     /// The subject of an order lifecycle is the RESTING order, and `Fill` is the
     /// only carrier keyed to it (`order_id` identifies the resting order;
     /// `side` is the resting order's). `TradeAggregate` is the aggressor-side
-    /// print: on XNAS it carries `order_id == 0` for 100% of its population, so
-    /// it can never match an entry in `active_orders`, and admitting it here
-    /// would state a lifecycle transition for an order this tracker does not
-    /// hold.
+    /// print, and admitting it here would state a lifecycle transition for an
+    /// order this tracker does not hold.
+    ///
+    /// ⚠ CORRECTED 2026-08-23. This paragraph used to justify the exclusion with
+    /// "on XNAS it carries `order_id == 0` for 100% of its population, so it can
+    /// never match an entry in `active_orders`". That premise is XNAS-ONLY and
+    /// THIS FILE REFUTES IT ~160 lines below: on ARCX, 88,024 of 444,141 `T`
+    /// (19.82%) carry `order_id != 0`. Two comments in one file disagreed about
+    /// scope, and the weaker one was the one a reader met first.
+    ///
+    /// The correct justification is VENUE-INDEPENDENT and does not rest on any
+    /// measurement: an aggressor print is not an event in a resting order's
+    /// lifecycle AT ALL, so admitting it would be wrong even if a trade id
+    /// numerically collided with a live order id. Enforced structurally, not
+    /// empirically — the sole caller discards a `None` and returns, so a
+    /// `TradeAggregate` never reaches `active_orders` on any venue.
     fn action_state(action: Action) -> Option<usize> {
         match action {
             Action::Add => Some(STATE_ADD),
@@ -145,13 +157,28 @@ impl LifecycleTracker {
             Action::Cancel => Some(STATE_CANCEL),
             Action::Fill => Some(STATE_TRADE),
             // ⚠ EXHAUSTIVE, NOT A WILDCARD (2026-08-23). This was `_ => None`.
-            // The doc-comment above states the disposition precisely and NOTHING
-            // ENFORCED IT: a carrier added later would return `None` exactly as
-            // silently as the three named here, and the reasoning above — that
-            // `TradeAggregate` carries `order_id == 0` on 100% of its XNAS
-            // population and so can never match `active_orders` — would not have
-            // been re-examined. Naming every remaining variant makes an added one
-            // a compile error. Found by `scripts/ci/check_carrier_disjunction.py`.
+            // Nothing enforced the disposition: a carrier added later would return
+            // `None` exactly as silently as the three named here. Naming every
+            // remaining variant makes an added one a compile error. Found by the
+            // monorepo's carrier-disjunction gate (`scripts/ci/` at the pipeline
+            // root — NOT in this repo; a standalone clone cannot resolve that path).
+            //
+            // ⚠ CORRECTED SAME DAY. The first version of this comment justified
+            // dropping `TradeAggregate` on the grounds that it "carries
+            // `order_id == 0` on 100% of its XNAS population and so can never match
+            // `active_orders`". That is an XNAS-ONLY premise and this file already
+            // refutes it ~160 lines below: on ARCX, 88,024 of 444,141 `T` (19.82%)
+            // carry `order_id != 0`. Re-asserting it was a DO-NOT-RE-ASSERT
+            // recurrence.
+            //
+            // THE REAL MECHANISM IS VENUE-INDEPENDENT and stronger: the sole caller
+            // is `let _ = match Self::action_state(...) { Some(s) => s, None => return }`,
+            // so a `TradeAggregate` NEVER REACHES `active_orders` on any venue,
+            // whatever its `order_id`. And semantically an aggressor print is not an
+            // event in a resting order's lifecycle at all -- it would be wrong to
+            // admit even if a trade id numerically collided with a live order id.
+            // The old wording made a SEMANTIC invariant contingent on an EMPIRICAL
+            // coincidence in two named venues.
             Action::TradeAggregate | Action::Clear | Action::None => None,
         }
     }
@@ -317,8 +344,14 @@ impl AnalysisTracker for LifecycleTracker {
             }
             // ⚠ EXHAUSTIVE, NOT A WILDCARD (2026-08-23) — this was `_ => {}`; see
             // `action_state` above for the reasoning and the same repair.
-            // `TradeAggregate` is the aggressor-side print, keyed to no resting
-            // order; `Clear` and `None` are not lifecycle events.
+            //
+            // ⚠ AND THIS ARM IS STATICALLY UNREACHABLE. `process_event` returns
+            // early when `action_state` yields `None`, which it does for exactly
+            // these three variants -- so nothing can arrive here. It is kept
+            // because deleting it would require a `_` wildcard, which is the
+            // silent-absorption defect this repair exists to remove; the
+            // exhaustiveness is the point, not the reachability. Stated so a future
+            // author who hits `E0004` here knows they are editing a dead branch.
             Action::TradeAggregate | Action::Clear | Action::None => {}
         }
     }

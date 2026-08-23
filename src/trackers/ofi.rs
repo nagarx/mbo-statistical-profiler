@@ -694,7 +694,41 @@ impl AnalysisTracker for OfiTracker {
                 // carrier's disposition edits one line, not a shared one.
                 Action::TradeAggregate => {}
                 Action::Fill => {}
-                Action::Modify | Action::Clear | Action::None => {}
+                Action::Clear | Action::None => {}
+                // ⚠ `Modify` IS A BOOK EVENT AND ITS OFI IS DROPPED. This arm is
+                // its own, deliberately, so no reader can infer from grouping that
+                // it belongs with the two genuine non-events above.
+                //
+                // The exclusion is PRE-EXISTING -- before 2026-08-23 it was
+                // absorbed by a `_ => {}` -- but naming it without examining it
+                // converts an unexamined default into a stated decision that the
+                // compiler now blesses. It is stated here instead.
+                //
+                // `modify_order` in the reconstructor is `remove_order_internal`
+                // then `add_order`: a cancel-replace that vacates one level and
+                // fills another, so `compute_ofi` on an `M` is genuinely NON-ZERO,
+                // and under Cont-Kukanov-Stoikov it is the largest-|e_n| class
+                // there is. There is no `day_ofi_modify` bucket, so that value is
+                // computed and discarded.
+                //
+                // THE CONSEQUENCE IS IN `finalize()`: `total_component` is
+                // add + cancel + execution, and each published fraction is
+                // normalised by it. Modify is excluded from BOTH numerator and
+                // denominator, so `component_fractions` SUMS TO EXACTLY 1.0 OVER A
+                // PARTITION THAT IS NOT A PARTITION -- the arithmetic confirms the
+                // reader's assumption that nothing is missing.
+                //
+                // MEASURED on the committed 233-day corpora (`output_*_full/`):
+                //   ARCX  modify_count 34,559,212 = 2.519148% of events
+                //   XNAS  modify_count 0          = 0.000000%
+                // So this is EXACTLY ZERO on the venue everyone looks at, which is
+                // why it survived review, and material on the other one.
+                //
+                // OWED (ladder): either add a `day_ofi_modify` bucket and a fourth
+                // fraction, making the composition actually complete, or keep it
+                // dropped and declare `component_fractions` a 3-of-4 partition in
+                // the emitted artifact. Not decided here.
+                Action::Modify => {}
             }
 
             self.regime_abs_ofi.add(regime, ofi.abs());
