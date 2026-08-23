@@ -144,7 +144,15 @@ impl LifecycleTracker {
             Action::Modify => Some(STATE_MODIFY),
             Action::Cancel => Some(STATE_CANCEL),
             Action::Fill => Some(STATE_TRADE),
-            _ => None,
+            // ⚠ EXHAUSTIVE, NOT A WILDCARD (2026-08-23). This was `_ => None`.
+            // The doc-comment above states the disposition precisely and NOTHING
+            // ENFORCED IT: a carrier added later would return `None` exactly as
+            // silently as the three named here, and the reasoning above — that
+            // `TradeAggregate` carries `order_id == 0` on 100% of its XNAS
+            // population and so can never match `active_orders` — would not have
+            // been re-examined. Naming every remaining variant makes an added one
+            // a compile error. Found by `scripts/ci/check_carrier_disjunction.py`.
+            Action::TradeAggregate | Action::Clear | Action::None => None,
         }
     }
 
@@ -307,7 +315,11 @@ impl AnalysisTracker for LifecycleTracker {
                     }
                 }
             }
-            _ => {}
+            // ⚠ EXHAUSTIVE, NOT A WILDCARD (2026-08-23) — this was `_ => {}`; see
+            // `action_state` above for the reasoning and the same repair.
+            // `TradeAggregate` is the aggressor-side print, keyed to no resting
+            // order; `Clear` and `None` are not lifecycle events.
+            Action::TradeAggregate | Action::Clear | Action::None => {}
         }
     }
 

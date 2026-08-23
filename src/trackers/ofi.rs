@@ -674,13 +674,27 @@ impl AnalysisTracker for OfiTracker {
                         self.day_ofi_cancel.push(ofi);
                     }
                 }
-                // Explicit no-op arms, not a wildcard: both carriers are book
+                // Explicit no-op arms, and NO wildcard: both carriers are book
                 // no-ops, so their OFI is identically 0.0 and recording it would
-                // manufacture a zero-valued series. Naming them here means a
-                // future carrier addition forces a decision instead of falling
-                // silently into `_ => {}`.
-                Action::TradeAggregate | Action::Fill => {}
-                _ => {}
+                // manufacture a zero-valued series.
+                //
+                // ⚠ CORRECTED 2026-08-23. This comment used to end: "Naming them
+                // here means a future carrier addition forces a decision instead
+                // of falling silently into `_ => {}`." `_ => {}` was the NEXT
+                // LINE, so it forced nothing — the sentence asserted exactly the
+                // protection the following line removed. The match is now
+                // exhaustive, so an added variant IS a compile error and the
+                // claim is true. `FINDING-151`: the failure path returned success.
+                //
+                // The two carriers get SEPARATE arms, deliberately. A shared arm
+                // is benign here, but this repo's whole correctness ladder exists
+                // to un-merge these two, and one production site naming both in
+                // one pattern is the shape `scripts/ci/check_carrier_disjunction.py`
+                // forbids. Separate arms also mean a future change to ONE
+                // carrier's disposition edits one line, not a shared one.
+                Action::TradeAggregate => {}
+                Action::Fill => {}
+                Action::Modify | Action::Clear | Action::None => {}
             }
 
             self.regime_abs_ofi.add(regime, ofi.abs());
