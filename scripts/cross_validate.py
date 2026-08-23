@@ -145,13 +145,37 @@ def validate_quality(rust: dict, golden: dict) -> tuple:
     checks = 0
     passes = 0
 
+    # ⚠ THE `trade_count` COMPARISON WAS LOUD IN THE WRONG DIRECTION.
+    #
+    # The golden's `action_counts["Trade"]` was produced BEFORE the carrier
+    # split, when the decoder merged `b'T' | b'F' => Action::Trade`, so it is the
+    # MERGED population. Post-split the Rust `trade_count` is bucket 3 =
+    # `TradeAggregate` alone, which is smaller by the whole `F` population
+    # (−44.05% of executions on XNAS). Comparing them at tolerance 0 fails on a
+    # CORRECT number — and a gate that reds on correct code is one that gets
+    # routed around (hft-rules §1).
+    #
+    # ⭐ THE REPAIR IS STRICTLY STRONGER THAN THE ORIGINAL CHECK. Comparing
+    # `trade_count + fill_count` against the merged golden asserts that the
+    # split PARTITIONS the same population — nothing invented, nothing dropped.
+    # The old check could only see the total; this one would also catch a
+    # record leaking out of both buckets.
+    #
+    # ⚠ ABSENT IS NOT ZERO (hft-rules §9). If either key is missing the sum is
+    # `None`, so `check_value` reports a missing measurement rather than
+    # silently comparing a fabricated 0.
+    _actions = rust.get("action_distribution", {})
+    _t = _actions.get("trade_count")
+    _f = _actions.get("fill_count")
+    _carrier_total = None if (_t is None or _f is None) else _t + _f
+
     tests = [
         ("total_events", rust.get("total_events"), golden["n_mbo_rows"], 0),
-        ("add_count", rust.get("action_distribution", {}).get("add_count"),
+        ("add_count", _actions.get("add_count"),
          golden["action_counts"].get("Add"), 0),
-        ("cancel_count", rust.get("action_distribution", {}).get("cancel_count"),
+        ("cancel_count", _actions.get("cancel_count"),
          golden["action_counts"].get("Cancel"), 0),
-        ("trade_count", rust.get("action_distribution", {}).get("trade_count"),
+        ("trade_count+fill_count", _carrier_total,
          golden["action_counts"].get("Trade"), 0),
     ]
 

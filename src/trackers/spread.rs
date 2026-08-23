@@ -106,7 +106,24 @@ impl AnalysisTracker for SpreadTracker {
             self.intraday_curve.add(ts, spread, self.utc_offset);
         }
 
-        if lob.is_trade_event() {
+        // ⚠ THE UNION HELPER NO LONGER EXISTS, AND THAT IS DELIBERATE.
+        // `LobState::is_trade_event()` returned true for BOTH carriers, so it
+        // added one spread observation per CARRIER ROW — two per physical
+        // execution, under two opposite side conventions. The candidate
+        // replaced it with `is_aggregate_trade_event()` (`T`) and
+        // `is_resting_fill_event()` (`F`) and deliberately ships NO union
+        // predicate: a caller wanting both must say so and own the double count.
+        //
+        // ⚠ THIS SITE IS A METHOD CALL — a FIFTH form. Every `Action::`-keyed
+        // census in this programme MISSED it, and it is SILENT: had the helper
+        // merely been redefined rather than removed, this line would have
+        // changed meaning with no compiler error and no test failure.
+        //
+        // `TradeAggregate` chosen for consistency with the other two
+        // trade-conditioned market-quality statistics in this crate —
+        // `liquidity.rs` effective spread and `trades.rs` — all of which key on
+        // the AGGRESSOR print, one row per physical execution.
+        if lob.is_aggregate_trade_event() {
             self.trade_conditional_spread.add(spread);
         }
     }
@@ -184,6 +201,40 @@ mod tests {
     fn make_msg() -> MboMessage {
         MboMessage::new(1, Action::Add, Side::Bid, 100_000_000_000, 100)
             .with_timestamp(1_000_000_000)
+    }
+
+    #[test]
+    fn test_trade_conditional_spread_admits_only_the_aggressor_print() {
+        // ⚠ CLOSES A MEASURED COVERAGE GAP, ON THE SITE NO CENSUS FOUND.
+        // This is the FIFTH form — a METHOD CALL (`lob.is_trade_event()`), not
+        // an `Action::` match — so every `Action`-keyed census in this
+        // programme missed it. Swapping the predicate to the resting carrier
+        // left all tests green.
+        //
+        // The candidate deliberately ships NO union predicate: the former
+        // `is_trade_event()` returned true for BOTH carriers and therefore
+        // added one spread observation per CARRIER ROW — two per physical
+        // execution, under two opposite side conventions.
+        let mut tracker = SpreadTracker::new(1000);
+
+        let mut agg_lob = make_lob_spread(100_000_000_000, 100_010_000_000);
+        agg_lob.triggering_action = Some(Action::TradeAggregate);
+        tracker.process_event(&make_msg(), &agg_lob, 3);
+        assert_eq!(
+            tracker.trade_conditional_spread.count(),
+            1,
+            "the aggressor print must contribute a trade-conditional observation"
+        );
+
+        let mut fill_lob = make_lob_spread(100_000_000_000, 100_010_000_000);
+        fill_lob.triggering_action = Some(Action::Fill);
+        tracker.process_event(&make_msg(), &fill_lob, 3);
+        assert_eq!(
+            tracker.trade_conditional_spread.count(),
+            1,
+            "the paired Fill is the SAME physical execution — counting it too \
+             double-counts every trade"
+        );
     }
 
     #[test]

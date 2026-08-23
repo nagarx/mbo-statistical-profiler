@@ -114,12 +114,21 @@ impl LifecycleTracker {
         }
     }
 
+    /// Lifecycle state for an action — `Fill` ONLY for the execution state.
+    ///
+    /// The subject of an order lifecycle is the RESTING order, and `Fill` is the
+    /// only carrier keyed to it (`order_id` identifies the resting order;
+    /// `side` is the resting order's). `TradeAggregate` is the aggressor-side
+    /// print: on XNAS it carries `order_id == 0` for 100% of its population, so
+    /// it can never match an entry in `active_orders`, and admitting it here
+    /// would state a lifecycle transition for an order this tracker does not
+    /// hold.
     fn action_state(action: Action) -> Option<usize> {
         match action {
             Action::Add => Some(STATE_ADD),
             Action::Modify => Some(STATE_MODIFY),
             Action::Cancel => Some(STATE_CANCEL),
-            Action::Trade | Action::Fill => Some(STATE_TRADE),
+            Action::Fill => Some(STATE_TRADE),
             _ => None,
         }
     }
@@ -228,7 +237,16 @@ impl AnalysisTracker for LifecycleTracker {
                     self.regime_fill_rate.add(regime, 0.0);
                 }
             }
-            Action::Trade | Action::Fill => {
+            // `Fill` ONLY — and this is a FORMALISATION, not a change of value.
+            //
+            // The arm was already `F`-only IN EFFECT: every `TradeAggregate`
+            // carries `order_id == 0` on XNAS, so `active_orders.get_mut` never
+            // matched one. Measured exactly: `n_fills + n_partial_fills =
+            // 75,232,609 == transition_matrix.counts[STATE_ADD][STATE_TRADE]`.
+            // Naming the carrier makes the compiler enforce what the data
+            // already guaranteed, and stops the guarantee from depending on a
+            // venue property that ARCX does not share.
+            Action::Fill => {
                 if let Some(order) = self.active_orders.get_mut(&msg.order_id) {
                     self.transition_matrix
                         .record(order.last_action, STATE_TRADE);
@@ -340,9 +358,14 @@ mod tests {
         MboMessage::new(order_id, Action::Cancel, Side::Bid, 100_000_000_000, 0).with_timestamp(ts)
     }
 
-    fn make_trade(order_id: u64, ts: i64, size: u32) -> MboMessage {
-        MboMessage::new(order_id, Action::Trade, Side::Bid, 100_000_000_000, size)
-            .with_timestamp(ts)
+    /// A resting-order FILL — the carrier this tracker admits.
+    ///
+    /// `Fill` and not `TradeAggregate`: an order lifecycle is keyed by
+    /// `order_id`, and only `Fill` carries the resting order's id. A
+    /// `TradeAggregate` fixture would never match `active_orders` and the test
+    /// would assert on a transition that cannot occur.
+    fn make_fill(order_id: u64, ts: i64, size: u32) -> MboMessage {
+        MboMessage::new(order_id, Action::Fill, Side::Bid, 100_000_000_000, size).with_timestamp(ts)
     }
 
     fn make_modify(order_id: u64, ts: i64, new_size: u32) -> MboMessage {
@@ -395,7 +418,7 @@ mod tests {
         let lob = make_lob();
 
         tracker.process_event(&make_add(1, 10 * NS, 100), &lob, 3);
-        tracker.process_event(&make_trade(1, 12 * NS, 100), &lob, 3);
+        tracker.process_event(&make_fill(1, 12 * NS, 100), &lob, 3);
 
         assert_eq!(tracker.n_fills, 1);
         assert_eq!(tracker.n_resolved, 1);
@@ -408,7 +431,7 @@ mod tests {
         let lob = make_lob();
 
         tracker.process_event(&make_add(1, 10 * NS, 100), &lob, 3);
-        tracker.process_event(&make_trade(1, 11 * NS, 30), &lob, 3);
+        tracker.process_event(&make_fill(1, 11 * NS, 30), &lob, 3);
 
         assert_eq!(tracker.n_partial_fills, 1);
         assert_eq!(tracker.active_orders.len(), 1);
@@ -418,7 +441,7 @@ mod tests {
         assert_eq!(order.n_partial_fills, 1);
 
         // Complete the fill
-        tracker.process_event(&make_trade(1, 12 * NS, 70), &lob, 3);
+        tracker.process_event(&make_fill(1, 12 * NS, 70), &lob, 3);
         assert_eq!(tracker.n_fills, 1);
         assert_eq!(tracker.active_orders.len(), 0);
     }
@@ -449,7 +472,7 @@ mod tests {
 
         // 2 orders: 1 filled, 1 cancelled
         tracker.process_event(&make_add(1, 10 * NS, 100), &lob, 3);
-        tracker.process_event(&make_trade(1, 11 * NS, 100), &lob, 3);
+        tracker.process_event(&make_fill(1, 11 * NS, 100), &lob, 3);
 
         tracker.process_event(&make_add(2, 10 * NS, 100), &lob, 3);
         tracker.process_event(&make_cancel(2, 11 * NS), &lob, 3);
@@ -499,7 +522,7 @@ mod tests {
             tracker.process_event(&make_add(i, (10 + i as i64) * NS, 100), &lob, 3);
         }
         for i in 1..=3u64 {
-            tracker.process_event(&make_trade(i, (20 + i as i64) * NS, 100), &lob, 3);
+            tracker.process_event(&make_fill(i, (20 + i as i64) * NS, 100), &lob, 3);
         }
         for i in 4..=10u64 {
             tracker.process_event(&make_cancel(i, (20 + i as i64) * NS), &lob, 3);

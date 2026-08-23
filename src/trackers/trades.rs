@@ -53,6 +53,13 @@ pub struct TradeTracker {
     trade_size_dist: StreamingDistribution,
     buyer_size_dist: StreamingDistribution,
     seller_size_dist: StreamingDistribution,
+    /// Sizes of executions with NO disclosed aggressor side (`T|N`).
+    ///
+    /// The hidden-order / auction-cross population. Directionless by
+    /// construction, so it cannot enter `buyer_` or `seller_`; counted here so
+    /// the published size distribution covers the whole tape rather than the
+    /// side-determinate 58.4% of it.
+    undisclosed_size_dist: StreamingDistribution,
 
     regime_trade_size: RegimeAccumulator,
     regime_trade_count: [u64; N_REGIMES],
@@ -87,6 +94,8 @@ pub struct TradeTracker {
     large_trade_impact_dist: StreamingDistribution,
     large_trade_buyer_count: u64,
     large_trade_seller_count: u64,
+    /// Large executions with no disclosed aggressor side (`T|N`).
+    large_trade_undisclosed_count: u64,
 
     intraday_trade_rate_curve: IntradayCurveAccumulator,
 
@@ -104,6 +113,7 @@ impl TradeTracker {
             trade_size_dist: StreamingDistribution::new(10_000),
             buyer_size_dist: StreamingDistribution::new(10_000),
             seller_size_dist: StreamingDistribution::new(10_000),
+            undisclosed_size_dist: StreamingDistribution::new(10_000),
             regime_trade_size: RegimeAccumulator::new(),
             regime_trade_count: [0u64; N_REGIMES],
             at_bid_count: 0,
@@ -127,6 +137,7 @@ impl TradeTracker {
             large_trade_impact_dist: StreamingDistribution::new(10_000),
             large_trade_buyer_count: 0,
             large_trade_seller_count: 0,
+            large_trade_undisclosed_count: 0,
             intraday_trade_rate_curve: IntradayCurveAccumulator::new_rth_1min(),
             utc_offset: -5, // EST default; overwritten by begin_day at start of each day
             n_days: 0,
@@ -154,7 +165,17 @@ impl Default for TradeTracker {
 
 impl AnalysisTracker for TradeTracker {
     fn process_event(&mut self, msg: &MboMessage, lob_state: &LobState, regime: u8) {
-        let is_trade = matches!(msg.action, Action::Trade | Action::Fill);
+        // The AGGRESSOR print only (`TradeAggregate`).
+        //
+        // Every field below is aggressor-keyed — `buyer_initiated_size`,
+        // `seller_initiated_size`, trade-through, large-trade impact — so the
+        // carrier whose `side` answers "who initiated?" is `T`. Admitting
+        // `Fill` too counted every physical execution twice under OPPOSITE side
+        // conventions, which is why `buyerN 86,584,115` and `sellerN
+        // 86,590,732` sat 0.0076% apart: the two carriers were cancelling.
+        // Under `T` alone they genuinely separate — 215,055 vs 258,355 on
+        // 2025-02-03. Population: `total_trades` 193,879,475 -> −44.05%.
+        let is_trade = matches!(msg.action, Action::TradeAggregate);
         if !is_trade {
             return;
         }
@@ -177,10 +198,23 @@ impl AnalysisTracker for TradeTracker {
             self.regime_trade_count[regime as usize] += 1;
         }
 
+        // ⚠ THE MAPPING IS ALREADY AGGRESSOR-KEYED AND MUST NOT BE FLIPPED.
+        // On a `T`, `side` is the AGGRESSOR's: `Bid` = the aggressor BOUGHT.
+        // (Contrast `vpin.rs`, whose mapping was written for the RESTING
+        // convention and HAD to be flipped by this same migration.)
+        //
+        // ⚠ `Side::None` IS NOT A ROUNDING BUCKET. It is the hidden/cross
+        // population — 68,063 records and 19,661,605 shares on 2025-07-01,
+        // 41.6% of that day's traded volume — and it was previously DISCARDED
+        // by `=> {}`. It is directionless by construction (no aggressor side is
+        // disclosed), so it cannot enter a signed bucket; but silently dropping
+        // 41.6% of volume from a size distribution makes the published
+        // distribution unrepresentative of the tape. It now has its own
+        // unsigned bucket. This site is SILENT and NOT compiler-protected.
         match msg.side {
             Side::Bid => self.buyer_size_dist.add(size),
             Side::Ask => self.seller_size_dist.add(size),
-            Side::None => {}
+            Side::None => self.undisclosed_size_dist.add(size),
         }
 
         let value = msg.price_as_f64() * size;
@@ -209,7 +243,7 @@ impl AnalysisTracker for TradeTracker {
                         match msg.side {
                             Side::Bid => self.large_trade_buyer_count += 1,
                             Side::Ask => self.large_trade_seller_count += 1,
-                            _ => {}
+                            Side::None => self.large_trade_undisclosed_count += 1,
                         }
                     }
                 }
@@ -320,6 +354,7 @@ impl AnalysisTracker for TradeTracker {
             "trade_size_distribution": self.trade_size_dist.summary(),
             "buyer_initiated_size": self.buyer_size_dist.summary(),
             "seller_initiated_size": self.seller_size_dist.summary(),
+            "undisclosed_initiated_size": self.undisclosed_size_dist.summary(),
             "trade_value": {
                 "mean": self.trade_value.mean(),
                 "std": self.trade_value.std(),
@@ -355,6 +390,7 @@ impl AnalysisTracker for TradeTracker {
                 "impact_bps": self.large_trade_impact_dist.summary(),
                 "buyer_count": self.large_trade_buyer_count,
                 "seller_count": self.large_trade_seller_count,
+                "undisclosed_count": self.large_trade_undisclosed_count,
             },
             "regime_trade_size": self.regime_trade_size.finalize(),
             "intraday_trade_rate_curve": self.intraday_trade_rate_curve.finalize()
@@ -378,8 +414,10 @@ impl AnalysisTracker for TradeTracker {
 mod tests {
     use super::*;
 
+    /// An AGGRESSOR print — the carrier this tracker admits. `side` is the
+    /// AGGRESSOR's, so `Side::Bid` means the aggressor BOUGHT.
     fn make_trade_msg(side: Side, price: i64, size: u32) -> MboMessage {
-        MboMessage::new(1, Action::Trade, side, price, size).with_timestamp(1_000_000_000)
+        MboMessage::new(1, Action::TradeAggregate, side, price, size).with_timestamp(1_000_000_000)
     }
 
     fn make_lob() -> LobState {
@@ -389,6 +427,40 @@ mod tests {
         lob.bid_sizes[0] = 100;
         lob.ask_sizes[0] = 100;
         lob
+    }
+
+    #[test]
+    fn test_undisclosed_side_is_bucketed_not_discarded() {
+        // ⚠ CLOSES A MEASURED COVERAGE GAP. Reverting `Side::None` to the old
+        // `=> {}` left all tests green, because no fixture ever sent an
+        // undisclosed-side execution.
+        //
+        // `T|None` is the hidden-order / auction-cross population — 68,063
+        // records and 19,661,605 shares on 2025-07-01, 41.6% of that day's
+        // traded volume. It is directionless by construction so it cannot enter
+        // a signed bucket, but discarding it makes the published size
+        // distribution unrepresentative of the tape by that fraction.
+        let mut tracker = TradeTracker::new();
+        let lob = make_lob();
+
+        tracker.process_event(&make_trade_msg(Side::None, 100_000_000_000, 75), &lob, 3);
+
+        assert_eq!(
+            tracker.undisclosed_size_dist.count(),
+            1,
+            "T|None must be counted, not discarded"
+        );
+        assert_eq!(
+            tracker.buyer_size_dist.count(),
+            0,
+            "T|None is not buyer-initiated"
+        );
+        assert_eq!(
+            tracker.seller_size_dist.count(),
+            0,
+            "T|None is not seller-initiated"
+        );
+        assert_eq!(tracker.total_trades, 1, "and it is still a trade");
     }
 
     #[test]
@@ -488,8 +560,8 @@ mod tests {
 
         const NS_PER_SECOND_T: i64 = 1_000_000_000;
         let ts = 14 * 3600 * NS_PER_SECOND_T + 30 * 60 * NS_PER_SECOND_T; // 14:30 UTC
-        let msg =
-            MboMessage::new(1, Action::Trade, Side::Bid, 100_000_000_000, 100).with_timestamp(ts);
+        let msg = MboMessage::new(1, Action::TradeAggregate, Side::Bid, 100_000_000_000, 100)
+            .with_timestamp(ts);
 
         tracker.begin_day(0, -4, 0);
         tracker.process_event(&msg, &lob, 3);

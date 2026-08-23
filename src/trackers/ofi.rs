@@ -138,13 +138,24 @@ pub struct OfiTracker {
     prev_ask_price: i64,
     prev_bid_size: u32,
     prev_ask_size: u32,
+    /// `(action, order_id)` of the IMMEDIATELY PRECEDING record.
+    ///
+    /// The whole state needed to separate an execution's book leg from a
+    /// genuine cancellation. Updated at the TOP of `process_event`, before any
+    /// early return.
+    prev_record: (Action, u64),
     initialized: bool,
 
     day_ofi_ts: Vec<i64>,
     day_ofi_vals: Vec<f64>,
     day_ofi_add: Vec<f64>,
+    /// OFI on `Cancel` records that are GENUINE cancellations.
     day_ofi_cancel: Vec<f64>,
-    day_ofi_trade: Vec<f64>,
+    /// OFI on `Cancel` records that are the BOOK LEG OF AN EXECUTION.
+    ///
+    /// Replaces the former `day_ofi_trade`. See the dispatch in
+    /// `process_event` for why the execution's book delta lives on the `C`.
+    day_ofi_execution: Vec<f64>,
     day_mid_prices: Vec<f64>,
     day_mid_ts: Vec<i64>,
     day_spreads: Vec<f64>,
@@ -156,8 +167,15 @@ pub struct OfiTracker {
     intraday_ofi_return_r_curve: IntradayCorrelationAccumulator,
 
     total_abs_add: f64,
+    /// Σ|OFI| over GENUINE cancellations.
     total_abs_cancel: f64,
-    total_abs_trade: f64,
+    /// Σ|OFI| over the book legs of executions (the `C` paired to an `F`).
+    ///
+    /// ⚠ RENAMED FROM `total_abs_trade`, AND THE PUBLISHED KEY CHANGED WITH IT
+    /// (`trade_fraction` -> `execution_fraction`). The rename is deliberately
+    /// LOUD: a consumer reading the old key now gets an absent field rather
+    /// than a number whose meaning moved underneath it.
+    total_abs_execution: f64,
 
     daily_deltas: WelfordAccumulator,
     total_buyer_vol: f64,
@@ -205,12 +223,13 @@ impl OfiTracker {
             prev_ask_price: 0,
             prev_bid_size: 0,
             prev_ask_size: 0,
+            prev_record: (Action::None, 0),
             initialized: false,
             day_ofi_ts: Vec::with_capacity(20_000_000),
             day_ofi_vals: Vec::with_capacity(20_000_000),
             day_ofi_add: Vec::with_capacity(20_000_000),
             day_ofi_cancel: Vec::with_capacity(20_000_000),
-            day_ofi_trade: Vec::with_capacity(20_000_000),
+            day_ofi_execution: Vec::with_capacity(20_000_000),
             day_mid_prices: Vec::with_capacity(20_000_000),
             day_mid_ts: Vec::with_capacity(20_000_000),
             day_spreads: Vec::with_capacity(20_000_000),
@@ -221,7 +240,7 @@ impl OfiTracker {
             intraday_ofi_return_r_curve: IntradayCorrelationAccumulator::new_rth_1min(),
             total_abs_add: 0.0,
             total_abs_cancel: 0.0,
-            total_abs_trade: 0.0,
+            total_abs_execution: 0.0,
             daily_deltas: WelfordAccumulator::new(),
             total_buyer_vol: 0.0,
             total_seller_vol: 0.0,
@@ -551,10 +570,10 @@ impl OfiTracker {
 
         let add_total: f64 = self.day_ofi_add.iter().map(|v| v.abs()).sum();
         let cancel_total: f64 = self.day_ofi_cancel.iter().map(|v| v.abs()).sum();
-        let trade_total: f64 = self.day_ofi_trade.iter().map(|v| v.abs()).sum();
+        let execution_total: f64 = self.day_ofi_execution.iter().map(|v| v.abs()).sum();
         self.total_abs_add += add_total;
         self.total_abs_cancel += cancel_total;
-        self.total_abs_trade += trade_total;
+        self.total_abs_execution += execution_total;
     }
 }
 
@@ -565,6 +584,17 @@ impl AnalysisTracker for OfiTracker {
     }
 
     fn process_event(&mut self, msg: &MboMessage, lob_state: &LobState, regime: u8) {
+        // ⚠ THE LOOKBACK IS CAPTURED-THEN-STORED HERE, AT THE TOP, AND THAT
+        // PLACEMENT IS LOAD-BEARING. `process_event` has THREE early returns
+        // below (invalid book, empty BBO, first-event initialisation). Updating
+        // the previous-record state at the END of the function would skip it on
+        // every message that takes one of them, silently breaking the F->C
+        // pairing for the record that follows. Read the previous value into a
+        // local, store the current one immediately, and every exit path leaves
+        // the state correct.
+        let prev_record = self.prev_record;
+        self.prev_record = (msg.action, msg.order_id);
+
         if lob_state.check_consistency() != BookConsistency::Valid {
             return;
         }
@@ -604,18 +634,70 @@ impl AnalysisTracker for OfiTracker {
             self.day_ofi_ts.push(ts);
             self.day_ofi_vals.push(ofi);
 
+            // ⚠ `day_ofi_trade` IS GONE, AND ITS REPLACEMENT IS NOT A RENAME.
+            //
+            // Both carriers are vendor BOOK NO-OPS after L-ROUTE, so the OFI
+            // measured on a `TradeAggregate` or a `Fill` row is STRUCTURALLY
+            // 0.0 — the book did not move. A `day_ofi_trade` fed from those
+            // rows would be a vector of zeros: a published series that reads as
+            // "executions carry no order-flow imbalance" while carrying no
+            // information at all. That is the `FINDING-155` class.
+            //
+            // ⭐ THE DELTA DID NOT VANISH; IT MOVED. Pre-L-ROUTE the `F`
+            // performed the book removal and the venue's paired `C` found
+            // nothing (`cancel_order_not_found` = 261,386 on 2025-07-01).
+            // Post-L-ROUTE the `F` is inert and the `C` performs the removal
+            // (that counter -> 0). So the execution's entire book delta now
+            // arrives on the `C` — and a `Cancel` bucket that does not separate
+            // them silently reports execution flow as cancellation flow.
+            //
+            // The split is EXACT, not a heuristic: every `F` is immediately
+            // followed by a `C` with the same `order_id` and the same size,
+            // measured 1,808,570 / 1,808,570 over 6 days across two venues,
+            // including inside both auction crosses. A one-record lookback is
+            // therefore sufficient AND complete.
             let action = lob_state.triggering_action.unwrap_or(Action::None);
             match action {
                 Action::Add => self.day_ofi_add.push(ofi),
-                Action::Cancel => self.day_ofi_cancel.push(ofi),
-                Action::Trade | Action::Fill => self.day_ofi_trade.push(ofi),
+                Action::Cancel => {
+                    let (prev_action, prev_order_id) = prev_record;
+                    if prev_action == Action::Fill && prev_order_id == msg.order_id {
+                        self.day_ofi_execution.push(ofi);
+                    } else {
+                        self.day_ofi_cancel.push(ofi);
+                    }
+                }
+                // Explicit no-op arms, not a wildcard: both carriers are book
+                // no-ops, so their OFI is identically 0.0 and recording it would
+                // manufacture a zero-valued series. Naming them here means a
+                // future carrier addition forces a decision instead of falling
+                // silently into `_ => {}`.
+                Action::TradeAggregate | Action::Fill => {}
                 _ => {}
             }
 
             self.regime_abs_ofi.add(regime, ofi.abs());
         }
 
-        if (msg.action == Action::Trade || msg.action == Action::Fill) && msg.side != Side::None {
+        // ⚠ THIS SITE IS WRITTEN AS `==` / `||`, SO EVERY `matches!`-SHAPED
+        // GREP IN THIS PROGRAMME MISSED IT. It is found only by searching the
+        // enum name, not the match form.
+        //
+        // `TradeAggregate` ONLY, and the `Bid -> buyer` mapping is KEPT: on a
+        // `T`, `side` is the AGGRESSOR's, so `Bid` means the aggressor BOUGHT.
+        // (Contrast `vpin.rs`, whose mapping was written for the RESTING
+        // convention and had to be flipped.)
+        //
+        // ⚠ THE MEASURED CONSEQUENCE IS THE POINT. Under `T ∪ F` this ratio was
+        // pinned at EXACTLY 0.5000000000 — not "close to a half", exactly one —
+        // because `T|A ≡ F|B` makes every execution contribute to both buckets.
+        // `aggressor_ratio` was a DECODE IDENTITY, not a market measurement.
+        // Under `TradeAggregate` alone it reads 0.5042058217. Same annihilation
+        // mechanism as `FINDING-170`.
+        //
+        // `side != Side::None` is retained: `T|N` discloses no aggressor, so it
+        // belongs in neither signed bucket nor in this denominator.
+        if msg.action == Action::TradeAggregate && msg.side != Side::None {
             let size = msg.size as f64;
             if msg.side == Side::Bid {
                 self.total_buyer_vol += size;
@@ -647,7 +729,7 @@ impl AnalysisTracker for OfiTracker {
         self.day_ofi_vals.clear();
         self.day_ofi_add.clear();
         self.day_ofi_cancel.clear();
-        self.day_ofi_trade.clear();
+        self.day_ofi_execution.clear();
         self.day_mid_prices.clear();
         self.day_mid_ts.clear();
         self.day_spreads.clear();
@@ -695,7 +777,7 @@ impl AnalysisTracker for OfiTracker {
             );
         }
 
-        let total_component = self.total_abs_add + self.total_abs_cancel + self.total_abs_trade;
+        let total_component = self.total_abs_add + self.total_abs_cancel + self.total_abs_execution;
         let add_frac = if total_component > 0.0 {
             self.total_abs_add / total_component
         } else {
@@ -706,8 +788,8 @@ impl AnalysisTracker for OfiTracker {
         } else {
             0.0
         };
-        let trade_frac = if total_component > 0.0 {
-            self.total_abs_trade / total_component
+        let execution_frac = if total_component > 0.0 {
+            self.total_abs_execution / total_component
         } else {
             0.0
         };
@@ -759,7 +841,7 @@ impl AnalysisTracker for OfiTracker {
             "component_fractions": {
                 "add_fraction": add_frac,
                 "cancel_fraction": cancel_frac,
-                "trade_fraction": trade_frac,
+                "execution_fraction": execution_frac,
             },
             "regime_intensity": self.regime_abs_ofi.finalize(),
             "intraday_ofi_curve": curve,
@@ -902,9 +984,16 @@ mod tests {
         let lob1 = make_lob(100_000_000_000, 100_010_000_000, 100, 100);
         tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob1, 3);
 
+        // ⚠ `Cancel`, NOT a carrier. This fixture asserts the OFI ARITHMETIC on
+        // a bid-price drop — and post-L-ROUTE a book delta can no longer be
+        // caused by `TradeAggregate` or `Fill`, both of which are vendor book
+        // no-ops. Keeping a carrier here would have the test describe a state
+        // the production code makes unreachable. `Cancel` is the action that
+        // actually moves the book, and (with no preceding `Fill` for this id)
+        // it lands in `day_ofi_cancel` as a genuine cancellation.
         let lob2 = make_lob(99_990_000_000, 100_010_000_000, 100, 100);
         tracker.process_event(
-            &make_msg_ts(Action::Trade, Side::Ask, ts + NS_PER_SECOND),
+            &make_msg_ts(Action::Cancel, Side::Ask, ts + NS_PER_SECOND),
             &lob2,
             3,
         );
@@ -914,6 +1003,109 @@ mod tests {
             "Bid price drop: expected OFI=-100, got {}",
             tracker.day_ofi_vals[0]
         );
+    }
+
+    #[test]
+    fn test_cancel_paired_to_a_fill_is_execution_flow_not_cancellation() {
+        // ⚠ CLOSES A MEASURED COVERAGE GAP. Disabling the F->C pairing split
+        // entirely left all 105 tests green — nothing exercised it.
+        //
+        // The claim: post-L-ROUTE the `F` is a book no-op and its paired `C`
+        // performs the removal, so a `Cancel` immediately preceded by a `Fill`
+        // for the SAME order is the book leg of an execution, not a
+        // cancellation. Without the split, `day_ofi_cancel` silently reports
+        // all execution flow as cancellation flow.
+        let mut tracker = OfiTracker::new(&[1.0], 1000);
+        let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
+        let lob = make_lob(100_000_000_000, 100_010_000_000, 100, 100);
+
+        // Warm-up: the tracker discards its first event to establish `prev_*`.
+        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob, 3);
+
+        // A genuine cancellation — no preceding Fill for this order.
+        let mut cancel_lob = make_lob(100_000_000_000, 100_010_000_000, 90, 100);
+        cancel_lob.triggering_action = Some(Action::Cancel);
+        tracker.process_event(
+            &make_msg_ts(Action::Cancel, Side::Bid, ts + NS_PER_SECOND),
+            &cancel_lob,
+            3,
+        );
+        assert_eq!(
+            tracker.day_ofi_cancel.len(),
+            1,
+            "lone Cancel = genuine cancellation"
+        );
+        assert_eq!(tracker.day_ofi_execution.len(), 0);
+
+        // Now the execution pair: Fill then its paired Cancel, SAME order_id.
+        let mut fill_lob = make_lob(100_000_000_000, 100_010_000_000, 90, 100);
+        fill_lob.triggering_action = Some(Action::Fill);
+        tracker.process_event(
+            &make_msg_ts(Action::Fill, Side::Bid, ts + 2 * NS_PER_SECOND),
+            &fill_lob,
+            3,
+        );
+        let mut paired_lob = make_lob(100_000_000_000, 100_010_000_000, 80, 100);
+        paired_lob.triggering_action = Some(Action::Cancel);
+        tracker.process_event(
+            &make_msg_ts(Action::Cancel, Side::Bid, ts + 3 * NS_PER_SECOND),
+            &paired_lob,
+            3,
+        );
+
+        assert_eq!(
+            tracker.day_ofi_execution.len(),
+            1,
+            "a Cancel paired to a Fill on the same order is EXECUTION flow"
+        );
+        assert_eq!(
+            tracker.day_ofi_cancel.len(),
+            1,
+            "and it must NOT also be counted as a cancellation"
+        );
+    }
+
+    #[test]
+    fn test_signed_volume_admits_only_the_aggressor_print() {
+        // ⚠ CLOSES A MEASURED COVERAGE GAP. Swapping this site to `Fill` left
+        // all 105 tests green — and that swap is exactly the annihilation
+        // `FINDING-170` describes: under `T ∪ F` the ratio was pinned at
+        // EXACTLY 0.5000000000 by the decode identity rather than by the market.
+        let mut tracker = OfiTracker::new(&[1.0], 1000);
+        let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
+        let lob = make_lob(100_000_000_000, 100_010_000_000, 100, 100);
+        tracker.process_event(&make_msg_ts(Action::Add, Side::Bid, ts), &lob, 3);
+
+        // A `Fill` must contribute NOTHING to signed volume: its `side` is the
+        // RESTING order's, the opposite convention from this accumulator.
+        tracker.process_event(
+            &make_msg_ts(Action::Fill, Side::Bid, ts + NS_PER_SECOND),
+            &lob,
+            3,
+        );
+        assert_eq!(
+            tracker.total_buyer_vol, 0.0,
+            "Fill must not enter signed volume"
+        );
+        assert_eq!(tracker.total_seller_vol, 0.0);
+
+        // An aggressor print on the Bid = the aggressor BOUGHT.
+        tracker.process_event(
+            &make_msg_ts(Action::TradeAggregate, Side::Bid, ts + 2 * NS_PER_SECOND),
+            &lob,
+            3,
+        );
+        assert_eq!(tracker.total_buyer_vol, 100.0, "T|Bid = aggressor bought");
+        assert_eq!(tracker.total_seller_vol, 0.0);
+
+        // `T|None` discloses no aggressor and must enter neither bucket.
+        tracker.process_event(
+            &make_msg_ts(Action::TradeAggregate, Side::None, ts + 3 * NS_PER_SECOND),
+            &lob,
+            3,
+        );
+        assert_eq!(tracker.total_buyer_vol, 100.0, "T|None is directionless");
+        assert_eq!(tracker.total_seller_vol, 0.0, "T|None is directionless");
     }
 
     #[test]

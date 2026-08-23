@@ -39,12 +39,30 @@ impl QualityTracker {
         }
     }
 
+    /// Histogram bucket for an action.
+    ///
+    /// ⚠ BUCKET 3 AND BUCKET 4 ARE NOW BOTH LIVE, AND BUCKET 3's PUBLISHED
+    /// KEY CHANGED MEANING WITHOUT CHANGING NAME.
+    ///
+    /// Pre-L-DECODE the decoder merged `b'T' | b'F' => Action::Trade`, so
+    /// bucket 3 held BOTH carriers and bucket 4 was PROVABLY DEAD — measured
+    /// `fill_count = 0` across all three corpora (233 + 233 + 134 = 600
+    /// tracker-days). Post-split bucket 3 holds only the aggressor print `T`
+    /// and narrows by the `F` population (−44.05% of executions on XNAS), while
+    /// bucket 4 goes live for the first time.
+    ///
+    /// The emitted JSON key for bucket 3 is still `trade_count`. It now means
+    /// "aggregate trade prints" rather than "all execution records". A consumer
+    /// comparing it to a pre-split golden will see a real, correct number
+    /// disagree — see `scripts/cross_validate.py::validate_quality`, which is
+    /// LOUD IN THE WRONG DIRECTION and must be dispositioned before the pin
+    /// moves.
     fn action_index(action: Action) -> usize {
         match action {
             Action::Add => 0,
             Action::Modify => 1,
             Action::Cancel => 2,
-            Action::Trade => 3,
+            Action::TradeAggregate => 3,
             Action::Fill => 4,
             Action::Clear => 5,
             Action::None => 6,
@@ -198,12 +216,13 @@ mod tests {
 
         tracker.process_event(&make_msg(Action::Add), &lob, 3);
         tracker.process_event(&make_msg(Action::Cancel), &lob, 3);
-        tracker.process_event(&make_msg(Action::Trade), &lob, 3);
+        tracker.process_event(&make_msg(Action::TradeAggregate), &lob, 3);
 
         assert_eq!(tracker.total_events, 3);
         assert_eq!(tracker.action_counts[0], 1); // Add
         assert_eq!(tracker.action_counts[2], 1); // Cancel
-        assert_eq!(tracker.action_counts[3], 1); // Trade
+        assert_eq!(tracker.action_counts[3], 1); // TradeAggregate (was the merged bucket)
+        assert_eq!(tracker.action_counts[4], 0); // Fill — live now, unused by this fixture
     }
 
     #[test]

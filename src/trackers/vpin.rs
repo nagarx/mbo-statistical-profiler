@@ -255,7 +255,22 @@ impl AnalysisTracker for VpinTracker {
             }
         }
 
-        if msg.action != Action::Trade && msg.action != Action::Fill {
+        // The AGGRESSOR print only (`TradeAggregate`).
+        //
+        // ⚠ WHY THIS PAIRS WITH THE SIDE FLIP BELOW, AND WHY NEITHER IS SAFE
+        // ALONE. VPIN is built on the bar-level BUY/SELL IMBALANCE, so it
+        // depends entirely on the side convention being right for the admitted
+        // carrier. Admitting `T ∪ F` while classifying with the RESTING
+        // convention (as this file did) makes the two carriers CANCEL: one
+        // physical execution appears as `F|A` -> buy and as `T|A` -> buy, but
+        // `T|A ≡ F|B`, so every trade contributes to both buckets and the
+        // imbalance collapses toward zero. Measured: it cancelled to EXACTLY
+        // zero. VPIN measures toxicity THROUGH that imbalance, so the published
+        // series was structurally near-zero rather than uninformative-by-market.
+        // Same mechanism as `FINDING-170`, in a different consumer.
+        //
+        // Bar population drops −44.05%: that is the double-count leaving.
+        if msg.action != Action::TradeAggregate {
             return;
         }
         if msg.size == 0 {
@@ -273,15 +288,33 @@ impl AnalysisTracker for VpinTracker {
         self.current_bar_last_price = trade_price;
         self.current_bar_value_sum += trade_price * size as f64;
 
-        // MBO convention: msg.side = resting order's side.
-        // Side::Bid resting → aggressor is SELLER (hit the bid)
-        // Side::Ask resting → aggressor is BUYER (lifted the ask)
-        if msg.side == Side::Ask {
+        // ⚠ AGGRESSOR CONVENTION — FLIPPED 2026-08-23 WITH THE ADMISSION ABOVE.
+        // On a `TradeAggregate`, `msg.side` is the AGGRESSOR's own side:
+        //     Side::Bid  -> the aggressor BOUGHT (lifted the ask)
+        //     Side::Ask  -> the aggressor SOLD   (hit the bid)
+        // This is the OPPOSITE of the convention this block carried while it
+        // was fed `Fill`, where `side` was the RESTING order's. The previous
+        // comment stated the resting rule and was correct FOR THAT CARRIER;
+        // keeping it after the admission change would have inverted every bar.
+        //
+        // ⚠ THE ADMISSION CHANGE AND THIS FLIP ARE ONE EDIT. Doing either alone
+        // ships a silently inverted VPIN — no panic, no NaN, a plausible series.
+        if msg.side == Side::Bid {
             self.current_bar_buy_vol += size;
-        } else if msg.side == Side::Bid {
+        } else if msg.side == Side::Ask {
             self.current_bar_sell_vol += size;
         } else {
-            // Side::None — split evenly
+            // `Side::None` — no aggressor side disclosed (hidden executions and
+            // the auction crosses). Split evenly, PRESERVING today's behaviour.
+            //
+            // ⚠ THIS DILUTES VPIN AND THE EFFECT IS LARGE. `T|N` is 68,063
+            // records / 19,661,605 shares on 2025-07-01 — 41.6% of the day's
+            // traded volume. An even split contributes ZERO to |buy − sell|
+            // while contributing its full weight to the bar denominator, so
+            // VPIN is attenuated by roughly that fraction. Preserved rather than
+            // changed because choosing a different treatment (exclude from
+            // bars, or bar on side-determinate volume only) is a MODELLING
+            // decision, not part of a carrier migration. Recorded as owed.
             self.current_bar_buy_vol += size / 2;
             self.current_bar_sell_vol += size - size / 2;
         }
@@ -297,13 +330,29 @@ impl AnalysisTracker for VpinTracker {
                 self.current_bar_first_ts = ts;
                 self.current_bar_last_price = trade_price;
                 self.current_bar_value_sum = trade_price * overflow as f64;
-                if msg.side == Side::Ask {
-                    // Buyer aggressor (ask-side resting filled)
+                // ⚠ THE SECOND SIDE SITE. Same aggressor flip as above — and
+                // it MUST stay in step: classifying the bar body one way and
+                // its overflow the other corrupts only the bars that happen to
+                // straddle a boundary, which is the hardest kind of wrong
+                // number to notice.
+                //
+                // ⚠ AND THIS BRANCH CARRIED A PRE-EXISTING BUG, INDEPENDENT OF
+                // THE CARRIER SPLIT: its `else` swept `Side::None` into SELL in
+                // full, while the body block above splits `None` evenly. So an
+                // undisclosed-side execution was classified differently
+                // depending only on whether it crossed a bar boundary. Now
+                // consistent with the body.
+                if msg.side == Side::Bid {
+                    // Aggressor BOUGHT (lifted the ask).
                     self.current_bar_buy_vol = overflow;
                     self.current_bar_sell_vol = 0;
-                } else {
+                } else if msg.side == Side::Ask {
+                    // Aggressor SOLD (hit the bid).
                     self.current_bar_sell_vol = overflow;
                     self.current_bar_buy_vol = 0;
+                } else {
+                    self.current_bar_buy_vol = overflow / 2;
+                    self.current_bar_sell_vol = overflow - overflow / 2;
                 }
             }
         }
@@ -389,8 +438,13 @@ mod tests {
 
     const NS_PER_SECOND: i64 = 1_000_000_000;
 
+    /// An AGGRESSOR print — the carrier this tracker admits.
+    ///
+    /// ⚠ `side` is the AGGRESSOR's: `Side::Bid` = the aggressor BOUGHT. Every
+    /// fixture below was written against the RESTING convention and had to be
+    /// re-derived, not merely renamed.
     fn make_trade(price_nanodollars: i64, size: u32, side: Side, ts: i64) -> MboMessage {
-        MboMessage::new(1, Action::Trade, side, price_nanodollars, size).with_timestamp(ts)
+        MboMessage::new(1, Action::TradeAggregate, side, price_nanodollars, size).with_timestamp(ts)
     }
 
     fn make_valid_lob() -> LobState {
@@ -436,24 +490,53 @@ mod tests {
 
     #[test]
     fn test_vpin_all_buy_equals_one() {
-        // All buyer-initiated (Side::Ask = resting ask filled by buyer aggressor)
-        // → every bar has |buy - sell| = bar_size → VPIN = 1.0
+        // ⚠ AGGRESSOR CONVENTION. `Side::Bid` on a `TradeAggregate` means the
+        // AGGRESSOR BOUGHT. This fixture previously used `Side::Ask` with the
+        // comment "resting ask filled by buyer aggressor" — correct for the
+        // `Fill` carrier this tracker no longer admits.
+        //
+        // ⚠ AND THE ASSERTION HAD TO CHANGE, NOT ONLY THE SIDE. VPIN is
+        // |buy − sell| / total, which is DIRECTION-BLIND: all-buy and all-sell
+        // both give EXACTLY 1.0. So the old body passed identically under the
+        // inverted convention — a test named `all_buy` that could not tell buy
+        // from sell, and therefore could not detect the very flip it appeared
+        // to guard (hft-rules §6: a passing test can lock a bug). The bar-level
+        // split below is the direction-sensitive claim; the VPIN value alone
+        // never was one.
         let mut tracker = VpinTracker::new(100, 2);
         let lob = make_valid_lob();
         let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
 
         for i in 0..10 {
-            let msg = make_trade(100_000_000_000, 100, Side::Ask, ts + i * NS_PER_SECOND);
+            let msg = make_trade(100_000_000_000, 100, Side::Bid, ts + i * NS_PER_SECOND);
             tracker.process_event(&msg, &lob, 3);
         }
         tracker.end_of_day();
 
-        if !tracker.vpin_values.is_empty() {
-            let last_vpin = tracker.vpin_values.last().unwrap().1;
+        // ⚠ NOT `if !is_empty()`. The former body wrapped every assertion in
+        // that guard, so an empty series passed the test while asserting
+        // nothing at all — the failure path returning success.
+        assert!(
+            !tracker.vpin_values.is_empty(),
+            "no VPIN values were produced; the assertions below would be vacuous"
+        );
+        let last_vpin = tracker.vpin_values.last().unwrap().1;
+        assert!(
+            (last_vpin - 1.0).abs() < 1e-10,
+            "one-sided flow must give VPIN 1.0, got {last_vpin}"
+        );
+
+        // THE DIRECTION-SENSITIVE CLAIM — this is what a side flip breaks.
+        assert!(!tracker.completed_bars.is_empty(), "no completed bars");
+        for bar in &tracker.completed_bars {
+            assert_eq!(
+                bar.sell_volume, 0,
+                "aggressor bought (Side::Bid) — sell_volume must be 0, got {}",
+                bar.sell_volume
+            );
             assert!(
-                (last_vpin - 1.0).abs() < 1e-10,
-                "All-buy VPIN should be 1.0, got {}",
-                last_vpin
+                bar.buy_volume > 0,
+                "aggressor bought (Side::Bid) — buy_volume must be positive"
             );
         }
     }
@@ -480,6 +563,67 @@ mod tests {
                 last_vpin
             );
         }
+    }
+
+    #[test]
+    fn test_overflow_carry_uses_the_same_side_convention_as_the_bar_body() {
+        // ⚠ CLOSES A MEASURED COVERAGE GAP. Reverting the aggressor flip in the
+        // OVERFLOW branch alone left all 105 tests green: every existing fixture
+        // used sizes that divide the bar size exactly, so no test ever crossed a
+        // bar boundary with a remainder. A bar body classified one way and its
+        // carry the other corrupts only the bars that straddle a boundary —
+        // the hardest kind of wrong number to notice.
+        let mut tracker = VpinTracker::new(100, 2);
+        let lob = make_valid_lob();
+        let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
+
+        // 150 shares against a 100-share bar: completes one bar, carries 50.
+        tracker.process_event(&make_trade(100_000_000_000, 150, Side::Bid, ts), &lob, 3);
+
+        assert_eq!(
+            tracker.completed_bars.len(),
+            1,
+            "one bar should have closed"
+        );
+        assert_eq!(
+            tracker.current_bar_volume, 50,
+            "50 shares should have carried"
+        );
+        assert_eq!(
+            tracker.current_bar_buy_vol, 50,
+            "aggressor BOUGHT — the carry belongs in buy_vol"
+        );
+        assert_eq!(
+            tracker.current_bar_sell_vol, 0,
+            "aggressor BOUGHT — sell_vol must stay 0 across the boundary"
+        );
+    }
+
+    #[test]
+    fn test_overflow_carry_splits_undisclosed_side_like_the_bar_body() {
+        // ⚠ A PRE-EXISTING INCONSISTENCY, INDEPENDENT OF THE CARRIER SPLIT.
+        // The overflow branch used a bare `else`, sweeping `Side::None` wholly
+        // into SELL, while the bar body splits it evenly. So an
+        // undisclosed-side execution was classified differently depending only
+        // on whether it happened to cross a bar boundary.
+        let mut tracker = VpinTracker::new(100, 2);
+        let lob = make_valid_lob();
+        let ts = 14 * 3600 * NS_PER_SECOND + 30 * 60 * NS_PER_SECOND;
+
+        tracker.process_event(&make_trade(100_000_000_000, 140, Side::None, ts), &lob, 3);
+
+        assert_eq!(
+            tracker.current_bar_volume, 40,
+            "40 shares should have carried"
+        );
+        assert_eq!(
+            tracker.current_bar_buy_vol, 20,
+            "undisclosed carry splits evenly"
+        );
+        assert_eq!(
+            tracker.current_bar_sell_vol, 20,
+            "undisclosed carry splits evenly"
+        );
     }
 
     #[test]
